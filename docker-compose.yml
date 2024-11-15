@@ -1,0 +1,24 @@
+services:
+  database:
+    container_name: user_crud_db_container
+    image: postgres:14
+    restart: always
+    environment:
+      DATABASE: postgres
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: '123'
+      PGDATA: /data/postgres
+    volumes:
+       - /database/postgres:/data/postgres
+    ports:
+      - "5555:5432"
+    networks:
+      - user-crud-network
+
+networks:
+  user-crud-network:
+    name: user-crud-app-network
+    external: true
+
+volumes:
+  data:
