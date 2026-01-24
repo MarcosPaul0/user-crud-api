@@ -3,53 +3,50 @@ using UserCrud.Domain.Entities;
 using UserCrud.Domain.Interfaces;
 using UserCrud.Infrastructure.Context;
 
-namespace UserCrud.Infrastructure.Repositories
+namespace UserCrud.Infrastructure.Repositories;
+
+public class UserRepository(ApplicationDbContext context) : IUserRepository
 {
-    public class UserRepository : IUserRepository
+    public async Task<User> CreateAsync(User user, CancellationToken cancellationToken = default)
     {
-        private readonly ApplicationDbContext _userContext;
+        await context.AddAsync(user, cancellationToken);
+        
+        return user;
+    }
 
-        public UserRepository(ApplicationDbContext context)
-        {
-            _userContext = context;
-        }
+    public async Task<User> DeleteAsync(User user)
+    {
+        context.User.Remove(user);
+        
+        return await Task.FromResult(user);
+    }
 
-        public async Task<User> Create(User user)
-        {
-            _userContext.Add(user);
-            await _userContext.SaveChangesAsync();
-            return user;
-        }
+    public async Task<IEnumerable<User>> FindAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await context.User.AsNoTracking().ToListAsync(cancellationToken);
+    }
 
-        public async Task<User> Delete(User user)
-        {
-            _userContext.Remove(user);
-            await _userContext.SaveChangesAsync();
-            return user;
-        }
+    public async Task<User?> FindByEmailAsync(string email, CancellationToken cancellationToken = default)
+    {
+        return await context.User.FirstOrDefaultAsync(user => user.Email == email, cancellationToken);
+    }
 
-        public async Task<IEnumerable<User>> FindAll()
-        {
-            return await _userContext.User.AsNoTracking().ToListAsync();
-        }
+    public async Task<User?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await context.User.FindAsync(id, cancellationToken);
+    }
 
-        public async Task<User?> FindById(string id)
-        {
-            return await _userContext.User.FindAsync(id);
-        }
+    public async Task<User?> FindWithPonesByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await context.User
+            .Include(user => user.Phones)
+            .FirstOrDefaultAsync(user => user.Id == id, cancellationToken);
+    }
 
-        public async Task<User?> FindWithPonesById(string id)
-        {
-            return await _userContext.User
-                .Include(user => user.Phones)
-                .FirstOrDefaultAsync(user => user.Id == Guid.Parse(id));
-        }
-
-        public async Task<User> Update(User user)
-        {
-            _userContext.Update(user);
-            await _userContext.SaveChangesAsync();
-            return user;
-        }
+    public async Task<User> UpdateAsync(User user)
+    {
+        context.Update(user);
+        
+        return await Task.FromResult(user);
     }
 }
