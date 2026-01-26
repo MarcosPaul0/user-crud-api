@@ -1,14 +1,14 @@
 using UserCrud.Domain.Entities;
 
-namespace UserCrud.Domain.Interfaces
+namespace UserCrud.Domain.Interfaces;
+
+public interface IUserRepository
 {
-    public interface IUserRepository
-    {
-        Task<IEnumerable<User>> FindAll();
-        Task<User?> FindById(string id);
-        Task<User?> FindWithPonesById(string id);
-        Task<User> Create(User user);
-        Task<User> Update(User user);
-        Task<User> Delete(User user);
-    }
+    Task<IEnumerable<User>> FindAllAsync(CancellationToken cancellationToken= default);
+    Task<User?> FindByEmailAsync(string email, CancellationToken cancellationToken= default);
+    Task<User?> FindByIdAsync(Guid id, CancellationToken cancellationToken= default);
+    Task<User?> FindWithPonesByIdAsync(Guid id, CancellationToken cancellationToken= default);
+    Task<User> CreateAsync(User user, CancellationToken cancellationToken= default);
+    Task<User> UpdateAsync(User user);
+    Task<User> DeleteAsync(User user);
 }
