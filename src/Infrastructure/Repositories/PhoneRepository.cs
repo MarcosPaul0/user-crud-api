@@ -3,53 +3,45 @@ using UserCrud.Domain.Entities;
 using UserCrud.Domain.Interfaces;
 using UserCrud.Infrastructure.Context;
 
-namespace UserCrud.Infrastructure.Repositories
+namespace UserCrud.Infrastructure.Repositories;
+
+public class PhoneRepository(ApplicationDbContext context) : IPhoneRepository
 {
-    public class PhoneRepository : IPhoneRepository
+    public async Task<Phone> CreateAsync(Phone phone, CancellationToken cancellationToken = default)
     {
-        private readonly ApplicationDbContext _phoneContext;
+        await context.AddAsync(phone, cancellationToken);
+        
+        return phone;
+    }
 
-        public PhoneRepository(ApplicationDbContext context)
-        {
-            _phoneContext = context;
-        }
+    public async Task<Phone> DeleteAsync(Phone phone)
+    {
+        context.Remove(phone);
+        
+        return await Task.FromResult(phone);
+    }
 
-        public async Task<Phone> Create(Phone phone)
-        {
-            _phoneContext.Add(phone);
-            await _phoneContext.SaveChangesAsync();
-            return phone;
-        }
+    public async Task<IEnumerable<Phone>> FindAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await context.Phone.AsNoTracking().ToListAsync(cancellationToken);
+    }
 
-        public async Task<Phone> Delete(Phone phone)
-        {
-            _phoneContext.Remove(phone);
-            await _phoneContext.SaveChangesAsync();
-            return phone;
-        }
+    public async Task<Phone?> FindByIdAsync(string id, CancellationToken cancellationToken = default)
+    {
+        return await context.Phone.FindAsync(id, cancellationToken);
+    }
 
-        public async Task<IEnumerable<Phone>> FindAll()
-        {
-            return await _phoneContext.Phone.AsNoTracking().ToListAsync();
-        }
+    public async Task<IEnumerable<Phone>> FindByUserIdAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        return await context.Phone
+            .Where(phone => phone.UserId == Guid.Parse(userId))
+            .ToListAsync(cancellationToken);
+    }
 
-        public async Task<Phone?> FindById(string id)
-        {
-            return await _phoneContext.Phone.FindAsync(id);
-        }
-
-        public async Task<IEnumerable<Phone>> FindByUserId(string userId)
-        {
-            return await _phoneContext.Phone
-                .Where(phone => phone.UserId == Guid.Parse(userId))
-                .ToListAsync();
-        }
-
-        public async Task<Phone> Update(Phone phone)
-        {
-            _phoneContext.Update(phone);
-            await _phoneContext.SaveChangesAsync();
-            return phone;
-        }
+    public async Task<Phone> UpdateAsync(Phone phone)
+    {
+        context.Update(phone);
+        
+        return await Task.FromResult(phone);
     }
 }
