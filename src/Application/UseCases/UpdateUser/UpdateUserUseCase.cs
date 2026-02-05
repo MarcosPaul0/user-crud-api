@@ -37,6 +37,8 @@ public class UpdateUserUseCase(IUserRepository userRepository, IUnitOfWork unitO
 
         if (hasBeenUpdated)
         {
+            user.UpdatedAt = DateTime.UtcNow;
+            
             await userRepository.UpdateAsync(user);
             await unitOfWork.SaveChangesAsync();
         }
