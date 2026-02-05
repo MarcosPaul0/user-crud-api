@@ -14,7 +14,8 @@ public class DeleteUserUseCase(IUserRepository userRepository, IUnitOfWork unitO
             throw new NotFoundException(ExceptionMessages.USER_NOT_FOUND);
         }
         
-        await userRepository.DeleteAsync(user);
+        await userRepository.DeleteAsync(user, cancellationToken);
+        
         await unitOfWork.SaveChangesAsync();
     }
 }
