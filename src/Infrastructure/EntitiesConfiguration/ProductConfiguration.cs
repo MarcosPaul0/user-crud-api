@@ -1,0 +1,30 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using UserCrud.Domain.Entities;
+
+namespace UserCrud.Infrastructure.EntitiesConfiguration;
+
+public class ProductConfiguration : IEntityTypeConfiguration<Product>
+{
+    public void Configure(EntityTypeBuilder<Product> builder)
+    {
+        builder.ToTable("product");
+        
+        builder.HasKey(product => product.Id);
+
+        builder.Property(product => product.Id).HasColumnName("id").ValueGeneratedOnAdd();
+        
+        builder.Property(product => product.Name).HasColumnName("name").HasMaxLength(100).IsRequired();
+        builder.Property(product => product.Description).HasColumnName("description").HasMaxLength(1200).IsRequired();
+        builder.Property(product => product.PriceInCents).HasColumnName("price_in_cents").IsRequired();
+        builder.Property(product => product.IsActive).HasColumnName("is_active").IsRequired();
+        builder.Property(product => product.StockQuantity).HasColumnName("stock_quantity").IsRequired();
+        builder.Property(product => product.ProductCategoryId).HasColumnName("product_category_id").IsRequired();
+        builder.Property(product => product.CreatedAt).HasColumnName("created_at").IsRequired().ValueGeneratedOnAdd();
+        builder.Property(product => product.UpdatedAt).HasColumnName("updated_at").IsRequired(false).ValueGeneratedOnUpdate();
+        
+        builder.HasOne(entity => entity.ProductCategory)
+            .WithOne()
+            .HasForeignKey<Product>(entity => entity.ProductCategoryId);
+    }
+}
