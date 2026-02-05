@@ -1,25 +1,70 @@
+using System.Security.Cryptography;
 using System.Text.Json.Serialization;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using UserCrud.API.Middlewares;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
+using UserCrud.API.Handlers;
+using UserCrud.Application.Interfaces;
 using UserCrud.Application.UseCases;
 using UserCrud.Infrastructure;
 
-var builder = WebApplication.CreateBuilder(args);
-
 Env.Load();
+
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddUseCases();
 builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
-builder.Services.AddOpenApi(options =>
-{
-    // Specify the OpenAPI version to use
-    options.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0;
-});
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
+var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
+var audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+
+var publicKey = Environment.GetEnvironmentVariable("JWT_PUBLIC_KEY");
+var keyBytes = Convert.FromBase64String(publicKey);
+
+var rsa = RSA.Create();
+rsa.ImportSubjectPublicKeyInfo(keyBytes, out _);
+var rsaKey = new RsaSecurityKey(rsa);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidIssuer = issuer,
+            ValidateAudience = true,
+            ValidAudience = audience,
+            ValidateLifetime = true,
+            IssuerSigningKey = rsaKey,
+            ClockSkew = TimeSpan.Zero
+        };
+        
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var token = context.Request.Cookies["autoria_token"];
+                
+                if (!string.IsNullOrEmpty(token))
+                {
+                    context.Token = token;
+                }
+                
+                return Task.CompletedTask;
+            }
+        };
+    })
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+        options => builder.Configuration.Bind("CookieSettings", options));
+
+builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -32,31 +77,23 @@ builder.Services.AddSwaggerGen(options =>
 
         var segments = routeTemplate
             .Split('/', StringSplitOptions.RemoveEmptyEntries)
-            .Select(s => s.Split('?')[0].Split('{')[0].Trim()) // Remove query strings e parâmetros de rota
+            .Select(s => s.Split('?')[0].Split('{')[0].Trim())
             .Where(s => !string.IsNullOrEmpty(s))
             .ToArray();
         
-        // Verifica se começa com 'api' e tem mais segmentos
         if (segments.Length <= 1 || !segments[0].Equals("api", StringComparison.OrdinalIgnoreCase))
         {
             return [segments.FirstOrDefault() ?? "Default"];
         }
         
         var groupName = segments[1];
-            
-        // Capitaliza a primeira letra
+        
         return [char.ToUpper(groupName[0]) + groupName[1..]];
 
     });
     
     options.OrderActionsBy(api => api.RelativePath);
 });
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
-        options => builder.Configuration.Bind("JwtSettings", options))
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
-        options => builder.Configuration.Bind("CookieSettings", options));
 
 var app = builder.Build();
 
@@ -68,8 +105,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.Services.GetRequiredService<IEnvironmentVariablesService>();
+
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
-app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseExceptionHandler();
 app.MapControllers();
 app.Run();
