@@ -12,7 +12,7 @@ using UserCrud.Infrastructure.Context;
 namespace UserCrud.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260124150512_AddUserAndPhoneTables")]
+    [Migration("20260126235344_AddUserAndPhoneTables")]
     partial class AddUserAndPhoneTables
     {
         /// <inheritdoc />
@@ -85,8 +85,8 @@ namespace UserCrud.Infrastructure.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
                         .HasColumnName("password");
 
                     b.Property<DateTime?>("UpdatedAt")
