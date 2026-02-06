@@ -1,6 +1,8 @@
+using UserCrud.Domain.Entities;
+
 namespace UserCrud.Application.UseCases.ListProductCategory;
 
 public interface IListProductCategoryUseCase
 {
-    Task ExecuteAsync(CancellationToken cancellationToken);
+    Task<(IEnumerable<ProductCategory> productCategories, int count)> ExecuteAsync(CancellationToken cancellationToken);
 }
