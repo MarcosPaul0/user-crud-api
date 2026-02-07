@@ -17,6 +17,6 @@ public class LoginUseController(ILoginUseCase loginUseCase) : ControllerBase
 
         Response.Cookies.Append("autoria_token", token);
         
-        return Ok();
+        return NoContent();
     }
 }

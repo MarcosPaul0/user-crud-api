@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserCrud.Application.Dtos;
 using UserCrud.Application.UseCases.UpdateProduct;
@@ -8,6 +9,7 @@ namespace UserCrud.API.Controllers;
 [Route("api/product")]
 public class UpdateProductController(IUpdateProductUseCase updateProductUseCase) : ControllerBase
 {
+    [Authorize]
     [HttpPatch("{productId:guid}")]
     public async Task<ActionResult> HandleAsync(
         [FromRoute] Guid productId,
@@ -16,6 +18,6 @@ public class UpdateProductController(IUpdateProductUseCase updateProductUseCase)
     {
         await updateProductUseCase.ExecuteAsync(productId, updateProductDto, cancellationToken);
 
-        return Ok();
+        return NoContent();
     }
 }

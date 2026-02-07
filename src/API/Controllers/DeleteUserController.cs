@@ -10,8 +10,10 @@ public class DeleteUserController(IDeleteUserUseCase deleteUserUseCase) : Contro
 {
     [Authorize]
     [HttpDelete("{userId:guid}")]
-    public async Task HandleAsync(Guid userId, CancellationToken cancellationToken)
+    public async Task<ActionResult> HandleAsync(Guid userId, CancellationToken cancellationToken)
     {
         await deleteUserUseCase.ExecuteAsync(userId, cancellationToken);
+        
+        return NoContent();
     }
 }

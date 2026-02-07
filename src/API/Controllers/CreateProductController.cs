@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserCrud.Application.Dtos;
 using UserCrud.Application.UseCases.CreateProduct;
@@ -8,6 +9,7 @@ namespace UserCrud.API.Controllers;
 [Route("api/product")]
 public class CreateProductController(ICreateProductUseCase createProductUseCase) : ControllerBase
 {
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult> HandleAsync(
         [FromBody] CreateProductDto createProductDto,

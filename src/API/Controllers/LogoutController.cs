@@ -11,6 +11,6 @@ public class LogoutController : ControllerBase
     {
         Response.Cookies.Delete("autoria_token");
         
-        return Ok();
+        return NoContent();
     }
 }
