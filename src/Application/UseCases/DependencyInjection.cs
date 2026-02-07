@@ -2,6 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using UserCrud.Application.UseCases.CreateProduct;
 using UserCrud.Application.UseCases.CreateProductCategory;
 using UserCrud.Application.UseCases.CreateUser;
+using UserCrud.Application.UseCases.DeleteProduct;
+using UserCrud.Application.UseCases.DeleteProductCategory;
 using UserCrud.Application.UseCases.DeleteUser;
 using UserCrud.Application.UseCases.FindProductById;
 using UserCrud.Application.UseCases.FindUserById;
@@ -29,11 +31,13 @@ public static class DependencyInjection
         services.AddScoped<ICreateProductCategoryUseCase, CreateProductCategoryUseCase>();
         services.AddScoped<IUpdateProductCategoryUseCase, UpdateProductCategoryUseCase>();
         services.AddScoped<IListProductCategoryUseCase, ListProductCategoryUseCase>();
+        services.AddScoped<IDeleteProductCategoryUseCase, DeleteProductCategoryUseCase>();
         
         services.AddScoped<ICreateProductUseCase, CreateProductUseCase>();
         services.AddScoped<IUpdateProductUseCase, UpdateProductUseCase>();
         services.AddScoped<IListProductsUseCase, ListProductsUseCase>();
-        services.AddScoped<IFindProductByIdUseCase, IFindProductByIdUseCase>();
+        services.AddScoped<IFindProductByIdUseCase, FindProductByIdUseCase>();
+        services.AddScoped<IDeleteProductUseCase, DeleteProductUseCase>();
 
         return services;
     }
