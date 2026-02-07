@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Middlewares\" />
-    <Folder Include="Presenters\" />
   </ItemGroup>
 
 </Project>

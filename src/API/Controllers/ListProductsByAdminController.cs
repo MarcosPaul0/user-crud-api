@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UserCrud.API.Presenters;
 using UserCrud.Application.Dtos;
 using UserCrud.Application.UseCases.ListProductsByAdmin;
 
@@ -15,8 +16,8 @@ public class ListProductsByAdminController(IListProductsByAdminUseCase listProdu
         [FromBody] ListProductByAdminDto listProductByAdminDto,
         CancellationToken cancellationToken)
     {
-        var result = await listProductsByAdminUseCase.ExecuteAsync(listProductByAdminDto, cancellationToken);
+        var (products, count) = await listProductsByAdminUseCase.ExecuteAsync(listProductByAdminDto, cancellationToken);
 
-        return Ok();
+        return Ok(ProductByAdminPresenter.ToHttp(products, count, listProductByAdminDto.Page, listProductByAdminDto.ItemsPerPage));
     }
 }

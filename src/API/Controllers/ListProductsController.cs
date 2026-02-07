@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using UserCrud.API.Presenters;
 using UserCrud.Application.Dtos;
 using UserCrud.Application.UseCases.ListProducts;
 
@@ -13,8 +14,8 @@ public class ListProductsController(IListProductsUseCase listProductsUseCase) : 
         [FromBody] ListProductDto listProductDto,
         CancellationToken cancellationToken)
     {
-        var result = await listProductsUseCase.ExecuteAsync(listProductDto, cancellationToken);
+        var (products, count) = await listProductsUseCase.ExecuteAsync(listProductDto, cancellationToken);
 
-        return Ok();
+        return Ok(ProductPresenter.ToHttp(products, count, listProductDto.Page, listProductDto.ItemsPerPage));
     }
 }

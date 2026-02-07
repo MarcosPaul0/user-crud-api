@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using UserCrud.API.Presenters;
 using UserCrud.Application.UseCases.FindProductById;
 
 namespace UserCrud.API.Controllers;
@@ -12,8 +13,8 @@ public class FindProductByIdController(IFindProductByIdUseCase findProductByIdUs
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
-        var result = await findProductByIdUseCase.ExecuteAsync(productId, cancellationToken);
+        var product = await findProductByIdUseCase.ExecuteAsync(productId, cancellationToken);
 
-        return Ok();
+        return Ok(ProductPresenter.ToHttp(product));
     }
 }
