@@ -9,8 +9,6 @@ public class ListProductCategoryUseCase(IProductCategoryRepository productCatego
     {
         var productCategories = await productCategoryRepository.FindAllAsync(cancellationToken);
 
-        var productCategoriesCount = await productCategoryRepository.CountAsync(cancellationToken);
-
-        return (productCategories, productCategoriesCount);
+        return (productCategories, productCategories.Count());
     }
 }
