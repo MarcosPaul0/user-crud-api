@@ -11,11 +11,11 @@ public class ListProductsController(IListProductsUseCase listProductsUseCase) : 
 {
     [HttpGet]
     public async Task<ActionResult> HandleAsync(
-        [FromBody] ListProductDto listProductDto,
+        [FromBody] ListProductsDto listProductsDto,
         CancellationToken cancellationToken)
     {
-        var (products, count) = await listProductsUseCase.ExecuteAsync(listProductDto, cancellationToken);
+        var (products, count) = await listProductsUseCase.ExecuteAsync(listProductsDto, cancellationToken);
 
-        return Ok(ProductPresenter.ToHttp(products, count, listProductDto.Page, listProductDto.ItemsPerPage));
+        return Ok(ProductPresenter.ToHttp(products, count, listProductsDto.Page, listProductsDto.ItemsPerPage));
     }
 }

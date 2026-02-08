@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UserCrud.API.Presenters;
+using UserCrud.Application.Dtos;
 using UserCrud.Application.UseCases.ListUsers;
 using UserCrud.Domain.Entities;
 
@@ -11,10 +13,12 @@ public class FindAllUsersController(IListUserUseCase listUsersUseCase) : Control
 {
     [Authorize]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> HandleAsync(CancellationToken cancellationToken)
+    public async Task<ActionResult<IEnumerable<User>>> HandleAsync(
+        ListUsersDto listUsersDto,
+        CancellationToken cancellationToken)
     {
-        var result = await listUsersUseCase.ExecuteAsync(cancellationToken);
+        var (users, usersCount) = await listUsersUseCase.ExecuteAsync(listUsersDto, cancellationToken);
 
-        return Ok(result);
+        return Ok(UserPresenter.ToHttp(users, usersCount, listUsersDto.Page, listUsersDto.ItemsPerPage));
     }
 }

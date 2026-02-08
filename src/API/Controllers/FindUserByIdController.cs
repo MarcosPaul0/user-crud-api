@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UserCrud.API.Presenters;
 using UserCrud.Application.UseCases.FindUserById;
 using UserCrud.Domain.Entities;
 
@@ -13,8 +14,8 @@ public class FindUserByIdController(IFindUserByIdUseCase findUserByIdUseCase) : 
     [HttpGet("{userId:guid}")]
     public async Task<ActionResult<User>> Handle([FromRoute] Guid userId, CancellationToken cancellationToken)
     {
-        var result = await findUserByIdUseCase.ExecuteAsync(userId, cancellationToken);
+        var user = await findUserByIdUseCase.ExecuteAsync(userId, cancellationToken);
 
-        return Ok(result);
+        return Ok(UserPresenter.ToHttp(user));
     }
 }

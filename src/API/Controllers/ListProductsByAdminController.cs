@@ -13,11 +13,11 @@ public class ListProductsByAdminController(IListProductsByAdminUseCase listProdu
     [Authorize]
     [HttpGet]
     public async Task<ActionResult> HandleAsync(
-        [FromBody] ListProductByAdminDto listProductByAdminDto,
+        [FromBody] ListProductsByAdminDto listProductsByAdminDto,
         CancellationToken cancellationToken)
     {
-        var (products, count) = await listProductsByAdminUseCase.ExecuteAsync(listProductByAdminDto, cancellationToken);
+        var (products, count) = await listProductsByAdminUseCase.ExecuteAsync(listProductsByAdminDto, cancellationToken);
 
-        return Ok(ProductByAdminPresenter.ToHttp(products, count, listProductByAdminDto.Page, listProductByAdminDto.ItemsPerPage));
+        return Ok(ProductByAdminPresenter.ToHttp(products, count, listProductsByAdminDto.Page, listProductsByAdminDto.ItemsPerPage));
     }
 }
