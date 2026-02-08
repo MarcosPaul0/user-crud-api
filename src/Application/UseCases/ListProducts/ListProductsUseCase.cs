@@ -7,15 +7,15 @@ namespace UserCrud.Application.UseCases.ListProducts;
 public class ListProductsUseCase(IProductRepository productRepository) : IListProductsUseCase
 {
     public async Task<(IEnumerable<Product> products, int count)> ExecuteAsync(
-        ListProductDto listProductDto, 
+        ListProductsDto listProductsDto, 
         CancellationToken cancellationToken)
     {
         var productFilter = new Product(
-            listProductDto.Name,
-            listProductDto.ProductCategoryId);
+            listProductsDto.Name,
+            listProductsDto.ProductCategoryId);
 
-        var products = await productRepository.FindAllAsync(productFilter, listProductDto.Page,
-            listProductDto.ItemsPerPage, cancellationToken);
+        var products = await productRepository.FindAllAsync(productFilter, listProductsDto.Page,
+            listProductsDto.ItemsPerPage, cancellationToken);
         
         var productsCount = await productRepository.CountAsync(productFilter, cancellationToken);
         
