@@ -1,6 +1,7 @@
 namespace UserCrud.API.Dtos;
 
-public class ProductCategoryResponseDto
+public record ProductCategoryResponseDto
 {
-    
+    public required Guid Id { get; init; }
+    public required string Category { get; init; }
 }
