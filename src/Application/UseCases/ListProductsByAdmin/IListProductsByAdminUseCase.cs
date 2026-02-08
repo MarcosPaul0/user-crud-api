@@ -5,6 +5,6 @@ namespace UserCrud.Application.UseCases.ListProductsByAdmin;
 
 public interface IListProductsByAdminUseCase
 {
-    Task<(IEnumerable<Product> products, int count)> ExecuteAsync(ListProductByAdminDto listProductByAdminDto,
+    Task<(IEnumerable<Product> products, int count)> ExecuteAsync(ListProductsByAdminDto listProductsByAdminDto,
         CancellationToken cancellationToken);
 }
