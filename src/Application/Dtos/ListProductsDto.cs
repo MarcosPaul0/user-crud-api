@@ -2,12 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace UserCrud.Application.Dtos;
 
-public record ListProductByAdminDto : PaginationDto
+public record ListProductsDto : PaginationDto
 {
-    [StringLength(100, MinimumLength = 10)]
+    [StringLength(100, MinimumLength = 3)]
     public string? Name { get; init; }
     
     public Guid? ProductCategoryId { get; init; }
-    
-    public bool? IsActive { get; init; }
 }
