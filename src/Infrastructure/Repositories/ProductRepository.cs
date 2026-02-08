@@ -35,6 +35,14 @@ public class ProductRepository(ApplicationDbContext context) : BaseRepository<Pr
 
     public async Task<int> CountAsync(Product filter, CancellationToken cancellationToken = default)
     {
-        return await _context.Product.AsNoTracking().CountAsync(cancellationToken);
+        var query = _context.Product.AsNoTracking();
+
+        query = new ProductFilterBuilder(query)
+            .FilterByIsActive(filter.IsActive)
+            .FilterByName(filter.Name)
+            .FilterByProductCategoryId(filter.ProductCategoryId)
+            .Build();
+        
+        return await query.CountAsync(cancellationToken);
     }
 }
