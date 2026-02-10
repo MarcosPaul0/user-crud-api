@@ -12,7 +12,7 @@ public class FindUserByIdController(IFindUserByIdUseCase findUserByIdUseCase) : 
 {
     [Authorize]
     [HttpGet("{userId:guid}")]
-    public async Task<ActionResult<User>> Handle([FromRoute] Guid userId, CancellationToken cancellationToken)
+    public async Task<ActionResult> Handle([FromRoute] Guid userId, CancellationToken cancellationToken)
     {
         var user = await findUserByIdUseCase.ExecuteAsync(userId, cancellationToken);
 
