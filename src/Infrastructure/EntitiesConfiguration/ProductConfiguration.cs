@@ -19,12 +19,12 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(product => product.PriceInCents).HasColumnName("price_in_cents").IsRequired();
         builder.Property(product => product.IsActive).HasColumnName("is_active").IsRequired();
         builder.Property(product => product.StockQuantity).HasColumnName("stock_quantity").IsRequired();
-        builder.Property(product => product.ProductCategoryId).HasColumnName("product_category_id").IsRequired();
         builder.Property(product => product.CreatedAt).HasColumnName("created_at").IsRequired().ValueGeneratedOnAdd();
         builder.Property(product => product.UpdatedAt).HasColumnName("updated_at").IsRequired(false).ValueGeneratedOnUpdate();
         
-        builder.HasOne(entity => entity.ProductCategory)
-            .WithOne()
-            .HasForeignKey<Product>(entity => entity.ProductCategoryId);
+        builder.Property(product => product.ProductCategoryId).HasColumnName("product_category_id").IsRequired();
+        builder.HasOne(product => product.ProductCategory)
+            .WithMany()
+            .HasForeignKey(product => product.ProductCategoryId);
     }
 }
