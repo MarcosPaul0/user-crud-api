@@ -7,11 +7,11 @@ using UserCrud.Application.UseCases.ListProductsByAdmin;
 namespace UserCrud.API.Controllers;
 
 [ApiController]
-[Route("api/product/by-admin")]
+[Route("api/product")]
 public class ListProductsByAdminController(IListProductsByAdminUseCase listProductsByAdminUseCase) : ControllerBase
 {
     [Authorize]
-    [HttpGet]
+    [HttpPost("list/by-admin")]
     public async Task<ActionResult> HandleAsync(
         [FromBody] ListProductsByAdminDto listProductsByAdminDto,
         CancellationToken cancellationToken)
