@@ -12,7 +12,7 @@ namespace UserCrud.API.Controllers;
 public class FindAllUsersController(IListUserUseCase listUsersUseCase) : ControllerBase
 {
     [Authorize]
-    [HttpGet]
+    [HttpPost("list")]
     public async Task<ActionResult<IEnumerable<User>>> HandleAsync(
         ListUsersDto listUsersDto,
         CancellationToken cancellationToken)
