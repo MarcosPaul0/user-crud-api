@@ -12,4 +12,8 @@ public static class ExceptionMessages
     
     public const string PRODUCT_NOT_FOUND = "Product not found!";
     public const string PRODUCT_ALREADY_EXISTS = "Product already exists!";
+    
+    public const string PRODUCT_MAX_IMAGES_REACHED = "Product max images reached!";
+    public const string PRODUCT_IMAGE_NOT_FOUND = "Product image not found!";
+    public const string PRODUCT_IMAGE_FILE_IS_REQUIRED = "Product image file is required.";
 }
