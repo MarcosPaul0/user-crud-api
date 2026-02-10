@@ -9,7 +9,7 @@ namespace UserCrud.API.Controllers;
 [Route("api/product")]
 public class ListProductsController(IListProductsUseCase listProductsUseCase) : ControllerBase
 {
-    [HttpGet]
+    [HttpPost("list")]
     public async Task<ActionResult> HandleAsync(
         [FromBody] ListProductsDto listProductsDto,
         CancellationToken cancellationToken)
