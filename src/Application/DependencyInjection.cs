@@ -11,11 +11,12 @@ using UserCrud.Application.UseCases.ListProductCategory;
 using UserCrud.Application.UseCases.ListProducts;
 using UserCrud.Application.UseCases.ListUsers;
 using UserCrud.Application.UseCases.Login;
+using UserCrud.Application.UseCases.SetProductImages;
 using UserCrud.Application.UseCases.UpdateProduct;
 using UserCrud.Application.UseCases.UpdateProductCategory;
 using UserCrud.Application.UseCases.UpdateUser;
 
-namespace UserCrud.Application.UseCases;
+namespace UserCrud.Application;
 
 public static class DependencyInjection
 {
@@ -38,6 +39,8 @@ public static class DependencyInjection
         services.AddScoped<IListProductsUseCase, ListProductsUseCase>();
         services.AddScoped<IFindProductByIdUseCase, FindProductByIdUseCase>();
         services.AddScoped<IDeleteProductUseCase, DeleteProductUseCase>();
+
+        services.AddScoped<ISetProductImagesUseCase, SetProductImagesUseCase>();
 
         return services;
     }

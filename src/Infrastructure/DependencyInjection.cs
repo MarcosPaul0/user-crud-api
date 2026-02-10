@@ -1,3 +1,5 @@
+using Amazon.Runtime;
+using Amazon.S3;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,9 +23,26 @@ public static class DependencyInjection
         services.AddScoped<IPhoneRepository, PhoneRepository>();
         services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IProductImageRepository, ProductImageRepository>();
 
         services.AddScoped<IPasswordHasherService, PasswordHasherService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddSingleton<IEnvironmentVariablesService, EnvironmentVariablesService>();
+        services.AddSingleton<IAmazonS3>(serviceProvider =>
+        {
+            var environmentVariablesService = serviceProvider.GetRequiredService<IEnvironmentVariablesService>();
+            
+            var credentials = new BasicAWSCredentials(
+                environmentVariablesService.ObjectStorageAccessKey, 
+                environmentVariablesService.ObjectStorageSecretKey);
+            
+            var config = new AmazonS3Config
+            {
+                ServiceURL = environmentVariablesService.ObjectStorageEndpoint,
+                ForcePathStyle = true
+            };
+
+            return new AmazonS3Client(credentials, config);
+        });
     }
 }
