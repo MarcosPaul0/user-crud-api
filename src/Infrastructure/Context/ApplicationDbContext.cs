@@ -12,6 +12,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     
     public DbSet<Product> Product { get; set; }
     
+    public DbSet<ProductImage> ProductImage { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder builder)
     {
         // // 1. Aplica as configurações primeiro para descobrir todas as propriedades e tipos
