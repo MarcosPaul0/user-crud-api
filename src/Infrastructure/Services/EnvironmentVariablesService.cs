@@ -10,6 +10,11 @@ public class EnvironmentVariablesService : IEnvironmentVariablesService
     public string JwtIssuer { get; private set; } = GetRequiredAndConvert<string>("JWT_ISSUER");
     public string JwtAudience { get; private set; } = GetRequiredAndConvert<string>("JWT_AUDIENCE");
     public int JwtExpirationTimeInMinutes { get; private set; } = GetRequiredAndConvert<int>("JWT_EXPIRATION_TIME_IN_MINUTES");
+    public string ObjectStorageBucket { get; private set; } = GetRequiredAndConvert<string>("OBJECT_STORAGE_BUCKET");
+    public string ObjectStorageEndpoint { get; private set; } = GetRequiredAndConvert<string>("OBJECT_STORAGE_ENDPOINT");
+    public string ObjectStoragePublicUrl { get; private set; } = GetRequiredAndConvert<string>("OBJECT_STORAGE_PUBLIC_URL");
+    public string ObjectStorageAccessKey { get; private set; } = GetRequiredAndConvert<string>("OBJECT_STORAGE_ACCESS_KEY");
+    public string ObjectStorageSecretKey { get; private set; } = GetRequiredAndConvert<string>("OBJECT_STORAGE_SECRET_KEY");
 
     private static T GetRequiredAndConvert<T>(string variableName)
     {
