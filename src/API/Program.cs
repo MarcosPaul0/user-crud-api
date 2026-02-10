@@ -4,10 +4,9 @@ using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi;
 using UserCrud.API.Handlers;
+using UserCrud.Application;
 using UserCrud.Application.Interfaces;
-using UserCrud.Application.UseCases;
 using UserCrud.Infrastructure;
 
 Env.Load();
