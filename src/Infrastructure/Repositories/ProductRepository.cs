@@ -30,7 +30,7 @@ public class ProductRepository(ApplicationDbContext context) : BaseRepository<Pr
             .ApplyPagination(page, itemsPerPage)
             .Build();
         
-        return await query.ToListAsync(cancellationToken);
+        return await query.Include(product => product.ProductCategory).ToListAsync(cancellationToken);
     }
 
     public async Task<int> CountAsync(Product filter, CancellationToken cancellationToken = default)
