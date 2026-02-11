@@ -13,7 +13,7 @@ namespace UserCrud.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static void AddPersistence(this IServiceCollection services, IConfiguration configuration)
+    public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         var connection = configuration.GetConnectionString("DefaultConnection");
         services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connection));
@@ -44,5 +44,6 @@ public static class DependencyInjection
 
             return new AmazonS3Client(credentials, config);
         });
+        services.AddScoped<IObjectStorageService, CloudflareR2Service>();
     }
 }
