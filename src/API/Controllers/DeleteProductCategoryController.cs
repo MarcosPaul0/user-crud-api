@@ -5,7 +5,7 @@ using UserCrud.Application.UseCases.DeleteProductCategory;
 namespace UserCrud.API.Controllers;
 
 [ApiController]
-[Route("api/product")]
+[Route("api/product-category")]
 public class DeleteProductCategoryController(IDeleteProductCategoryUseCase deleteProductCategoryUseCase) : ControllerBase
 {
     [Authorize]
