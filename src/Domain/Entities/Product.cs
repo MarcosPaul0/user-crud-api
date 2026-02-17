@@ -5,7 +5,8 @@ public class Product : Entity
     public string Name { get; set; }
     public string Description { get; set; }
     public int PriceInCents { get; set; }
-    public int ProductionTimeInDays { get; set; }
+    public int ProductionTimeInMinutes { get; set; }
+    public byte DiscountPercentage { get; set; }
     public bool? IsActive { get; set; }
     public int StockQuantity { get; set; }
     
@@ -16,7 +17,8 @@ public class Product : Entity
         string name, 
         string description,
         int priceInCents, 
-        int productionTimeInDays, 
+        int productionTimeInMinutes, 
+        byte discountPercentage,
         int stockQuantity, 
         Guid productCategoryId, 
         DateTime createdAt)
@@ -24,8 +26,9 @@ public class Product : Entity
         Name = name;
         Description = description;
         PriceInCents = priceInCents;
-        ProductionTimeInDays = productionTimeInDays;
+        ProductionTimeInMinutes = productionTimeInMinutes;
         IsActive = true;
+        DiscountPercentage = discountPercentage;
         StockQuantity = stockQuantity;
         ProductCategoryId = productCategoryId;
         CreatedAt = createdAt;
