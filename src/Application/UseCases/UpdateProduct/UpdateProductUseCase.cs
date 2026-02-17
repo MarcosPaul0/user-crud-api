@@ -59,15 +59,15 @@ public class UpdateProductUseCase(
             isUpdated = true;
         }
         
-        if (updateProductDto.ProductionTimeInDays != null && updateProductDto.ProductionTimeInDays != product.ProductionTimeInDays)
+        if (updateProductDto.ProductionTimeInMinutes != null && updateProductDto.ProductionTimeInMinutes != product.ProductionTimeInMinutes)
         {
-            product.ProductionTimeInDays = updateProductDto.ProductionTimeInDays.Value;
+            product.ProductionTimeInMinutes = updateProductDto.ProductionTimeInMinutes.Value;
             isUpdated = true;
         }
         
-        if (updateProductDto.ProductionTimeInDays != null && updateProductDto.ProductionTimeInDays != product.ProductionTimeInDays)
+        if (updateProductDto.DiscountPercentage != null && updateProductDto.DiscountPercentage != product.DiscountPercentage)
         {
-            product.ProductionTimeInDays = updateProductDto.ProductionTimeInDays.Value;
+            product.DiscountPercentage = updateProductDto.DiscountPercentage.Value;
             isUpdated = true;
         }
         
