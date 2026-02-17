@@ -18,7 +18,11 @@ public class CreateProductDto
     
     [Required]
     [Range(1, int.MaxValue)]
-    public int ProductionTimeInDays { get; init; }
+    public int ProductionTimeInMinutes { get; init; }
+    
+    [Required]
+    [Range(0, 30)]
+    public byte DiscountPercentage { get; init; }
     
     [Required]
     [Range(1, int.MaxValue)]
