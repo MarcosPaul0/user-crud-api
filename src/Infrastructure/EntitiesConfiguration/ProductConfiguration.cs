@@ -17,6 +17,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(product => product.Name).HasColumnName("name").HasMaxLength(100).IsRequired();
         builder.Property(product => product.Description).HasColumnName("description").HasMaxLength(1200).IsRequired();
         builder.Property(product => product.PriceInCents).HasColumnName("price_in_cents").IsRequired();
+        builder.Property(product => product.DiscountPercentage).HasColumnName("discount_percentage").IsRequired();
+        builder.Property(product => product.ProductionTimeInMinutes).HasColumnName("production_time_in_minutes").IsRequired();
         builder.Property(product => product.IsActive).HasColumnName("is_active").IsRequired();
         builder.Property(product => product.StockQuantity).HasColumnName("stock_quantity").IsRequired();
         builder.Property(product => product.CreatedAt).HasColumnName("created_at").IsRequired().ValueGeneratedOnAdd();
