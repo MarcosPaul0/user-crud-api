@@ -74,6 +74,10 @@ namespace UserCrud.Infrastructure.Migrations
                         .HasColumnType("character varying(1200)")
                         .HasColumnName("description");
 
+                    b.Property<byte>("DiscountPercentage")
+                        .HasColumnType("smallint")
+                        .HasColumnName("discount_percentage");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
                         .HasColumnName("is_active");
@@ -92,8 +96,9 @@ namespace UserCrud.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("product_category_id");
 
-                    b.Property<int>("ProductionTimeInDays")
-                        .HasColumnType("integer");
+                    b.Property<int>("ProductionTimeInMinutes")
+                        .HasColumnType("integer")
+                        .HasColumnName("production_time_in_minutes");
 
                     b.Property<int>("StockQuantity")
                         .HasColumnType("integer")
