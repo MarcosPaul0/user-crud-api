@@ -14,10 +14,13 @@ public record UpdateProductDto
     public int? PriceInCents { get; init; }
     
     [Range(1, int.MaxValue)]
-    public int? ProductionTimeInDays { get; init; }
+    public int? ProductionTimeInMinutes { get; init; }
     
     [Range(1, int.MaxValue)]
     public int? StockQuantity { get; init; }
+    
+    [Range(0, 30)]
+    public byte? DiscountPercentage { get; init; }
     
     public Guid? ProductCategoryId { get; init; }
     
