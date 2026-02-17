@@ -8,7 +8,8 @@ public record ProductByAdminResponseDto
     public required string Name { get; init; }
     public required string Description { get; init; }
     public required int PriceInCents { get; init; }
-    public required int ProductionTimeInDays { get; init; }
+    public required int ProductionTimeInMinutes { get; init; }
+    public required byte DiscountPercentage { get; init; }
     public required bool? IsActive { get; init; }
     public required int StockQuantity { get; init; }
     public required Guid ProductCategoryId { get; init; }
