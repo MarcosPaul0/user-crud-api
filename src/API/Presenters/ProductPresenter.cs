@@ -16,7 +16,8 @@ public static class ProductPresenter
             Name = product.Name,
             Description = product.Description,
             PriceInCents = product.PriceInCents,
-            ProductionTimeInDays = product.ProductionTimeInDays,
+            ProductionTimeInMinutes = product.ProductionTimeInMinutes,
+            DiscountPercentage = product.DiscountPercentage,
             ProductCategoryId = product.ProductCategoryId,
             Category = product.ProductCategory.Category,
         };
