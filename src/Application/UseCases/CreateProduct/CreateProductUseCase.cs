@@ -31,7 +31,8 @@ public class CreateProductUseCase(
             createProductDto.Name,
             createProductDto.Description,
             createProductDto.PriceInCents,
-            createProductDto.ProductionTimeInDays,
+            createProductDto.ProductionTimeInMinutes,
+            createProductDto.DiscountPercentage,
             createProductDto.StockQuantity,
             createProductDto.ProductCategoryId,
             DateTime.UtcNow);
