@@ -31,6 +31,21 @@ var rsa = RSA.Create();
 rsa.ImportSubjectPublicKeyInfo(keyBytes, out _);
 var rsaKey = new RsaSecurityKey(rsa);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Default", policy =>
+    {
+        policy
+            .WithOrigins(    
+                "http://localhost:3001",
+                "https://localhost:3001"
+            )
+            .AllowCredentials()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -106,7 +121,11 @@ if (app.Environment.IsDevelopment())
 
 app.Services.GetRequiredService<IEnvironmentVariablesService>();
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+app.UseCors("Default");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseExceptionHandler();
