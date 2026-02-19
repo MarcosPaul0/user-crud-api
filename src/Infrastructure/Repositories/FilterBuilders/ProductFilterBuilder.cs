@@ -4,8 +4,6 @@ namespace UserCrud.Infrastructure.Repositories.FilterBuilders;
 
 public class ProductFilterBuilder(IQueryable<Product> query) : BaseFilterBuilder<Product>(query)
 {
-    private IQueryable<Product> _query = query;
-
     protected override void Order()
     {
         _query = _query.OrderBy(product => product.CreatedAt);

@@ -4,7 +4,7 @@ namespace UserCrud.Infrastructure.Repositories.FilterBuilders;
 
 public abstract class BaseFilterBuilder<T>(IQueryable<T> query) where T : Entity 
 {
-    private IQueryable<T> _query = query;
+    protected IQueryable<T> _query = query;
     protected abstract void Order();
 
     public IQueryable<T> Build()

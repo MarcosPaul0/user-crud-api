@@ -5,8 +5,6 @@ namespace UserCrud.Infrastructure.Repositories.FilterBuilders;
 
 public class UserFilterBuilder(IQueryable<User> query) : BaseFilterBuilder<User>(query)
 {
-    private IQueryable<User> _query = query;
-    
     protected override void Order()
     {
         _query = _query.OrderBy(user => user.CreatedAt);
