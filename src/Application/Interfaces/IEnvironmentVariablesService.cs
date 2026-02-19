@@ -12,4 +12,5 @@ public interface IEnvironmentVariablesService
     public string ObjectStorageEndpoint { get; }
     public string ObjectStorageAccessKey { get; }
     public string ObjectStorageSecretKey { get; }
+    public string AuthTokenCookie { get; }
 }

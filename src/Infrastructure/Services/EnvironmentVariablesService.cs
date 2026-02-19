@@ -15,12 +15,11 @@ public class EnvironmentVariablesService : IEnvironmentVariablesService
     public string ObjectStoragePublicUrl { get; private set; } = GetRequiredAndConvert<string>("OBJECT_STORAGE_PUBLIC_URL");
     public string ObjectStorageAccessKey { get; private set; } = GetRequiredAndConvert<string>("OBJECT_STORAGE_ACCESS_KEY");
     public string ObjectStorageSecretKey { get; private set; } = GetRequiredAndConvert<string>("OBJECT_STORAGE_SECRET_KEY");
+    public string AuthTokenCookie { get; private set; } = GetRequiredAndConvert<string>("AUTH_TOKEN_COOKIE");
 
     private static T GetRequiredAndConvert<T>(string variableName)
     {
         var value = Environment.GetEnvironmentVariable(variableName);
-        
-        Console.WriteLine($"Environment variable '{variableName}' has value '{value}'.");
         
         if (string.IsNullOrWhiteSpace(value))
         {
