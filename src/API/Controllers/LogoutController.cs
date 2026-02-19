@@ -1,15 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
+using UserCrud.Application.Interfaces;
 
 namespace UserCrud.API.Controllers;
 
 [ApiController]
 [Route("api/auth/logout")]
-public class LogoutController : ControllerBase
+public class LogoutController(IEnvironmentVariablesService environmentVariablesService) : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult> HandleAsync(CancellationToken cancellationToken)
     {
-        Response.Cookies.Delete("autoria_token");
+        var authTokenCookie = environmentVariablesService.AuthTokenCookie;
+        
+        Response.Cookies.Delete(authTokenCookie);
         
         return NoContent();
     }
