@@ -229,6 +229,9 @@ namespace UserCrud.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.ToTable("user", (string)null);
                 });
 
