@@ -26,7 +26,7 @@ public static class DependencyInjection
         services.AddScoped<IProductImageRepository, ProductImageRepository>();
 
         services.AddScoped<IPasswordHasherService, PasswordHasherService>();
-        services.AddScoped<IJwtTokenService, JwtTokenService>();
+        services.AddSingleton<IJwtTokenService, JwtTokenService>();
         services.AddSingleton<IEnvironmentVariablesService, EnvironmentVariablesService>();
         services.AddSingleton<IAmazonS3>(serviceProvider =>
         {
