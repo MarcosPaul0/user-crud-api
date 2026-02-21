@@ -17,7 +17,16 @@ public class ProductCategoryRepository(ApplicationDbContext context) : BaseRepos
 
     public async Task<IEnumerable<ProductCategory>> FindAllAsync(CancellationToken cancellationToken = default)
     {
-        return await _context.ProductCategory.AsNoTracking().ToListAsync(cancellationToken);
+        return await _context.ProductCategory
+            .AsNoTracking()
+            .Select(c => new ProductCategory(
+                c.Id,
+                c.Category,
+                _context.Product.Count(p => p.ProductCategoryId == c.Id),
+                c.CreatedAt,
+                c.UpdatedAt
+            ))
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<int> CountAsync(CancellationToken cancellationToken = default)

@@ -9,7 +9,14 @@ namespace UserCrud.Infrastructure.Repositories;
 public class ProductRepository(ApplicationDbContext context) : BaseRepository<Product>(context), IProductRepository
 {
     private readonly ApplicationDbContext _context = context;
-    
+
+    public override async Task<Product?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _context.Product
+            .Include(product => product.ProductCategory)
+            .FirstOrDefaultAsync(product => product.Id == id, cancellationToken);
+    }
+
     public async Task<Product?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
         return await _context.Product.FirstOrDefaultAsync(product => product.Name == name, cancellationToken);
