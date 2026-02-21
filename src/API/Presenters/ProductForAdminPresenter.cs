@@ -4,13 +4,13 @@ using UserCrud.Domain.Entities;
 
 namespace UserCrud.API.Presenters;
 
-public static class ProductByAdminPresenter
+public static class ProductForAdminPresenter
 {
-    public static ProductByAdminResponseDto ToHttp(Product product)
+    public static ProductForAdminResponseDto ToHttp(Product product)
     {
         ArgumentNullException.ThrowIfNull(product.ProductCategory);
         
-        return new ProductByAdminResponseDto()
+        return new ProductForAdminResponseDto()
         {
             Id = product.Id,
             Name = product.Name,
@@ -27,7 +27,7 @@ public static class ProductByAdminPresenter
         };
     }
     
-    public static PaginationResponseDto<ProductByAdminResponseDto> ToHttp(IEnumerable<Product> products, int count, int page, int itemsPerPage)
+    public static PaginationResponseDto<ProductForAdminResponseDto> ToHttp(IEnumerable<Product> products, int count, int page, int itemsPerPage)
     {
         var productsResponse = products.Select(ToHttp);
         
