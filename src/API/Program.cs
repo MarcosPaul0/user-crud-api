@@ -4,6 +4,7 @@ using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Scalar.AspNetCore;
 using UserCrud.API.Handlers;
 using UserCrud.Application;
 using UserCrud.Application.Interfaces;
@@ -21,16 +22,6 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
-var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
-var audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
-
-var publicKey = Environment.GetEnvironmentVariable("JWT_PUBLIC_KEY");
-var keyBytes = Convert.FromBase64String(publicKey);
-
-var rsa = RSA.Create();
-rsa.ImportSubjectPublicKeyInfo(keyBytes, out _);
-var rsaKey = new RsaSecurityKey(rsa);
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Default", policy =>
@@ -45,6 +36,17 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+
+var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
+var audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+var publicKey = Environment.GetEnvironmentVariable("JWT_PUBLIC_KEY");
+var authTokenCookie = Environment.GetEnvironmentVariable("AUTH_TOKEN_COOKIE");
+
+var keyBytes = Convert.FromBase64String(publicKey);
+
+var rsa = RSA.Create();
+rsa.ImportSubjectPublicKeyInfo(keyBytes, out _);
+var rsaKey = new RsaSecurityKey(rsa);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -64,7 +66,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             OnMessageReceived = context =>
             {
-                var token = context.Request.Cookies["autoria_token"];
+                var token = context.Request.Cookies[authTokenCookie];
                 
                 if (!string.IsNullOrEmpty(token))
                 {
@@ -79,47 +81,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options => builder.Configuration.Bind("CookieSettings", options));
 
 builder.Services.AddOpenApi();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.TagActionsBy(api =>
-    {
-        var routeTemplate = api.RelativePath;
-        
-        if (string.IsNullOrEmpty(routeTemplate))
-            return ["Default"];
-
-        var segments = routeTemplate
-            .Split('/', StringSplitOptions.RemoveEmptyEntries)
-            .Select(s => s.Split('?')[0].Split('{')[0].Trim())
-            .Where(s => !string.IsNullOrEmpty(s))
-            .ToArray();
-        
-        if (segments.Length <= 1 || !segments[0].Equals("api", StringComparison.OrdinalIgnoreCase))
-        {
-            return [segments.FirstOrDefault() ?? "Default"];
-        }
-        
-        var groupName = segments[1];
-        
-        return [char.ToUpper(groupName[0]) + groupName[1..]];
-
-    });
-    
-    options.OrderActionsBy(api => api.RelativePath);
-});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapScalarApiReference(options =>
+    {
+        options.Title = "Autoria API";
+        options.Theme = ScalarTheme.None;
+    });
 }
-
-app.Services.GetRequiredService<IEnvironmentVariablesService>();
 
 if (!app.Environment.IsDevelopment())
 {
