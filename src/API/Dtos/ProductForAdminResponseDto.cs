@@ -2,7 +2,7 @@ using UserCrud.Domain.Entities;
 
 namespace UserCrud.API.Dtos;
 
-public record ProductByAdminResponseDto
+public record ProductForAdminResponseDto
 {
     public required Guid Id { get; init; }
     public required string Name { get; init; }
