@@ -6,6 +6,7 @@ using UserCrud.Application.UseCases.DeleteProduct;
 using UserCrud.Application.UseCases.DeleteProductCategory;
 using UserCrud.Application.UseCases.DeleteUser;
 using UserCrud.Application.UseCases.FindProductById;
+using UserCrud.Application.UseCases.FindProductCategoryById;
 using UserCrud.Application.UseCases.FindUserById;
 using UserCrud.Application.UseCases.ListProductCategory;
 using UserCrud.Application.UseCases.ListProducts;
@@ -30,15 +31,16 @@ public static class DependencyInjection
         services.AddScoped<IDeleteUserUseCase, DeleteUserUseCase>();
         services.AddScoped<ILoginUseCase, LoginUseCase>();
         
+        services.AddScoped<IFindProductCategoryByIdUseCase, FindProductCategoryByIdUseCase>();
         services.AddScoped<ICreateProductCategoryUseCase, CreateProductCategoryUseCase>();
         services.AddScoped<IUpdateProductCategoryUseCase, UpdateProductCategoryUseCase>();
         services.AddScoped<IListProductCategoryUseCase, ListProductCategoryUseCase>();
-        services.AddScoped<IListProductsForAdminUseCase, ListProductsForAdminUseCase>();
         services.AddScoped<IDeleteProductCategoryUseCase, DeleteProductCategoryUseCase>();
         
         services.AddScoped<ICreateProductUseCase, CreateProductUseCase>();
         services.AddScoped<IUpdateProductUseCase, UpdateProductUseCase>();
         services.AddScoped<IListProductsUseCase, ListProductsUseCase>();
+        services.AddScoped<IListProductsForAdminUseCase, ListProductsForAdminUseCase>();
         services.AddScoped<IFindProductByIdUseCase, FindProductByIdUseCase>();
         services.AddScoped<IDeleteProductUseCase, DeleteProductUseCase>();
 
