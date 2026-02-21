@@ -12,6 +12,8 @@ public static class ProductCategoryPresenter
         {
             Id = productCategory.Id,
             Category = productCategory.Category,
+            ProductCount = productCategory.ProductCount,
+            CreatedAt = productCategory.CreatedAt
         };
     }
     
