@@ -9,6 +9,7 @@ using UserCrud.Application.UseCases.FindProductById;
 using UserCrud.Application.UseCases.FindUserById;
 using UserCrud.Application.UseCases.ListProductCategory;
 using UserCrud.Application.UseCases.ListProducts;
+using UserCrud.Application.UseCases.ListProductsForAdmin;
 using UserCrud.Application.UseCases.ListUsers;
 using UserCrud.Application.UseCases.Login;
 using UserCrud.Application.UseCases.SetProductImages;
@@ -32,6 +33,7 @@ public static class DependencyInjection
         services.AddScoped<ICreateProductCategoryUseCase, CreateProductCategoryUseCase>();
         services.AddScoped<IUpdateProductCategoryUseCase, UpdateProductCategoryUseCase>();
         services.AddScoped<IListProductCategoryUseCase, ListProductCategoryUseCase>();
+        services.AddScoped<IListProductsForAdminUseCase, ListProductsForAdminUseCase>();
         services.AddScoped<IDeleteProductCategoryUseCase, DeleteProductCategoryUseCase>();
         
         services.AddScoped<ICreateProductUseCase, CreateProductUseCase>();

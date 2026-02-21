@@ -2,9 +2,9 @@ using UserCrud.Application.Dtos;
 using UserCrud.Domain.Entities;
 using UserCrud.Domain.Interfaces;
 
-namespace UserCrud.Application.UseCases.ListProductsByAdmin;
+namespace UserCrud.Application.UseCases.ListProductsForAdmin;
 
-public class ListProductsByAdminUseCase(IProductRepository productRepository) : IListProductsByAdminUseCase
+public class ListProductsForAdminUseCase(IProductRepository productRepository) : IListProductsForAdminUseCase
 {
     public async Task<(IEnumerable<Product> products, int count)> ExecuteAsync(
         ListProductsByAdminDto listProductsByAdminDto, 
