@@ -9,6 +9,6 @@ public record PaginationDto
     public int Page { get; init; }
     
     [Required]
-    [Range(1, 100)]
+    [Range(1, 20)]
     public int ItemsPerPage { get; init; }
 }
