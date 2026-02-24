@@ -10,6 +10,8 @@ public static class ProductForAdminPresenter
     {
         ArgumentNullException.ThrowIfNull(product.ProductCategory);
         
+        ArgumentNullException.ThrowIfNull(product.ProductImages);
+        
         return new ProductForAdminResponseDto()
         {
             Id = product.Id,
@@ -24,6 +26,7 @@ public static class ProductForAdminPresenter
             UpdatedAt = product.UpdatedAt,
             ProductCategoryId = product.ProductCategoryId,
             Category = product.ProductCategory.Category,
+            ProductImages = ProductImagePresenter.ToHttp(product.ProductImages)
         };
     }
     

@@ -14,6 +14,7 @@ public record ProductForAdminResponseDto
     public required int StockQuantity { get; init; }
     public required Guid ProductCategoryId { get; init; }
     public required string Category { get; init; }
+    public required List<ProductImageResponseDto> ProductImages { get; init; }
     public required DateTime CreatedAt { get; init; }
     public required DateTime? UpdatedAt { get; init; }
 }
