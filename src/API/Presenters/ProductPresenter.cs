@@ -6,26 +6,45 @@ namespace UserCrud.API.Presenters;
 
 public static class ProductPresenter
 {
-    public static ProductResponseDto ToHttp(Product product)
+    public static ProductByIdResponseDto ToHttp(Product product)
     {
         ArgumentNullException.ThrowIfNull(product.ProductCategory);
         
-        return new ProductResponseDto()
+        ArgumentNullException.ThrowIfNull(product.ProductImages);
+        
+        return  new ProductByIdResponseDto()
         {
             Id = product.Id,
             Name = product.Name,
-            Description = product.Description,
             PriceInCents = product.PriceInCents,
-            ProductionTimeInMinutes = product.ProductionTimeInMinutes,
             DiscountPercentage = product.DiscountPercentage,
             ProductCategoryId = product.ProductCategoryId,
             Category = product.ProductCategory.Category,
+            ProductImages = ProductImagePresenter.ToHttp(product.ProductImages)
         };
     }
     
-    public static PaginationResponseDto<ProductResponseDto> ToHttp(IEnumerable<Product> products, int count, int page, int itemsPerPage)
+    public static PaginationResponseDto<ProductListResponseDto> ToHttp(IEnumerable<Product> products, int count, int page, int itemsPerPage)
     {
-        var productsResponse = products.Select(ToHttp);
+        var productsResponse = products.Select(product =>
+        {
+            ArgumentNullException.ThrowIfNull(product.ProductCategory);
+            
+            var principalImage = product.ProductImages.FirstOrDefault(pi => pi.DisplayOrder == 1);
+            ArgumentNullException.ThrowIfNull(principalImage);
+
+            return new ProductListResponseDto()
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                PriceInCents = product.PriceInCents,
+                DiscountPercentage = product.DiscountPercentage,
+                ProductCategoryId = product.ProductCategoryId,
+                Category = product.ProductCategory.Category,
+                ProductImage = ProductImagePresenter.ToHttp(principalImage),
+            };
+        });
         
         return PaginationHelper.FormatResponse(productsResponse, count, page, itemsPerPage);
     }
