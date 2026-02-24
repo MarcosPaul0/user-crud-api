@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using UserCrud.Application.Dtos;
 using UserCrud.Application.Exceptions;
 using UserCrud.Application.Helpers;
@@ -25,9 +26,10 @@ public class SetProductImagesUseCase(
             throw new NotFoundException(ExceptionMessages.PRODUCT_NOT_FOUND);
         }
 
-        var productImagesToCreate = new List<ProductImageDto>();
-        var productImagesToUpdate = new List<(ProductImageDto, ProductImage)>();
+        var productImagesToCreate = new List<(IFormFile, ProductImage)>();
+        var productImagesToUpdate = new List<(IFormFile?, ProductImage)>();
 
+        var index = 0;
         foreach (var productImageDto in setProductImagesDto.Images)
         {
             if (productImageDto.Id != null && productImageDto.Id != Guid.Empty)
@@ -35,7 +37,10 @@ public class SetProductImagesUseCase(
                 continue;
             }
             
-            productImagesToCreate.Add(productImageDto);
+            var productImage = new ProductImage(null, productImageDto.DisplayOrder, productId, DateTime.UtcNow);
+            
+            productImagesToCreate.Add((productImageDto.File!, productImage));
+            index++;
         }
 
         var productImages = await productImageRepository.FindAllByProductIdAsync(productId, cancellationToken);
@@ -44,7 +49,7 @@ public class SetProductImagesUseCase(
         {
             throw new ConflictException(ExceptionMessages.PRODUCT_MAX_IMAGES_REACHED);
         }
-        
+
         foreach (var productImageDto in setProductImagesDto.Images)
         {
             if (productImageDto.Id == null || productImageDto.Id == Guid.Empty)
@@ -59,69 +64,70 @@ public class SetProductImagesUseCase(
                 throw new NotFoundException(ExceptionMessages.PRODUCT_IMAGE_NOT_FOUND);
             }
             
-            productImagesToUpdate.Add((productImageDto, productImage));
+            productImage.DisplayOrder = productImageDto.DisplayOrder;
+            productImage.UpdatedAt = DateTime.UtcNow;
+            
+            productImagesToUpdate.Add((productImageDto.File, productImage));
         }
 
-        foreach (var image in productImagesToCreate)
+        foreach (var (file, productImage) in productImagesToCreate)
         {
-            await CreateProductImagesAsync(productId, image, cancellationToken);
+            await CreateProductImagesAsync(productId, file, productImage, cancellationToken);
         }
         
-        foreach (var (dto, entity) in productImagesToUpdate)
+        foreach (var (file, productImage) in productImagesToUpdate)
         {
-            await UpdateProductImagesAsync(entity, dto, cancellationToken);
+            await UpdateProductImagesAsync(productImage, file, cancellationToken);
         }
         
         await unitOfWork.SaveChangesAsync();
     }
 
     private async Task CreateProductImagesAsync(
-        Guid productId, 
-        ProductImageDto productImageDto, 
+        Guid productId,
+        IFormFile file,
+        ProductImage productImage, 
         CancellationToken cancellationToken)
     {
-        if (productImageDto.File == null)
+        if (file == null)
         {
             throw new ConflictException(ExceptionMessages.PRODUCT_IMAGE_FILE_IS_REQUIRED);
         }
         
         var imageId = Guid.NewGuid();
-        var extension = Path.GetExtension(productImageDto.File.FileName);
+        var extension = Path.GetExtension(file.FileName);
         var objectKey = $"products/{productId}/{imageId}{extension}";
         
         var imageUrl = await objectStorageService.UploadAsync(
-            productImageDto.File,
+            file,
             objectKey,
             cancellationToken);
         
-        var productImage = new ProductImage(imageUrl, productImageDto.DisplayOrder, productId);
+        productImage.ImageUrl = imageUrl;
             
         await productImageRepository.CreateAsync(productImage, cancellationToken);
     }
 
     private async Task UpdateProductImagesAsync(
-        ProductImage productImage, 
-        ProductImageDto productImageDto, 
+        ProductImage productImage,
+        IFormFile? file,
         CancellationToken cancellationToken)
     {
-        if (productImageDto.File != null)
+        if (file != null)
         {
             var oldKey = ObjectStorageHelper.ExtractObjectKey(productImage.ImageUrl);
             await objectStorageService.DeleteAsync(oldKey, cancellationToken);
 
-            var extension = Path.GetExtension(productImageDto.File.FileName);
+            var extension = Path.GetExtension(file.FileName);
             var objectKey = $"products/{productImage.ProductId}/{productImage.Id}{extension}";
 
             var newUrl = await objectStorageService.UploadAsync(
-                productImageDto.File,
+                file,
                 objectKey,
                 cancellationToken);
 
             productImage.ImageUrl = newUrl;
         }
-        
-        productImage.DisplayOrder = productImageDto.DisplayOrder;
-        productImage.UpdatedAt = DateTime.UtcNow;
         
         await productImageRepository.UpdateAsync(productImage, cancellationToken);
     }
