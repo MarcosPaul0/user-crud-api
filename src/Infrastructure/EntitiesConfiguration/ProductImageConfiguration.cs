@@ -26,10 +26,8 @@ public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
         
         builder.Property(productImage => productImage.ProductId).HasColumnName("product_id").IsRequired();
         builder.HasOne(productImage => productImage.Product)
-            .WithMany()
+            .WithMany(product => product.ProductImages)
             .HasForeignKey(productImage => productImage.ProductId)
             .OnDelete(DeleteBehavior.Cascade);
-        
-        builder.HasIndex(productImage => new { productImage.ProductId, Order = productImage.DisplayOrder }).IsUnique();
     }
 }
