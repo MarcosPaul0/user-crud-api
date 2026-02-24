@@ -8,10 +8,11 @@ public class ProductImage : Entity
     public Guid ProductId { get; set; }
     public Product Product { get; set; }
     
-    public ProductImage(string imageUrl, byte displayOrder, Guid productId)
+    public ProductImage(string imageUrl, byte displayOrder, Guid productId, DateTime createdAt)
     {
         ImageUrl = imageUrl;
         DisplayOrder = displayOrder;
         ProductId = productId;
+        CreatedAt = createdAt;
     }
 }
