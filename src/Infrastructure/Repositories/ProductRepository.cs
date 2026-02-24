@@ -14,6 +14,7 @@ public class ProductRepository(ApplicationDbContext context) : BaseRepository<Pr
     {
         return await _context.Product
             .Include(product => product.ProductCategory)
+            .Include(product => product.ProductImages.OrderBy(productImage => productImage.DisplayOrder))
             .FirstOrDefaultAsync(product => product.Id == id, cancellationToken);
     }
 
@@ -37,7 +38,10 @@ public class ProductRepository(ApplicationDbContext context) : BaseRepository<Pr
             .ApplyPagination(page, itemsPerPage)
             .Build();
         
-        return await query.Include(product => product.ProductCategory).ToListAsync(cancellationToken);
+        return await query
+            .Include(product => product.ProductCategory)
+            .Include(product => product.ProductImages.OrderBy(productImage => productImage.DisplayOrder))
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<int> CountAsync(Product filter, CancellationToken cancellationToken = default)
