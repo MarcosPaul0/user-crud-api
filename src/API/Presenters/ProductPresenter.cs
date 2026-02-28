@@ -16,6 +16,8 @@ public static class ProductPresenter
         {
             Id = product.Id,
             Name = product.Name,
+            PrintDescription = product.PrintDescription,
+            Description = product.Description,
             PriceInCents = product.PriceInCents,
             DiscountPercentage = product.DiscountPercentage,
             ProductCategoryId = product.ProductCategoryId,
@@ -37,7 +39,6 @@ public static class ProductPresenter
             {
                 Id = product.Id,
                 Name = product.Name,
-                Description = product.Description,
                 PriceInCents = product.PriceInCents,
                 DiscountPercentage = product.DiscountPercentage,
                 ProductCategoryId = product.ProductCategoryId,

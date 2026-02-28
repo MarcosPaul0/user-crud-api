@@ -4,7 +4,6 @@ public record ProductListResponseDto
 {
     public required Guid Id { get; init; }
     public required string Name { get; init; }
-    public required string Description { get; init; }
     public required int PriceInCents { get; init; }
     public required byte DiscountPercentage { get; init; }
     public required Guid ProductCategoryId { get; init; }
