@@ -16,6 +16,7 @@ public static class ProductForAdminPresenter
         {
             Id = product.Id,
             Name = product.Name,
+            PrintDescription = product.PrintDescription,
             Description = product.Description,
             PriceInCents = product.PriceInCents,
             ProductionTimeInMinutes = product.ProductionTimeInMinutes,
