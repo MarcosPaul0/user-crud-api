@@ -6,6 +6,7 @@ namespace UserCrud.Domain.Entities;
 public class Product : Entity
 {
     public string Name { get; set; }
+    public string PrintDescription { get; set; }
     public string Description { get; set; }
     public int PriceInCents { get; set; }
     public int ProductionTimeInMinutes { get; set; }
@@ -21,6 +22,7 @@ public class Product : Entity
     public Product(
         string name, 
         string description,
+        string printDescription,
         int priceInCents, 
         int productionTimeInMinutes, 
         byte discountPercentage,
@@ -31,6 +33,7 @@ public class Product : Entity
         Name = name;
         Description = description;
         PriceInCents = priceInCents;
+        PrintDescription = printDescription;
         ProductionTimeInMinutes = productionTimeInMinutes;
         IsActive = true;
         DiscountPercentage = discountPercentage;
@@ -41,7 +44,8 @@ public class Product : Entity
     
     public Product(
         Guid id,
-        string name, 
+        string name,
+        string printDescription,
         string description,
         int priceInCents, 
         int productionTimeInMinutes,
@@ -56,6 +60,7 @@ public class Product : Entity
     {
         Id = id;
         Name = name;
+        PrintDescription = printDescription;
         Description = description;
         PriceInCents = priceInCents;
         ProductionTimeInMinutes = productionTimeInMinutes;
