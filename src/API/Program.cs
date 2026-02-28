@@ -27,10 +27,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("Default", policy =>
     {
         policy
-            .WithOrigins(    
-                "http://localhost:3001",
-                "https://localhost:3001"
-            )
+            .WithOrigins(Environment.GetEnvironmentVariable("ORIGIN") ?? string.Empty)
             .AllowCredentials()
             .AllowAnyHeader()
             .AllowAnyMethod();
@@ -81,6 +78,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options => builder.Configuration.Bind("CookieSettings", options));
 
 builder.Services.AddOpenApi();
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -103,4 +101,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseExceptionHandler();
 app.MapControllers();
+app.MapHealthChecks("/healthz");
 app.Run();
