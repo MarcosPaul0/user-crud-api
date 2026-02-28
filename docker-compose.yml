@@ -1,4 +1,23 @@
 services:
+  api:
+    container_name: user_crud_api_container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - src/API/.env
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=database;Port=5432;Database=user_crud;Username=admin;Password=123"
+    ports:
+      - "8082:8080"
+    networks:
+      - user-crud-network
+    depends_on:
+      - database
+      - minio
+    restart: unless-stopped
+
   database:
     container_name: user_crud_db_container
     image: postgres:14
@@ -15,6 +34,22 @@ services:
     networks:
       - user-crud-network
 
+  minio:
+    container_name: user_crud_minio_container
+    image: quay.io/minio/minio:latest
+    restart: always
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio-data:/data
+    ports:
+      - "9000:9000"   # S3 API
+      - "9001:9001"   # Console Web
+    networks:
+      - user-crud-network
+
 networks:
   user-crud-network:
     name: user-crud-app-network
@@ -22,3 +57,4 @@ networks:
 
 volumes:
   data:
+  minio-data:
