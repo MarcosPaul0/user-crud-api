@@ -4,8 +4,8 @@ namespace UserCrud.Infrastructure.Services;
 
 public class EnvironmentVariablesService : IEnvironmentVariablesService
 {
+    public string Origin { get; private set; } = GetRequiredAndConvert<string>("ORIGIN");
     public string JwtPrivateKey { get; private set; } = GetRequiredAndConvert<string>("JWT_PRIVATE_KEY");
-
     public string JwtPublicKey { get; private set; } = GetRequiredAndConvert<string>("JWT_PUBLIC_KEY");
     public string JwtIssuer { get; private set; } = GetRequiredAndConvert<string>("JWT_ISSUER");
     public string JwtAudience { get; private set; } = GetRequiredAndConvert<string>("JWT_AUDIENCE");

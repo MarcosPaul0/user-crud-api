@@ -2,6 +2,7 @@ namespace UserCrud.Application.Interfaces;
 
 public interface IEnvironmentVariablesService
 {
+    public string Origin { get; }
     public string JwtPrivateKey { get; }
     public string JwtPublicKey { get; }
     public string JwtIssuer { get; }
