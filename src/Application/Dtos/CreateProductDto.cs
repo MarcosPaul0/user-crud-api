@@ -9,6 +9,10 @@ public class CreateProductDto
     public string Name { get; init; }
     
     [Required]
+    [StringLength(600, MinimumLength = 10)]
+    public string PrintDescription { get; init; }
+    
+    [Required]
     [StringLength(1200, MinimumLength = 10)]
     public string Description { get; init; }
     

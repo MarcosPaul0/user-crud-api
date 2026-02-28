@@ -29,6 +29,7 @@ public class CreateProductUseCase(
 
         var newProduct = new Product(
             createProductDto.Name,
+            createProductDto.PrintDescription,
             createProductDto.Description,
             createProductDto.PriceInCents,
             createProductDto.ProductionTimeInMinutes,
