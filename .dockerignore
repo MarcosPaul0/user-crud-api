@@ -1,0 +1,63 @@
+# =============================================================================
+# .dockerignore — Arquivos excluídos do contexto de build do Docker
+# =============================================================================
+#
+# O contexto de build é tudo que é enviado para o daemon do Docker ao executar
+# `docker build`. Excluir arquivos desnecessários:
+#   - Reduz o tamanho do contexto (build mais rápido)
+#   - Evita que arquivos sensíveis (.env, chaves) entrem na imagem
+#   - Evita invalidar o cache de layers por mudanças irrelevantes
+# =============================================================================
+
+# Controle de versão
+**/.git
+**/.gitignore
+**/.gitattributes
+
+# IDEs e editores
+**/.vs
+**/.vscode
+**/.idea
+**/*.user
+**/*.suo
+
+# Artefatos de build (gerados pelo `dotnet build` localmente — não devem ir para o Docker)
+# O multi-stage build os gera dentro do container; arquivos locais apenas poluem o contexto
+**/bin
+**/obj
+**/out
+# Diretórios com barra invertida no nome criados pelo Rider/Windows em filesystems Linux
+# (ex: bin\Debug como nome literal — diferente de bin/Debug no Linux)
+**/*\*
+
+# Arquivos de ambiente e segredos — NUNCA devem entrar em uma imagem Docker
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.prod.example
+
+# Configuração Docker (evita recursão e layers desnecessárias)
+.dockerignore
+Dockerfile
+docker-compose*.yml
+
+# Documentação
+**/README.md
+**/CHANGELOG.md
+**/CONTRIBUTING.md
+**/*.md
+
+# Testes (não são necessários na imagem de produção)
+**/tests
+**/*.Tests
+**/*.Test
+
+# Certificados locais (montados via volume em runtime — não devem ficar embutidos na imagem)
+certs/
+
+# Diretório nginx (configuração montada via volume)
+nginx/
+
+# Outros
+**/.DS_Store
+**/Thumbs.db
