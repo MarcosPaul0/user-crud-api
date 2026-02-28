@@ -10,6 +10,9 @@ public record UpdateProductDto
     [StringLength(1200, MinimumLength = 10)]
     public string? Description { get; init; }
     
+    [StringLength(600, MinimumLength = 10)]
+    public string? PrintDescription { get; init; }
+    
     [Range(1, int.MaxValue)]
     public int? PriceInCents { get; init; }
     

@@ -47,6 +47,12 @@ public class UpdateProductUseCase(
             isUpdated = true;
         }
         
+        if (updateProductDto.PrintDescription != null && updateProductDto.PrintDescription != product.PrintDescription)
+        {
+            product.PrintDescription = updateProductDto.PrintDescription;
+            isUpdated = true;
+        }
+        
         if (updateProductDto.Description != null && updateProductDto.Description != product.Description)
         {
             product.Description = updateProductDto.Description;
