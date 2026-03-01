@@ -62,6 +62,10 @@ services:
         # e pode retornar 502 durante o boot da aplicação.
 #        condition: service_healthy
     restart: unless-stopped
+    depends_on:
+      certbot:
+      api:
+        condition: service_healthy
 
   certbot:
     image: certbot/certbot
