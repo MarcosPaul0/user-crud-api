@@ -33,5 +33,4 @@ ENV PATH="$PATH:/root/.dotnet/tools"
 # A connection string é injetada em runtime via env_file (.env) no docker-compose.
 CMD ["dotnet", "ef", "database", "update", \
      "--project",         "src/Infrastructure/UserCrud.Infrastructure.csproj", \
-     "--startup-project", "src/API/UserCrud.API.csproj", \
-     "--no-build"]
+     "--startup-project", "src/API/UserCrud.API.csproj"]
