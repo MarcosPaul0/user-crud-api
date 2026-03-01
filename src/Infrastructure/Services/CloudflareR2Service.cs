@@ -2,11 +2,13 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using UserCrud.Application.Interfaces;
 
 namespace UserCrud.Infrastructure.Services;
 
 public class CloudflareR2Service(
+    ILogger<CloudflareR2Service> logger,
     IAmazonS3 s3, 
     IEnvironmentVariablesService environmentVariablesService) : IObjectStorageService
 {
@@ -15,20 +17,27 @@ public class CloudflareR2Service(
         string objectKey,
         CancellationToken cancellationToken)
     {
-        await using var stream = file.OpenReadStream();
-
-        var request = new PutObjectRequest
+        try
         {
-            BucketName = environmentVariablesService.ObjectStorageBucket,
-            Key = objectKey,
-            InputStream = stream,
-            ContentType = file.ContentType,
-            DisablePayloadSigning = true
-        };
+            await using var stream = file.OpenReadStream();
 
-        await s3.PutObjectAsync(request, cancellationToken);
+            var request = new PutObjectRequest
+            {
+                BucketName = environmentVariablesService.ObjectStorageBucket,
+                Key = objectKey,
+                InputStream = stream,
+                ContentType = file.ContentType,
+                DisablePayloadSigning = true
+            };
 
-        return $"{environmentVariablesService.ObjectStoragePublicUrl}/{objectKey}";
+            await s3.PutObjectAsync(request, cancellationToken);
+
+            return $"{environmentVariablesService.ObjectStoragePublicUrl}/{objectKey}";
+        } catch (Exception exception)
+        {
+            logger.LogError(exception, "Error uploading file to Cloudflare R2");
+            throw;
+        }
     }
 
     public async Task DeleteAsync(
