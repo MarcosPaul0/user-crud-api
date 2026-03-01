@@ -55,15 +55,11 @@ services:
       - ./certbot/www:/var/www/certbot
     networks:
       - backend
-#    depends_on:
-#      api:
-        # [FIX] Aguarda o healthcheck da api passar antes de iniciar o nginx.
-        # Sem isso, nginx sobe junto com o container da api (não com a app pronta)
-        # e pode retornar 502 durante o boot da aplicação.
-#        condition: service_healthy
     restart: unless-stopped
+    # [FIX] Aguarda o healthcheck da api passar antes de iniciar o nginx.
+    # Sem isso, nginx sobe junto com o container da api (não com a app pronta)
+    # e pode retornar 502 durante o boot da aplicação.
     depends_on:
-      certbot:
       api:
         condition: service_healthy
 
@@ -74,16 +70,14 @@ services:
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    # entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;"
-    entrypoint: >
-      certbot certonly --webroot
-      -w /var/www/certbot
-      -d api.autorialoja.com.br
-      --non-interactive
-      --agree-tos
-      --email marcosphip7@gmail.com
+    # Loop de renovação automática: verifica e renova o certificado a cada 12h.
+    # O bootstrap inicial (primeiro certificado) é feito pelo scripts/init-ssl.sh.
+    entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;"
     networks:
       - backend
+    depends_on:
+      api:
+        condition: service_healthy
   # ---------------------------------------------------------------------------
   # migrator — Aplica migrations do EF Core e sai (container efêmero)
   #
