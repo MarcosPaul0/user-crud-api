@@ -56,12 +56,12 @@ services:
       - ./certs:/etc/nginx/certs:ro
     networks:
       - backend
-    depends_on:
-      api:
+#    depends_on:
+#      api:
         # [FIX] Aguarda o healthcheck da api passar antes de iniciar o nginx.
         # Sem isso, nginx sobe junto com o container da api (não com a app pronta)
         # e pode retornar 502 durante o boot da aplicação.
-        condition: service_healthy
+#        condition: service_healthy
     restart: unless-stopped
 
   # ---------------------------------------------------------------------------
