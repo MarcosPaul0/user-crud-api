@@ -7,14 +7,13 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using UserCrud.API.Handlers;
 using UserCrud.Application;
-using UserCrud.Application.Interfaces;
 using UserCrud.Infrastructure;
 
 Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddInfrastructure();
 builder.Services.AddUseCases();
 builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
