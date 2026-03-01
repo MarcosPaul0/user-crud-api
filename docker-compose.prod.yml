@@ -81,6 +81,26 @@ services:
     networks:
       - backend
   # ---------------------------------------------------------------------------
+  # migrator — Aplica migrations do EF Core e sai (container efêmero)
+  #
+  # Roda `dotnet ef database update` e termina. O serviço `api` só sobe após
+  # este container completar com sucesso (condition: service_completed_successfully).
+  # ---------------------------------------------------------------------------
+  migrator:
+    build:
+      context: .
+      dockerfile: Dockerfile.migrator
+    container_name: usercrud_migrator
+    env_file:
+      - .env
+    networks:
+      - backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  # ---------------------------------------------------------------------------
   # api — Aplicação ASP.NET Core
   #
   # Não expõe portas ao host — acessível SOMENTE via nginx na rede backend.
@@ -132,6 +152,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      migrator:
+        condition: service_completed_successfully
     restart: unless-stopped
 
   # ---------------------------------------------------------------------------
