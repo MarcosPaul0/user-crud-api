@@ -1,0 +1,37 @@
+# =============================================================================
+# Dockerfile.migrator — Aplicação de Migrations EF Core
+# =============================================================================
+#
+# Imagem efêmera baseada no SDK — roda `dotnet ef database update` e sai.
+# Usada pelo serviço `migrator` no docker-compose.prod.yml, que o docker-compose
+# garante que complete com sucesso antes de subir o serviço `api`.
+#
+# Não é uma imagem de longa duração: não há EXPOSE, volumes de dados nem restart.
+# =============================================================================
+
+FROM mcr.microsoft.com/dotnet/sdk:10.0
+
+WORKDIR /src
+
+# --- Passo 1: restore (camada cacheada enquanto os .csproj não mudam) ---
+COPY UserCrud.sln .
+COPY src/API/UserCrud.API.csproj                      src/API/
+COPY src/Application/UserCrud.Application.csproj      src/Application/
+COPY src/Domain/UserCrud.Domain.csproj                src/Domain/
+COPY src/Infrastructure/UserCrud.Infrastructure.csproj src/Infrastructure/
+
+RUN dotnet restore "UserCrud.sln"
+
+# --- Passo 2: código-fonte completo ---
+COPY . .
+
+# Instala dotnet-ef globalmente para uso no CMD
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+# Aplica todas as migrations pendentes ao iniciar o container.
+# A connection string é injetada em runtime via env_file (.env) no docker-compose.
+CMD ["dotnet", "ef", "database", "update", \
+     "--project",         "src/Infrastructure/UserCrud.Infrastructure.csproj", \
+     "--startup-project", "src/API/UserCrud.API.csproj", \
+     "--no-build"]
