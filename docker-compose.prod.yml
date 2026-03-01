@@ -75,8 +75,8 @@ services:
     entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;"
     networks:
       - backend
-    depends_on:
-      nginx:
+#    depends_on:
+#      nginx:
   # ---------------------------------------------------------------------------
   # migrator — Aplica migrations do EF Core e sai (container efêmero)
   #
@@ -136,16 +136,16 @@ services:
       - ./certs:/https:ro
     networks:
       - backend
-    healthcheck:
+#    healthcheck:
       # [ADD] Healthcheck da api: o nginx e o depends_on só avançam após este
       # check passar, garantindo que a aplicação está pronta para receber tráfego.
       # O endpoint /healthz é exposto gratuitamente pelo ASP.NET Core sem
       # configuração adicional em .NET 8+.
-      test: ["CMD-SHELL", "curl -f http://localhost:8080/healthz || exit 1"]
-      interval:     15s
-      timeout:       5s
-      retries:        3
-      start_period: 20s   # Margem para migrations automáticas ou boot lento
+#      test: ["CMD-SHELL", "curl -f http://localhost:8080/healthz || exit 1"]
+#      interval:     15s
+#      timeout:       5s
+#      retries:        3
+#      start_period: 20s   # Margem para migrations automáticas ou boot lento
     depends_on:
       postgres:
         condition: service_healthy
