@@ -1,0 +1,166 @@
+# =============================================================================
+# docker-compose.prod.yml — Stack de Produção UserCrud
+# =============================================================================
+#
+# Serviços:
+#   nginx    → Reverse proxy com SSL termination (portas 80 e 443 expostas ao host)
+#   api      → ASP.NET Core / .NET 10 (somente porta interna 8080, sem acesso externo)
+#   postgres → PostgreSQL 16 (somente rede interna, sem acesso externo)
+#
+# Pré-requisitos antes do primeiro deploy:
+#   1. Copie .env.prod.example para .env e preencha TODOS os valores
+#      $ cp .env.prod.example .env && nano .env
+#
+#   2. Coloque os certificados SSL em ./certs/:
+#      ./certs/yourdomain.crt  → certificado completo (cert + chain)
+#      ./certs/yourdomain.key  → chave privada
+#
+#   3. Revise ./nginx/nginx.conf e substitua 'yourdomain.com' pelo domínio real
+#
+#   4. Execute as migrations antes de subir em produção:
+#      $ docker run --rm \
+#          --network <backend-network> \
+#          -e ConnectionStrings__DefaultConnection="..." \
+#          -v "$(pwd)/src:/src" -w /src \
+#          mcr.microsoft.com/dotnet/sdk:10.0 \
+#          dotnet ef database update \
+#            --project Infrastructure/UserCrud.Infrastructure.csproj \
+#            --startup-project API/UserCrud.API.csproj
+#
+# Comandos úteis:
+#   Subir:    docker compose -f docker-compose.prod.yml up -d
+#   Parar:    docker compose -f docker-compose.prod.yml down
+#   Logs:     docker compose -f docker-compose.prod.yml logs -f api
+#   Rebuild:  docker compose -f docker-compose.prod.yml up -d --build api
+#
+# TODO: Em produção real, considere usar Docker Secrets ou um gerenciador de
+#       segredos (Vault, AWS Secrets Manager) ao invés de um arquivo .env no disco.
+# =============================================================================
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # nginx — Reverse proxy e SSL termination
+  #
+  # Portas 80 e 443 são as ÚNICAS portas expostas ao host em toda a stack.
+  # ---------------------------------------------------------------------------
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: usercrud_nginx
+    ports:
+      - "80:80"    # HTTP → redireciona para HTTPS via nginx.conf
+      - "443:443"  # HTTPS → SSL termination aqui
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      # TODO: coloque yourdomain.crt e yourdomain.key em ./certs/
+      - ./certs:/etc/nginx/certs:ro
+    networks:
+      - backend
+    depends_on:
+      api:
+        # [FIX] Aguarda o healthcheck da api passar antes de iniciar o nginx.
+        # Sem isso, nginx sobe junto com o container da api (não com a app pronta)
+        # e pode retornar 502 durante o boot da aplicação.
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # api — Aplicação ASP.NET Core
+  #
+  # Não expõe portas ao host — acessível SOMENTE via nginx na rede backend.
+  # ---------------------------------------------------------------------------
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: usercrud_api
+    expose:
+      - "8080"
+    # Carrega JWT, CORS, Object Storage e demais variáveis definidas em .env
+    # TODO: Crie .env a partir de .env.prod.example e NUNCA o commite no git
+    env_file:
+      - .env
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+
+      # [FIX] Habilita o middleware de ForwardedHeaders automaticamente.
+      # O nginx faz proxy via HTTP interno, então sem esta variável a API recebe
+      # todos os requests como http:// e o UseHttpsRedirection() (ativo em Production)
+      # tenta redirecionar infinitamente, causando loop. Com esta variável, a API
+      # lê o header X-Forwarded-Proto=https enviado pelo nginx e trata o request
+      # como HTTPS corretamente.
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      
+      # Kestrel HTTPS (desnecessário nesta arquitetura — nginx termina o TLS)
+      # ASPNETCORE_Kestrel__Certificates__Default__Path: /https/aspnetapp.pfx
+      # ASPNETCORE_Kestrel__Certificates__Default__Password: "${KESTREL_CERT_PASSWORD}"
+    volumes:
+      # [FIX] Volume para persistir as Data Protection Keys do ASP.NET.
+      # Sem este volume, as chaves são perdidas ao reiniciar o container e todos
+      # os cookies de autenticação são invalidados (usuários deslogados em cada deploy).
+      - dataprotection_keys:/home/appuser/.aspnet/DataProtection-Keys
+      # Certificados montados para eventual uso pelo Kestrel HTTPS
+      - ./certs:/https:ro
+    networks:
+      - backend
+    healthcheck:
+      # [ADD] Healthcheck da api: o nginx e o depends_on só avançam após este
+      # check passar, garantindo que a aplicação está pronta para receber tráfego.
+      # O endpoint /healthz é exposto gratuitamente pelo ASP.NET Core sem
+      # configuração adicional em .NET 8+.
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/healthz || exit 1"]
+      interval:     15s
+      timeout:       5s
+      retries:        3
+      start_period: 20s   # Margem para migrations automáticas ou boot lento
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # postgres — Banco de dados PostgreSQL 16
+  #
+  # Porta 5432 NÃO exposta ao host. Dados persistidos em volume nomeado 'pgdata'.
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: usercrud_postgres
+    environment:
+      DATABASE: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval:     10s
+      timeout:       5s
+      retries:        5
+      start_period: 10s
+    restart: unless-stopped
+
+
+# =============================================================================
+# Volumes nomeados
+# =============================================================================
+volumes:
+  # Dados do PostgreSQL — remover este volume apaga o banco inteiro
+  pgdata:
+
+  # [ADD] Data Protection Keys do ASP.NET Core.
+  # Persiste as chaves criptográficas usadas para assinar cookies de autenticação.
+  # Sem este volume, todos os usuários são deslogados a cada restart do container.
+  dataprotection_keys:
+
+
+# =============================================================================
+# Redes
+# =============================================================================
+networks:
+  # Rede bridge interna: nginx, api e postgres se comunicam aqui.
+  # Somente nginx tem portas expostas ao host (80 e 443).
+  backend:
+    driver: bridge

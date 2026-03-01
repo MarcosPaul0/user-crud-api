@@ -8,7 +8,6 @@ services:
       - src/API/.env
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: "Host=database;Port=5432;Database=user_crud;Username=admin;Password=123"
     ports:
       - "8082:8080"
     networks:
@@ -22,10 +21,12 @@ services:
     container_name: user_crud_db_container
     image: postgres:14
     restart: always
+    env_file:
+      - src/API/.env
     environment:
-      DATABASE: postgres
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: '123'
+      DATABASE: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       PGDATA: /data/postgres
     volumes:
        - /database/postgres:/data/postgres

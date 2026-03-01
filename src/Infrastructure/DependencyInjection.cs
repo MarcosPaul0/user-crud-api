@@ -13,10 +13,20 @@ namespace UserCrud.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static void AddInfrastructure(this IServiceCollection services)
     {
-        var connection = configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connection));
+        services.AddSingleton<IEnvironmentVariablesService, EnvironmentVariablesService>();
+
+        var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+        Console.WriteLine("💾💾 Connecting to database:");
+        Console.WriteLine(connectionString);
+
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new InvalidOperationException("The database connection string is not set.");
+        }
+        
+        services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
@@ -27,7 +37,6 @@ public static class DependencyInjection
 
         services.AddScoped<IPasswordHasherService, PasswordHasherService>();
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
-        services.AddSingleton<IEnvironmentVariablesService, EnvironmentVariablesService>();
         services.AddSingleton<IAmazonS3>(serviceProvider =>
         {
             var environmentVariablesService = serviceProvider.GetRequiredService<IEnvironmentVariablesService>();
