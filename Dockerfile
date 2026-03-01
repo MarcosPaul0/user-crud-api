@@ -161,6 +161,13 @@ COPY --from=publish /app/publish .
 # Isso é feito como root (usuário padrão até este ponto) enquanto ainda é possível.
 RUN chown -R appuser:appuser /app
 
+# Cria o diretório de DataProtection Keys com a ownership correta.
+# O Docker seeds volumes vazios com o conteúdo da imagem — ao criar o diretório
+# aqui (como root, antes do USER appuser), o volume será inicializado com as
+# permissões corretas na primeira execução.
+RUN mkdir -p /home/appuser/.aspnet/DataProtection-Keys \
+    && chown -R appuser:appuser /home/appuser/.aspnet
+
 # Troca para o usuário não-root para todas as instruções seguintes e em runtime.
 # Princípio do menor privilégio: limita o impacto de uma eventual exploração.
 USER appuser
