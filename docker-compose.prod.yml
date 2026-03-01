@@ -59,9 +59,9 @@ services:
     # [FIX] Aguarda o healthcheck da api passar antes de iniciar o nginx.
     # Sem isso, nginx sobe junto com o container da api (não com a app pronta)
     # e pode retornar 502 durante o boot da aplicação.
-    depends_on:
-      api:
-        condition: service_healthy
+#    depends_on:
+#      api:
+#        condition: service_healthy
 
   certbot:
     image: certbot/certbot
@@ -76,8 +76,7 @@ services:
     networks:
       - backend
     depends_on:
-      api:
-        condition: service_healthy
+      nginx:
   # ---------------------------------------------------------------------------
   # migrator — Aplica migrations do EF Core e sai (container efêmero)
   #
