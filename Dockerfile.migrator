@@ -25,12 +25,22 @@ RUN dotnet restore "UserCrud.sln"
 # --- Passo 2: código-fonte completo ---
 COPY . .
 
+# Compila em Release durante o build da imagem.
+# Erros de compilação aparecem aqui com output completo, não suprimidos pelo EF Core.
+RUN dotnet build "src/API/UserCrud.API.csproj" \
+    -c Release \
+    --no-restore
+
 # Instala dotnet-ef globalmente para uso no CMD
 RUN dotnet tool install --global dotnet-ef
 ENV PATH="$PATH:/root/.dotnet/tools"
 
 # Aplica todas as migrations pendentes ao iniciar o container.
+# --no-build: reutiliza o output do RUN acima — sem recompilar em runtime.
+# --configuration Release: aponta para o bin/Release gerado pelo build acima.
 # A connection string é injetada em runtime via env_file (.env) no docker-compose.
 CMD ["dotnet", "ef", "database", "update", \
      "--project",         "src/Infrastructure/UserCrud.Infrastructure.csproj", \
-     "--startup-project", "src/API/UserCrud.API.csproj"]
+     "--startup-project", "src/API/UserCrud.API.csproj", \
+     "--no-build", \
+     "--configuration",   "Release"]
