@@ -12,6 +12,6 @@ public class ProductImageDto
     public IFormFile? File { get; init; }
     
     [Required]
-    [Range(1, 5)]
+    [Range(1, 4)]
     public byte DisplayOrder { get; init; }
 }

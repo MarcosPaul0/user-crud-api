@@ -9,7 +9,7 @@ namespace UserCrud.API.Controllers;
 [Route("api/product")]
 public class SetProductImagesController(ISetProductImagesUseCase setProductImagesUseCase) : ControllerBase
 {
-    private const int ProductImageMaxSize = 15_728_640;
+    private const int ProductImageMaxSize = 12_582_912;
     
     [Authorize]
     [HttpPatch("images/{productId:guid}")]
