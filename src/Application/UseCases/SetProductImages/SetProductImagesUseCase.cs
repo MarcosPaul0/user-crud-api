@@ -115,8 +115,7 @@ public class SetProductImagesUseCase(
     {
         if (file != null)
         {
-            var oldKey = ObjectStorageHelper.ExtractObjectKey(productImage.ImageUrl);
-            await objectStorageService.DeleteAsync(oldKey, cancellationToken);
+            await objectStorageService.DeleteAsync(productImage.ImageUrl, cancellationToken);
 
             var extension = Path.GetExtension(file.FileName);
             var objectKey = $"products/{productImage.ProductId}/{productImage.Id}{extension}";

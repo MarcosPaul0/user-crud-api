@@ -2,6 +2,7 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using UserCrud.Application.Helpers;
 using UserCrud.Application.Interfaces;
 
 namespace UserCrud.Infrastructure.Services;
@@ -31,7 +32,7 @@ public class CloudflareR2Service(
 
             await s3.PutObjectAsync(request, cancellationToken);
             
-            logger.LogError("File uploaded from Cloudflare R2 successfully.");
+            logger.LogInformation("File uploaded from Cloudflare R2 successfully.");
 
             return $"{environmentVariablesService.ObjectStoragePublicUrl}/{objectKey}";
         } catch (Exception exception)
@@ -42,11 +43,13 @@ public class CloudflareR2Service(
     }
 
     public async Task DeleteAsync(
-        string objectKey,
+        string imageUrl,
         CancellationToken cancellationToken)
     {
         try
         {
+            var objectKey = ObjectStorageHelper.ExtractObjectKey(imageUrl);
+            
             var request = new DeleteObjectRequest
             {
                 BucketName = environmentVariablesService.ObjectStorageBucket,
@@ -55,7 +58,7 @@ public class CloudflareR2Service(
 
             await s3.DeleteObjectAsync(request, cancellationToken);
             
-            logger.LogError("File deleted from Cloudflare R2 successfully.");
+            logger.LogInformation("File deleted from Cloudflare R2 successfully.");
         } catch (Exception exception)
         {
             logger.LogError(exception, "Error deleting file to Cloudflare R2.");
