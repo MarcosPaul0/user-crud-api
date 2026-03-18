@@ -18,8 +18,6 @@ public static class DependencyInjection
         services.AddSingleton<IEnvironmentVariablesService, EnvironmentVariablesService>();
 
         var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-        Console.WriteLine("💾💾 Connecting to database:");
-        Console.WriteLine(connectionString);
 
         if (string.IsNullOrWhiteSpace(connectionString))
         {
@@ -34,7 +32,7 @@ public static class DependencyInjection
         services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IProductImageRepository, ProductImageRepository>();
-
+        
         services.AddScoped<IPasswordHasherService, PasswordHasherService>();
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
         services.AddSingleton<IAmazonS3>(serviceProvider =>

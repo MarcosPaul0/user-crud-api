@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UserCrud.API.Dtos;
 using UserCrud.API.Presenters;
 using UserCrud.Application.Dtos;
 using UserCrud.Application.UseCases.ListProductsForAdmin;
@@ -12,6 +13,7 @@ public class ListProductsForAdminController(IListProductsForAdminUseCase listPro
 {
     [Authorize]
     [HttpPost("list/for-admin")]
+    [ProducesResponseType(typeof(PaginationResponseDto<ProductForAdminResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult> HandleAsync(
         [FromBody] ListProductsByAdminDto listProductsByAdminDto,
         CancellationToken cancellationToken)

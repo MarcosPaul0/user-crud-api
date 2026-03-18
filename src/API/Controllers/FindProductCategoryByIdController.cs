@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UserCrud.API.Dtos;
 using UserCrud.API.Presenters;
 using UserCrud.Application.UseCases.FindProductCategoryById;
 
@@ -11,6 +12,7 @@ public class FindProductCategoryByIdController(IFindProductCategoryByIdUseCase f
 {
     [Authorize]
     [HttpGet("{productCategoryId:guid}")]
+    [ProducesResponseType(typeof(ProductCategoryResponseDto), StatusCodes.Status200OK)]
     public async Task<ActionResult> HandleAsync(
         [FromRoute] Guid productCategoryId,
         CancellationToken cancellationToken)

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using UserCrud.API.Dtos;
 using UserCrud.API.Presenters;
 using UserCrud.Application.UseCases.FindProductById;
 
@@ -9,6 +10,7 @@ namespace UserCrud.API.Controllers;
 public class FindProductByIdController(IFindProductByIdUseCase findProductByIdUseCase) : ControllerBase
 {
     [HttpGet("{productId:guid}")]
+    [ProducesResponseType(typeof(ProductByIdResponseDto), StatusCodes.Status200OK)]
     public async Task<ActionResult> HandleAsync(
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)

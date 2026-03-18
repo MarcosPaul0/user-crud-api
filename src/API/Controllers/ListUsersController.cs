@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UserCrud.API.Dtos;
 using UserCrud.API.Presenters;
 using UserCrud.Application.Dtos;
 using UserCrud.Application.UseCases.ListUsers;
@@ -13,6 +14,7 @@ public class FindAllUsersController(IListUserUseCase listUsersUseCase) : Control
 {
     [Authorize]
     [HttpPost("list")]
+    [ProducesResponseType(typeof(PaginationResponseDto<UserResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<User>>> HandleAsync(
         ListUsersDto listUsersDto,
         CancellationToken cancellationToken)

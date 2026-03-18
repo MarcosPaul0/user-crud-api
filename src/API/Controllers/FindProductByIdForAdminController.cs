@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UserCrud.API.Dtos;
 using UserCrud.API.Presenters;
 using UserCrud.Application.UseCases.FindProductById;
 
@@ -11,6 +12,7 @@ public class FindProductByIdForAdminController(IFindProductByIdUseCase findProdu
 {
     [Authorize]
     [HttpGet("for-admin/{productId:guid}")]
+    [ProducesResponseType(typeof(ProductForAdminResponseDto), StatusCodes.Status200OK)]
     public async Task<ActionResult> HandleAsync(
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using UserCrud.API.Dtos;
 using UserCrud.API.Presenters;
 using UserCrud.Application.Dtos;
 using UserCrud.Application.UseCases.ListProducts;
@@ -10,6 +11,7 @@ namespace UserCrud.API.Controllers;
 public class ListProductsController(IListProductsUseCase listProductsUseCase) : ControllerBase
 {
     [HttpPost("list")]
+    [ProducesResponseType(typeof(PaginationResponseDto<ProductListResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult> HandleAsync(
         [FromBody] ListProductsDto listProductsDto,
         CancellationToken cancellationToken)
