@@ -4,9 +4,7 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.UpdateProductCategory;
 
-public class UpdateProductCategoryUseCase(
-    IProductCategoryRepository productCategoryRepository,
-    IUnitOfWork unitOfWork) : IUpdateProductCategoryUseCase
+public sealed class UpdateProductCategoryUseCase(IUnitOfWork unitOfWork) : IUpdateProductCategoryUseCase
 {
     public async Task ExecuteAsync(
         Guid productCategoryId,
@@ -14,7 +12,7 @@ public class UpdateProductCategoryUseCase(
         CancellationToken cancellationToken)
     {
         var productCategory =
-            await productCategoryRepository.FindByIdAsync(productCategoryId, cancellationToken);
+            await unitOfWork.ProductCategory.FindByIdAsync(productCategoryId, cancellationToken);
         
         if (productCategory == null)
         {
@@ -22,7 +20,7 @@ public class UpdateProductCategoryUseCase(
         }
         
         var productCategoryAlreadyExists =
-            await productCategoryRepository.FindByCategoryAsync(updateProductCategoryDto.Category, cancellationToken);
+            await unitOfWork.ProductCategory.FindByCategoryAsync(updateProductCategoryDto.Category, cancellationToken);
 
         if (productCategoryAlreadyExists != null)
         {
@@ -32,7 +30,7 @@ public class UpdateProductCategoryUseCase(
         productCategory.Category = updateProductCategoryDto.Category;
         productCategory.UpdatedAt = DateTime.UtcNow;
 
-        await productCategoryRepository.UpdateAsync(productCategory, cancellationToken);
+        await unitOfWork.ProductCategory.UpdateAsync(productCategory, cancellationToken);
         
         await unitOfWork.SaveChangesAsync();
     }

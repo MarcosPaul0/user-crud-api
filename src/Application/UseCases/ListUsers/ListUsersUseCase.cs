@@ -4,7 +4,7 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.ListUsers;
 
-public class ListUserUseCase(IUserRepository userRepository) : IListUserUseCase
+public sealed class ListUserUseCase(IUserRepository userRepository) : IListUserUseCase
 {
     public async Task<(IEnumerable<User>, int)> ExecuteAsync(
         ListUsersDto listUsersDto, 

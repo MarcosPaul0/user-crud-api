@@ -4,11 +4,11 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.UpdateUser;
 
-public class UpdateUserUseCase(IUserRepository userRepository, IUnitOfWork unitOfWork) : IUpdateUserUseCase
+public sealed class UpdateUserUseCase(IUnitOfWork unitOfWork) : IUpdateUserUseCase
 {
     public async Task ExecuteAsync(Guid userId, UpdateUserDto updateUserDto, CancellationToken cancellationToken)
     {
-        var user = await userRepository.FindByIdAsync(userId, cancellationToken);
+        var user = await unitOfWork.User.FindByIdAsync(userId, cancellationToken);
 
         if (user == null)
         {
@@ -39,7 +39,7 @@ public class UpdateUserUseCase(IUserRepository userRepository, IUnitOfWork unitO
         {
             user.UpdatedAt = DateTime.UtcNow;
             
-            await userRepository.UpdateAsync(user, cancellationToken);
+            await unitOfWork.User.UpdateAsync(user, cancellationToken);
             await unitOfWork.SaveChangesAsync();
         }
     }

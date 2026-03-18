@@ -5,7 +5,7 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.CreateProductCategory;
 
-public class CreateProductCategoryUseCase(
+public sealed class CreateProductCategoryUseCase(
     IProductCategoryRepository productCategoryRepository,
     IUnitOfWork unitOfWork) : ICreateProductCategoryUseCase
 {

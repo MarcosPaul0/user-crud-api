@@ -8,7 +8,7 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.SetProductImages;
 
-public class SetProductImagesUseCase(
+public sealed class SetProductImagesUseCase(
     IObjectStorageService objectStorageService,
     IProductRepository productRepository,
     IProductImageRepository productImageRepository, 

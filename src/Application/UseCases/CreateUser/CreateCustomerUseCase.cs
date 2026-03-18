@@ -7,7 +7,7 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.CreateUser;
 
-public class CreateCustomerUseCase(
+public sealed class CreateCustomerUseCase(
     IPasswordHasherService passwordHasherService, 
     IUserRepository userRepository, 
     IUnitOfWork unitOfWork) : ICreateCustomerUseCase

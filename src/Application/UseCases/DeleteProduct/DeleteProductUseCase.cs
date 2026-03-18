@@ -4,7 +4,7 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.DeleteProduct;
 
-public class DeleteProductUseCase(
+public sealed class DeleteProductUseCase(
     IObjectStorageService objectStorageService,
     IProductRepository productRepository,
     IProductImageRepository productImageRepository,

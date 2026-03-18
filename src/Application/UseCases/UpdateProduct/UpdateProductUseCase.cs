@@ -4,14 +4,11 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.UpdateProduct;
 
-public class UpdateProductUseCase(
-    IProductRepository productRepository,
-    IProductCategoryRepository productCategoryRepository,
-    IUnitOfWork unitOfWork) : IUpdateProductUseCase
+public sealed class UpdateProductUseCase(IUnitOfWork unitOfWork) : IUpdateProductUseCase
 {
     public async Task ExecuteAsync(Guid productId, UpdateProductDto updateProductDto, CancellationToken cancellationToken)
     {
-        var product = await productRepository.FindByIdAsync(productId, cancellationToken);
+        var product = await unitOfWork.Product.FindByIdAsync(productId, cancellationToken);
 
         if (product == null)
         {
@@ -22,7 +19,7 @@ public class UpdateProductUseCase(
         
         if (updateProductDto.Name != null && updateProductDto.Name != product.Name)
         {
-            var productAlreadyExists = await productRepository.FindByNameAsync(updateProductDto.Name, cancellationToken);
+            var productAlreadyExists = await unitOfWork.Product.FindByNameAsync(updateProductDto.Name, cancellationToken);
 
             if (productAlreadyExists != null)
             {
@@ -36,7 +33,7 @@ public class UpdateProductUseCase(
         if (updateProductDto.ProductCategoryId != null && updateProductDto.ProductCategoryId != product.ProductCategoryId)
         {
             var productCategory =
-                await productCategoryRepository.FindByIdAsync(updateProductDto.ProductCategoryId.Value, cancellationToken);
+                await unitOfWork.ProductCategory.FindByIdAsync(updateProductDto.ProductCategoryId.Value, cancellationToken);
 
             if (productCategory == null)
             {
@@ -93,7 +90,7 @@ public class UpdateProductUseCase(
         {
             product.UpdatedAt = DateTime.UtcNow;
             
-            await productRepository.UpdateAsync(product, cancellationToken);
+            await unitOfWork.Product.UpdateAsync(product, cancellationToken);
             
             await unitOfWork.SaveChangesAsync();
         }

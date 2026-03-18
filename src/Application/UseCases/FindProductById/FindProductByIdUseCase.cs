@@ -4,7 +4,7 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.FindProductById;
 
-public class FindProductByIdUseCase(IProductRepository productRepository) : IFindProductByIdUseCase
+public sealed class FindProductByIdUseCase(IProductRepository productRepository) : IFindProductByIdUseCase
 {
     public async Task<Product> ExecuteAsync(Guid productId, CancellationToken cancellationToken)
     {

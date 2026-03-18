@@ -5,7 +5,7 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.Login;
 
-public class LoginUseCase(
+public sealed class LoginUseCase(
     IPasswordHasherService passwordHasherService, 
     IUserRepository userRepository, 
     IJwtTokenService jwtTokenService) : ILoginUseCase

@@ -3,7 +3,7 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.DeleteProductCategory;
 
-public class DeleteProductCategoryUseCase(
+public sealed class DeleteProductCategoryUseCase(
     IProductCategoryRepository productCategoryRepository,
     IUnitOfWork unitOfWork) : IDeleteProductCategoryUseCase
 {
