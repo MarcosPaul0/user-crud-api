@@ -21,12 +21,14 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
+var originUrl = Environment.GetEnvironmentVariable("ORIGIN");
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Default", policy =>
     {
         policy
-            .WithOrigins(Environment.GetEnvironmentVariable("ORIGIN") ?? string.Empty)
+            .WithOrigins(originUrl)
             .AllowCredentials()
             .AllowAnyHeader()
             .AllowAnyMethod();
