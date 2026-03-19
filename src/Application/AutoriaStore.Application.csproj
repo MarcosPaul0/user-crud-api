@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\UserCrud.Domain.csproj" />
+    <ProjectReference Include="..\Domain\AutoriaStore.Domain.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -9,6 +9,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
+    <RootNamespace>AutoriaStore.Application</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

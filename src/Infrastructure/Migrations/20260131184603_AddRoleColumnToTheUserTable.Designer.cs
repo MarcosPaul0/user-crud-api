@@ -25,7 +25,7 @@ namespace UserCrud.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("UserCrud.Domain.Entities.Phone", b =>
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.Phone", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,7 +59,7 @@ namespace UserCrud.Infrastructure.Migrations
                     b.ToTable("phone", (string)null);
                 });
 
-            modelBuilder.Entity("UserCrud.Domain.Entities.User", b =>
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -105,9 +105,9 @@ namespace UserCrud.Infrastructure.Migrations
                     b.ToTable("user", (string)null);
                 });
 
-            modelBuilder.Entity("UserCrud.Domain.Entities.Phone", b =>
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.Phone", b =>
                 {
-                    b.HasOne("UserCrud.Domain.Entities.User", "User")
+                    b.HasOne("AutoriaStore.Domain.Entities.User", "User")
                         .WithMany("Phones")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -116,7 +116,7 @@ namespace UserCrud.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("UserCrud.Domain.Entities.User", b =>
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.User", b =>
                 {
                     b.Navigation("Phones");
                 });

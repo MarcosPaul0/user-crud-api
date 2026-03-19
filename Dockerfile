@@ -1,5 +1,5 @@
 # =============================================================================
-# Dockerfile — UserCrud.API (ASP.NET Core / .NET 10) — Production
+# Dockerfile — AutoriaStore.API (ASP.NET Core / .NET 10) — Production
 # =============================================================================
 #
 # Multi-stage build com 4 estágios:
@@ -9,12 +9,12 @@
 #   final   → imagem mínima de produção (somente runtime + artefatos)
 #
 # Estrutura assumida:
-#   UserCrud.sln
+#   AutoriaStore.sln
 #   src/
-#     API/           UserCrud.API.csproj
-#     Application/   UserCrud.Application.csproj
-#     Domain/        UserCrud.Domain.csproj
-#     Infrastructure/UserCrud.Infrastructure.csproj
+#     API/           AutoriaStore.API.csproj
+#     Application/   AutoriaStore.Application.csproj
+#     Domain/        AutoriaStore.Domain.csproj
+#     Infrastructure/AutoriaStore.Infrastructure.csproj
 #
 # ─────────────────────────────────────────────────────────────────────────────
 # .dockerignore recomendado (crie o arquivo .dockerignore na raiz do projeto):
@@ -89,15 +89,15 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # --- Passo 1: copiar arquivos de definição de projeto (para cache do restore) ---
-COPY UserCrud.sln .
-COPY src/API/UserCrud.API.csproj                   src/API/
-COPY src/Application/UserCrud.Application.csproj   src/Application/
-COPY src/Domain/UserCrud.Domain.csproj             src/Domain/
-COPY src/Infrastructure/UserCrud.Infrastructure.csproj src/Infrastructure/
+COPY AutoriaStore.sln .
+COPY src/API/AutoriaStore.API.csproj                   src/API/
+COPY src/Application/AutoriaStore.Application.csproj   src/Application/
+COPY src/Domain/AutoriaStore.Domain.csproj             src/Domain/
+COPY src/Infrastructure/AutoriaStore.Infrastructure.csproj src/Infrastructure/
 
 # Restaura todos os pacotes NuGet declarados na solution.
 # Esta camada fica em cache enquanto os .csproj não mudam.
-RUN dotnet restore "UserCrud.sln"
+RUN dotnet restore "AutoriaStore.sln"
 
 # --- Passo 2: copiar o restante do código-fonte ---
 COPY . .
@@ -115,7 +115,7 @@ COPY . .
 # =============================================================================
 FROM build AS publish
 
-RUN dotnet publish "src/API/UserCrud.API.csproj" \
+RUN dotnet publish "src/API/AutoriaStore.API.csproj" \
     -c Release \
     --no-restore \
     -o /app/publish \
@@ -174,4 +174,4 @@ USER appuser
 
 # Exec form (array): o processo .NET recebe SIGTERM diretamente (sem shell intermediário),
 # permitindo graceful shutdown quando o container é parado.
-ENTRYPOINT ["dotnet", "UserCrud.API.dll"]
+ENTRYPOINT ["dotnet", "AutoriaStore.API.dll"]

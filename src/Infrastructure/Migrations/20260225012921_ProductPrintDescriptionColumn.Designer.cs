@@ -25,7 +25,7 @@ namespace UserCrud.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("UserCrud.Domain.Entities.Phone", b =>
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.Phone", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,7 +59,7 @@ namespace UserCrud.Infrastructure.Migrations
                     b.ToTable("phone", (string)null);
                 });
 
-            modelBuilder.Entity("UserCrud.Domain.Entities.Product", b =>
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -125,7 +125,7 @@ namespace UserCrud.Infrastructure.Migrations
                     b.ToTable("product", (string)null);
                 });
 
-            modelBuilder.Entity("UserCrud.Domain.Entities.ProductCategory", b =>
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.ProductCategory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -153,7 +153,7 @@ namespace UserCrud.Infrastructure.Migrations
                     b.ToTable("product_category", (string)null);
                 });
 
-            modelBuilder.Entity("UserCrud.Domain.Entities.ProductImage", b =>
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.ProductImage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -194,7 +194,7 @@ namespace UserCrud.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("UserCrud.Domain.Entities.User", b =>
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -243,9 +243,9 @@ namespace UserCrud.Infrastructure.Migrations
                     b.ToTable("user", (string)null);
                 });
 
-            modelBuilder.Entity("UserCrud.Domain.Entities.Phone", b =>
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.Phone", b =>
                 {
-                    b.HasOne("UserCrud.Domain.Entities.User", "User")
+                    b.HasOne("AutoriaStore.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -254,9 +254,9 @@ namespace UserCrud.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("UserCrud.Domain.Entities.Product", b =>
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.Product", b =>
                 {
-                    b.HasOne("UserCrud.Domain.Entities.ProductCategory", "ProductCategory")
+                    b.HasOne("AutoriaStore.Domain.Entities.ProductCategory", "ProductCategory")
                         .WithMany()
                         .HasForeignKey("ProductCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -265,9 +265,9 @@ namespace UserCrud.Infrastructure.Migrations
                     b.Navigation("ProductCategory");
                 });
 
-            modelBuilder.Entity("UserCrud.Domain.Entities.ProductImage", b =>
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.ProductImage", b =>
                 {
-                    b.HasOne("UserCrud.Domain.Entities.Product", "Product")
+                    b.HasOne("AutoriaStore.Domain.Entities.Product", "Product")
                         .WithMany("ProductImages")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -276,7 +276,7 @@ namespace UserCrud.Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("UserCrud.Domain.Entities.Product", b =>
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.Product", b =>
                 {
                     b.Navigation("ProductImages");
                 });

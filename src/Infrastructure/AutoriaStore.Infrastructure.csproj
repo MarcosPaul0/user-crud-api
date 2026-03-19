@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\UserCrud.Domain.csproj" />
-    <ProjectReference Include="..\Application\UserCrud.Application.csproj" />
+    <ProjectReference Include="..\Domain\AutoriaStore.Domain.csproj" />
+    <ProjectReference Include="..\Application\AutoriaStore.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +32,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
+    <RootNamespace>AutoriaStore.Infrastructure</RootNamespace>
   </PropertyGroup>
 
 </Project>

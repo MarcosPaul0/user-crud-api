@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
+    <RootNamespace>AutoriaStore.API</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\UserCrud.Application.csproj" />
-    <ProjectReference Include="..\Infrastructure\UserCrud.Infrastructure.csproj" />
+    <ProjectReference Include="..\Application\AutoriaStore.Application.csproj" />
+    <ProjectReference Include="..\Infrastructure\AutoriaStore.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

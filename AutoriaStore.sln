@@ -5,13 +5,13 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D69F8E37-013D-42F9-AD39-24E34E3DF4DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserCrud.Domain", "src\Domain\UserCrud.Domain.csproj", "{EF5965BD-8599-4934-8787-2FA4C616F740}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoriaStore.Domain", "src\Domain\AutoriaStore.Domain.csproj", "{EF5965BD-8599-4934-8787-2FA4C616F740}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserCrud.Application", "src\Application\UserCrud.Application.csproj", "{FE376211-1CF0-4177-9F30-27C54AFD0D12}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoriaStore.Application", "src\Application\AutoriaStore.Application.csproj", "{FE376211-1CF0-4177-9F30-27C54AFD0D12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserCrud.Infrastructure", "src\Infrastructure\UserCrud.Infrastructure.csproj", "{564AD19E-053B-4745-A000-684FEA68FACA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoriaStore.Infrastructure", "src\Infrastructure\AutoriaStore.Infrastructure.csproj", "{564AD19E-053B-4745-A000-684FEA68FACA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserCrud.API", "src\API\UserCrud.API.csproj", "{29A8C2F3-E5E7-4E7C-83B6-EC5390DA43FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoriaStore.API", "src\API\AutoriaStore.API.csproj", "{29A8C2F3-E5E7-4E7C-83B6-EC5390DA43FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
