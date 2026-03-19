@@ -56,12 +56,6 @@ services:
     networks:
       - backend
     restart: unless-stopped
-    # [FIX] Aguarda o healthcheck da api passar antes de iniciar o nginx.
-    # Sem isso, nginx sobe junto com o container da api (não com a app pronta)
-    # e pode retornar 502 durante o boot da aplicação.
-#    depends_on:
-#      api:
-#        condition: service_healthy
 
   certbot:
     image: certbot/certbot
@@ -75,8 +69,7 @@ services:
     entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;"
     networks:
       - backend
-#    depends_on:
-#      nginx:
+
   # ---------------------------------------------------------------------------
   # migrator — Aplica migrations do EF Core e sai (container efêmero)
   #
@@ -115,7 +108,6 @@ services:
       - .env
     environment:
       ASPNETCORE_ENVIRONMENT: "Production"
-
       # [FIX] Habilita o middleware de ForwardedHeaders automaticamente.
       # O nginx faz proxy via HTTP interno, então sem esta variável a API recebe
       # todos os requests como http:// e o UseHttpsRedirection() (ativo em Production)
@@ -123,10 +115,6 @@ services:
       # lê o header X-Forwarded-Proto=https enviado pelo nginx e trata o request
       # como HTTPS corretamente.
       ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
-      
-      # Kestrel HTTPS (desnecessário nesta arquitetura — nginx termina o TLS)
-      # ASPNETCORE_Kestrel__Certificates__Default__Path: /https/aspnetapp.pfx
-      # ASPNETCORE_Kestrel__Certificates__Default__Password: "${KESTREL_CERT_PASSWORD}"
     volumes:
       # [FIX] Volume para persistir as Data Protection Keys do ASP.NET.
       # Sem este volume, as chaves são perdidas ao reiniciar o container e todos
@@ -136,16 +124,6 @@ services:
       - ./certs:/https:ro
     networks:
       - backend
-#    healthcheck:
-      # [ADD] Healthcheck da api: o nginx e o depends_on só avançam após este
-      # check passar, garantindo que a aplicação está pronta para receber tráfego.
-      # O endpoint /healthz é exposto gratuitamente pelo ASP.NET Core sem
-      # configuração adicional em .NET 8+.
-#      test: ["CMD-SHELL", "curl -f http://localhost:8080/healthz || exit 1"]
-#      interval:     15s
-#      timeout:       5s
-#      retries:        3
-#      start_period: 20s   # Margem para migrations automáticas ou boot lento
     depends_on:
       postgres:
         condition: service_healthy
