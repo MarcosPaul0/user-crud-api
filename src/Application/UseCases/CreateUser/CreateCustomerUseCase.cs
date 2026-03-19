@@ -8,13 +8,12 @@ using UserCrud.Domain.Interfaces;
 namespace UserCrud.Application.UseCases.CreateUser;
 
 public sealed class CreateCustomerUseCase(
-    IPasswordHasherService passwordHasherService, 
-    IUserRepository userRepository, 
+    IPasswordHasherService passwordHasherService,
     IUnitOfWork unitOfWork) : ICreateCustomerUseCase
 {
     public async Task ExecuteAsync(CreateUserDto createUserDto, CancellationToken cancellationToken)
     {
-        var userAlreadyExists = await userRepository.FindByEmailAsync(createUserDto.Email, cancellationToken);
+        var userAlreadyExists = await unitOfWork.User.FindByEmailAsync(createUserDto.Email, cancellationToken);
 
         if (userAlreadyExists != null)
         {
@@ -25,7 +24,7 @@ public sealed class CreateCustomerUseCase(
         
         var newUser = new User(createUserDto.Name, createUserDto.Email, passwordHash, UserRole.Customer, DateTime.UtcNow);
         
-        await userRepository.CreateAsync(newUser, cancellationToken);
+        await unitOfWork.User.CreateAsync(newUser, cancellationToken);
         await unitOfWork.SaveChangesAsync();
     }
 }

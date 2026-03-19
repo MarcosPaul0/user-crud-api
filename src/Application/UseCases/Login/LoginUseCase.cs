@@ -7,12 +7,12 @@ namespace UserCrud.Application.UseCases.Login;
 
 public sealed class LoginUseCase(
     IPasswordHasherService passwordHasherService, 
-    IUserRepository userRepository, 
+    IUnitOfWork unitOfWork, 
     IJwtTokenService jwtTokenService) : ILoginUseCase
 {
     public async Task<string> ExecuteAsync(LoginDto loginDto, CancellationToken cancellationToken)
     {
-        var user = await userRepository.FindByEmailAsync(loginDto.Email, cancellationToken);
+        var user = await unitOfWork.User.FindByEmailAsync(loginDto.Email, cancellationToken);
 
         if (user is null)
         {

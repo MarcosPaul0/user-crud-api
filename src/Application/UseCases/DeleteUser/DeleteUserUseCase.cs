@@ -3,18 +3,18 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.DeleteUser;
 
-public sealed class DeleteUserUseCase(IUserRepository userRepository, IUnitOfWork unitOfWork) : IDeleteUserUseCase
+public sealed class DeleteUserUseCase(IUnitOfWork unitOfWork) : IDeleteUserUseCase
 {
     public async Task ExecuteAsync(Guid userId, CancellationToken cancellationToken)
     {
-        var user = await userRepository.FindByIdAsync(userId, cancellationToken);
+        var user = await unitOfWork.User.FindByIdAsync(userId, cancellationToken);
 
         if (user == null)
         {
             throw new NotFoundException(ExceptionMessages.USER_NOT_FOUND);
         }
         
-        await userRepository.DeleteAsync(user, cancellationToken);
+        await unitOfWork.User.DeleteAsync(user, cancellationToken);
         
         await unitOfWork.SaveChangesAsync();
     }

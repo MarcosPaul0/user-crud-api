@@ -4,7 +4,7 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.ListProductsForAdmin;
 
-public sealed class ListProductsForAdminUseCase(IProductRepository productRepository) : IListProductsForAdminUseCase
+public sealed class ListProductsForAdminUseCase(IUnitOfWork unitOfWork) : IListProductsForAdminUseCase
 {
     public async Task<(IEnumerable<Product> products, int count)> ExecuteAsync(
         ListProductsByAdminDto listProductsByAdminDto, 
@@ -15,10 +15,10 @@ public sealed class ListProductsForAdminUseCase(IProductRepository productReposi
             listProductsByAdminDto.ProductCategoryId,
             listProductsByAdminDto.IsActive);
 
-        var products = await productRepository.FindAllAsync(productFilter, listProductsByAdminDto.Page,
+        var products = await unitOfWork.Product.FindAllAsync(productFilter, listProductsByAdminDto.Page,
             listProductsByAdminDto.ItemsPerPage, cancellationToken);
         
-        var productsCount = await productRepository.CountAsync(productFilter, cancellationToken);
+        var productsCount = await unitOfWork.Product.CountAsync(productFilter, cancellationToken);
         
         return (products, productsCount);
     }

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using UserCrud.Application.Dtos;
 using UserCrud.Application.Exceptions;
-using UserCrud.Application.Helpers;
 using UserCrud.Application.Interfaces;
 using UserCrud.Domain.Entities;
 using UserCrud.Domain.Interfaces;
@@ -9,9 +8,7 @@ using UserCrud.Domain.Interfaces;
 namespace UserCrud.Application.UseCases.SetProductImages;
 
 public sealed class SetProductImagesUseCase(
-    IObjectStorageService objectStorageService,
-    IProductRepository productRepository,
-    IProductImageRepository productImageRepository, 
+    IObjectStorageService objectStorageService, 
     IUnitOfWork unitOfWork) : ISetProductImagesUseCase
 {
     public async Task ExecuteAsync(
@@ -19,7 +16,7 @@ public sealed class SetProductImagesUseCase(
         SetProductImagesDto setProductImagesDto, 
         CancellationToken cancellationToken)
     {
-        var product = await productRepository.FindByIdAsync(productId, cancellationToken);
+        var product = await unitOfWork.Product.FindByIdAsync(productId, cancellationToken);
 
         if (product == null)
         {
@@ -43,7 +40,7 @@ public sealed class SetProductImagesUseCase(
             index++;
         }
 
-        var productImages = await productImageRepository.FindAllByProductIdAsync(productId, cancellationToken);
+        var productImages = await unitOfWork.ProductImage.FindAllByProductIdAsync(productId, cancellationToken);
 
         if (productImages.Count + productImagesToCreate.Count > 5)
         {
@@ -57,7 +54,7 @@ public sealed class SetProductImagesUseCase(
                 continue;
             }
             
-            var productImage = await productImageRepository.FindByIdAsync(productImageDto.Id.Value, cancellationToken);
+            var productImage = await unitOfWork.ProductImage.FindByIdAsync(productImageDto.Id.Value, cancellationToken);
 
             if (productImage == null)
             {
@@ -105,7 +102,7 @@ public sealed class SetProductImagesUseCase(
         
         productImage.ImageUrl = imageUrl;
             
-        await productImageRepository.CreateAsync(productImage, cancellationToken);
+        await unitOfWork.ProductImage.CreateAsync(productImage, cancellationToken);
     }
 
     private async Task UpdateProductImagesAsync(
@@ -128,6 +125,6 @@ public sealed class SetProductImagesUseCase(
             productImage.ImageUrl = newUrl;
         }
         
-        await productImageRepository.UpdateAsync(productImage, cancellationToken);
+        await unitOfWork.ProductImage.UpdateAsync(productImage, cancellationToken);
     }
 }

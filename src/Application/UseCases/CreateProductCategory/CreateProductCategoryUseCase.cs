@@ -5,14 +5,12 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.CreateProductCategory;
 
-public sealed class CreateProductCategoryUseCase(
-    IProductCategoryRepository productCategoryRepository,
-    IUnitOfWork unitOfWork) : ICreateProductCategoryUseCase
+public sealed class CreateProductCategoryUseCase(IUnitOfWork unitOfWork) : ICreateProductCategoryUseCase
 {
     public async Task ExecuteAsync(CreateProductCategoryDto createProductCategoryDto, CancellationToken cancellationToken)
     {
         var productCategoryAlreadyExists =
-            await productCategoryRepository.FindByCategoryAsync(createProductCategoryDto.Category, cancellationToken);
+            await unitOfWork.ProductCategory.FindByCategoryAsync(createProductCategoryDto.Category, cancellationToken);
 
         if (productCategoryAlreadyExists != null)
         {
@@ -21,8 +19,7 @@ public sealed class CreateProductCategoryUseCase(
 
         var newProductCategory = new ProductCategory(createProductCategoryDto.Category, DateTime.UtcNow);
 
-        await productCategoryRepository.CreateAsync(newProductCategory, cancellationToken);
-        
+        await unitOfWork.ProductCategory.CreateAsync(newProductCategory, cancellationToken);
         await unitOfWork.SaveChangesAsync();
     }
 }

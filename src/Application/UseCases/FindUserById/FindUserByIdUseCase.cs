@@ -4,11 +4,11 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.FindUserById;
 
-public sealed class FindUserByIdUseCase(IUserRepository userRepository) : IFindUserByIdUseCase
+public sealed class FindUserByIdUseCase(IUnitOfWork unitOfWork) : IFindUserByIdUseCase
 {
     public async Task<User> ExecuteAsync(Guid userId, CancellationToken cancellationToken)
     {
-        var user = await userRepository.FindByIdAsync(userId, cancellationToken);
+        var user = await unitOfWork.User.FindByIdAsync(userId, cancellationToken);
         
         if (user is null)
         {

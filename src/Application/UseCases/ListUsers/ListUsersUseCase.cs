@@ -4,7 +4,7 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.ListUsers;
 
-public sealed class ListUserUseCase(IUserRepository userRepository) : IListUserUseCase
+public sealed class ListUserUseCase(IUnitOfWork unitOfWork) : IListUserUseCase
 {
     public async Task<(IEnumerable<User>, int)> ExecuteAsync(
         ListUsersDto listUsersDto, 
@@ -14,13 +14,13 @@ public sealed class ListUserUseCase(IUserRepository userRepository) : IListUserU
             listUsersDto.Name,
             listUsersDto.Role);
         
-        var users = await userRepository.FindAllAsync(
+        var users = await unitOfWork.User.FindAllAsync(
             usersFilter,
             listUsersDto.Page,
             listUsersDto.ItemsPerPage,
             cancellationToken);
         
-        var usersCount = await userRepository.CountAsync(usersFilter, cancellationToken);
+        var usersCount = await unitOfWork.User.CountAsync(usersFilter, cancellationToken);
 
         return (users, usersCount);
     }

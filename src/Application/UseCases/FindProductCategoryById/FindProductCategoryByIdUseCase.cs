@@ -4,11 +4,11 @@ using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.FindProductCategoryById;
 
-public sealed class FindProductCategoryByIdUseCase(IProductCategoryRepository productCategoryRepository) : IFindProductCategoryByIdUseCase
+public sealed class FindProductCategoryByIdUseCase(IUnitOfWork unitOfWork) : IFindProductCategoryByIdUseCase
 {
     public async Task<ProductCategory> ExecuteAsync(Guid productCategoryId, CancellationToken cancellationToken)
     {
-        var productCategory = await productCategoryRepository.FindByIdAsync(productCategoryId, cancellationToken);
+        var productCategory = await unitOfWork.ProductCategory.FindByIdAsync(productCategoryId, cancellationToken);
 
         if (productCategory == null)
         {
