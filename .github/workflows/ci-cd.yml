@@ -75,6 +75,9 @@ jobs:
       # Gera as tags e labels da imagem seguindo boas práticas OCI:
       #   - sha-<curto>  → tag imutável por commit (usada no deploy)
       #   - latest       → tag flutuante (atualizada a cada push na main)
+      - name: Converter IMAGE_NAME para lowercase
+        run: echo "IMAGE_NAME=$(echo $IMAGE_NAME | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+        
       - name: Gerar tags e labels da imagem
         id: meta
         uses: docker/metadata-action@v5
