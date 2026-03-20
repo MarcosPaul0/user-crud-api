@@ -96,9 +96,7 @@ services:
   # Não expõe portas ao host — acessível SOMENTE via nginx na rede backend.
   # ---------------------------------------------------------------------------
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ${API_IMAGE:-ghcr.io/MarcosPaul0/autoria-api:latest}
     container_name: usercrud_api
     expose:
       - "8080"

@@ -1,0 +1,174 @@
+# =============================================================================
+# .github/workflows/ci-cd.yml — Pipeline CI/CD AutoriaStore
+# =============================================================================
+#
+# Estágios:
+#   build  → Builda a imagem Docker da API e pusha para ghcr.io
+#   deploy → Via SSH, faz pull da nova imagem na VPS e recria o container
+#
+# Triggers:
+#   - Push na branch main
+#   - Pull Request direcionado à main (somente o estágio build é executado)
+#
+# Secrets necessários (Settings → Secrets and variables → Actions):
+#   VPS_HOST        → IP ou domínio da VPS
+#   VPS_USER        → Usuário SSH (ex: deploy)
+#   VPS_SSH_KEY     → Chave privada SSH (conteúdo completo do arquivo id_ed25519)
+#   VPS_DEPLOY_PATH → Caminho absoluto do diretório de deploy na VPS (ex: /opt/autorialoja)
+# =============================================================================
+
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Permissões mínimas necessárias para o GITHUB_TOKEN publicar no ghcr.io
+permissions:
+  contents: read
+  packages: write
+
+# Cancela runs anteriores do mesmo PR/branch para economizar minutos gratuitos
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # ghcr.io/<owner>/<repo> em letras minúsculas (obrigatório pelo OCI)
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # JOB 1: build
+  # Builda a imagem Docker e pusha para o GitHub Container Registry (ghcr.io).
+  # Executa tanto em push quanto em PR — útil para validar o Dockerfile no PR
+  # sem realizar o deploy.
+  # ---------------------------------------------------------------------------
+  build:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+
+    outputs:
+      # Passa a tag exata da imagem (SHA curto) para o job de deploy
+      image_tag: ${{ steps.meta.outputs.version }}
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      # Configura o buildx para builds multi-plataforma e cache avançado
+      - name: Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Autentica no ghcr.io usando o GITHUB_TOKEN (sem secret extra necessário)
+      - name: Login no GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Gera as tags e labels da imagem seguindo boas práticas OCI:
+      #   - sha-<curto>  → tag imutável por commit (usada no deploy)
+      #   - latest       → tag flutuante (atualizada a cada push na main)
+      - name: Gerar tags e labels da imagem
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,prefix=sha-,format=short
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+
+      # Builda e pusha — usa cache do ghcr.io para acelerar builds subsequentes
+      - name: Build e Push da imagem
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          dockerfile: Dockerfile
+          push: ${{ github.ref == 'refs/heads/main' }}  # Só pusha em push na main, não em PRs
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # Cache em camadas no próprio ghcr.io — economiza tempo de build
+          cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache
+          cache-to:   type=registry,ref=${{ env.IMAGE_NAME }}:buildcache,mode=max
+
+  # ---------------------------------------------------------------------------
+  # JOB 2: deploy
+  # Conecta na VPS via SSH, faz pull da nova imagem e recria o container da API.
+  # Só executa em push na main (não em PRs) e somente após o build ter sucesso.
+  # ---------------------------------------------------------------------------
+  deploy:
+    name: Deploy na VPS
+    runs-on: ubuntu-latest
+    needs: build
+    # Garante que deploy só rode em push na main (nunca em PRs)
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    environment:
+      name: production
+      url: https://yourdomain.com  # Substitua pelo domínio real
+
+    steps:
+      # Copia o docker-compose.prod.yml atualizado para a VPS via SCP.
+      # Isso garante que a VPS sempre use a versão mais recente do compose,
+      # sem precisar clonar o repositório inteiro.
+      - name: Checkout do código (para copiar o compose)
+        uses: actions/checkout@v4
+
+      - name: Copiar docker-compose.prod.yml para a VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host:     ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key:      ${{ secrets.VPS_SSH_KEY }}
+          source:   "docker-compose.prod.yml,nginx/"
+          target:   ${{ secrets.VPS_DEPLOY_PATH }}
+
+      # Conecta na VPS via SSH e executa a sequência de deploy:
+      #   1. Autentica no ghcr.io com o GHCR_TOKEN
+      #   2. Puxa a nova imagem com a tag exata do commit
+      #   3. Recria apenas o container da API (zero-downtime via --no-deps)
+      #   4. Remove imagens antigas para liberar espaço em disco
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host:     ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key:      ${{ secrets.VPS_SSH_KEY }}
+          # Variáveis enviadas para o script remoto
+          envs: IMAGE_NAME,IMAGE_TAG,GHCR_TOKEN
+          script: |
+            set -euo pipefail
+
+            IMAGE_FULL="${{ env.IMAGE_NAME }}:sha-${{ needs.build.outputs.image_tag }}"
+            DEPLOY_PATH="${{ secrets.VPS_DEPLOY_PATH }}"
+
+            echo "==> Autenticando no ghcr.io..."
+            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io \
+              -u ${{ github.actor }} --password-stdin
+
+            echo "==> Fazendo pull da imagem: ${IMAGE_FULL}"
+            docker pull "${IMAGE_FULL}"
+
+            echo "==> Atualizando o container da API..."
+            cd "${DEPLOY_PATH}"
+
+            # Força o docker compose a usar a imagem exata do commit
+            # A variável API_IMAGE é lida pelo docker-compose.prod.yml (veja nota abaixo)
+            export API_IMAGE="${IMAGE_FULL}"
+
+            docker compose -f docker-compose.prod.yml up -d \
+              --no-deps \
+              --force-recreate \
+              api
+
+            echo "==> Removendo imagens antigas (housekeeping)..."
+            docker image prune -f
+
+            echo "==> Deploy concluído com sucesso!"
+            docker compose -f docker-compose.prod.yml ps api
