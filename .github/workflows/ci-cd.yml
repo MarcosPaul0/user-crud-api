@@ -15,6 +15,7 @@
 #   VPS_USER        → Usuário SSH (ex: deploy)
 #   VPS_SSH_KEY     → Chave privada SSH (conteúdo completo do arquivo id_ed25519)
 #   VPS_DEPLOY_PATH → Caminho absoluto do diretório de deploy na VPS (ex: /opt/autorialoja)
+#   GHCR_TOKEN      → Personal Access Token com escopo read:packages (para pull na VPS)
 # =============================================================================
 
 name: CI/CD Pipeline
@@ -38,7 +39,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # ghcr.io/<owner>/<repo> em letras minúsculas (obrigatório pelo OCI)
+  # Valor inicial — será convertido para lowercase no step abaixo
   IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
 
 jobs:
@@ -53,8 +54,10 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      # Passa a tag exata da imagem (SHA curto) para o job de deploy
-      image_tag: ${{ steps.meta.outputs.version }}
+      # image_tag  → SHA curto do commit (ex: sha-a1b2c3d)
+      # image_name → nome completo da imagem já em lowercase
+      image_tag:  ${{ steps.meta.outputs.version }}
+      image_name: ${{ env.IMAGE_NAME }}
 
     steps:
       - name: Checkout do código
@@ -72,12 +75,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # ghcr.io exige letras minúsculas — converte antes de qualquer uso
+      - name: Converter IMAGE_NAME para lowercase
+        run: echo "IMAGE_NAME=$(echo $IMAGE_NAME | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
       # Gera as tags e labels da imagem seguindo boas práticas OCI:
       #   - sha-<curto>  → tag imutável por commit (usada no deploy)
       #   - latest       → tag flutuante (atualizada a cada push na main)
-      - name: Converter IMAGE_NAME para lowercase
-        run: echo "IMAGE_NAME=$(echo $IMAGE_NAME | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-        
+      # IMPORTANTE: sha vem primeiro para que steps.meta.outputs.version
+      # retorne o SHA e não "latest"
       - name: Gerar tags e labels da imagem
         id: meta
         uses: docker/metadata-action@v5
@@ -117,12 +123,11 @@ jobs:
       url: https://yourdomain.com  # Substitua pelo domínio real
 
     steps:
-      # Copia o docker-compose.prod.yml atualizado para a VPS via SCP.
-      # Isso garante que a VPS sempre use a versão mais recente do compose,
-      # sem precisar clonar o repositório inteiro.
       - name: Checkout do código (para copiar o compose)
         uses: actions/checkout@v4
 
+      # Cria o arquivo de chave SSH e adiciona a VPS ao known_hosts.
+      # Necessário para autenticar o rsync no step seguinte.
       - name: Instalar chave SSH
         env:
           SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
@@ -133,6 +138,8 @@ jobs:
           ssh-keygen -l -f ~/.ssh/id_deploy
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
+      # Copia o docker-compose.prod.yml e a pasta nginx/ para a VPS via rsync.
+      # Garante que a VPS sempre use a versão mais recente sem clonar o repo.
       - name: Copiar arquivos para a VPS via rsync
         run: |
           rsync -avz --no-perms \
@@ -143,28 +150,33 @@ jobs:
 
       # Conecta na VPS via SSH e executa a sequência de deploy:
       #   1. Autentica no ghcr.io com o GHCR_TOKEN
-      #   2. Puxa a nova imagem com a tag exata do commit
-      #   3. Recria apenas o container da API (zero-downtime via --no-deps)
+      #   2. Puxa a nova imagem com a tag exata do commit (sha-<commit>)
+      #   3. Recria apenas o container da API (--no-deps para não afetar os demais)
       #   4. Remove imagens antigas para liberar espaço em disco
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          timeout: 60s
+          host:            ${{ secrets.VPS_HOST }}
+          username:        ${{ secrets.VPS_USER }}
+          key:             ${{ secrets.VPS_SSH_KEY }}
+          timeout:         60s
           command_timeout: 10m
           script: |
             set -euo pipefail
 
-            IMAGE_FULL="ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:sha-${{ needs.build.outputs.image_tag }}"
+            # Usa image_name já em lowercase vindo do job build
+            IMAGE_NAME="${{ needs.build.outputs.image_name }}"
+            IMAGE_TAG="${{ needs.build.outputs.image_tag }}"
+            IMAGE_FULL="${IMAGE_NAME}:${IMAGE_TAG}"
             DEPLOY_PATH="${{ secrets.VPS_DEPLOY_PATH }}"
+
+            echo "==> Imagem alvo: ${IMAGE_FULL}"
 
             echo "==> Autenticando no ghcr.io..."
             echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io \
               -u ${{ github.actor }} --password-stdin
 
-            echo "==> Fazendo pull da imagem: ${IMAGE_FULL}"
+            echo "==> Fazendo pull da imagem..."
             docker pull "${IMAGE_FULL}"
 
             echo "==> Atualizando o container da API..."
