@@ -131,6 +131,7 @@ jobs:
           key:      ${{ secrets.VPS_SSH_KEY }}
           source:   "docker-compose.prod.yml,nginx/"
           target:   ${{ secrets.VPS_DEPLOY_PATH }}
+          overwrite: true
 
       # Conecta na VPS via SSH e executa a sequência de deploy:
       #   1. Autentica no ghcr.io com o GHCR_TOKEN
