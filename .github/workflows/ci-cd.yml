@@ -132,6 +132,8 @@ jobs:
           source:   "docker-compose.prod.yml,nginx/"
           target:   ${{ secrets.VPS_DEPLOY_PATH }}
           overwrite: true
+          timeout: 60s        # ← timeout para estabelecer conexão
+          command_timeout: 10m    # ← timeout para o comando completar
 
       # Conecta na VPS via SSH e executa a sequência de deploy:
       #   1. Autentica no ghcr.io com o GHCR_TOKEN
@@ -144,6 +146,8 @@ jobs:
           host:     ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key:      ${{ secrets.VPS_SSH_KEY }}
+          timeout: 60s        # ← timeout para estabelecer conexão
+          command_timeout: 10m    # ← timeout para o comando completar
           # Variáveis enviadas para o script remoto
           envs: IMAGE_NAME,IMAGE_TAG,GHCR_TOKEN
           script: |
