@@ -123,6 +123,16 @@ jobs:
       - name: Checkout do código (para copiar o compose)
         uses: actions/checkout@v4
 
+      - name: Instalar chave SSH
+        env:
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          ssh-keygen -l -f ~/.ssh/id_deploy
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
       - name: Copiar arquivos para a VPS via rsync
         run: |
           rsync -avz --no-perms \
