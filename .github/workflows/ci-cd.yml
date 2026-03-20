@@ -136,7 +136,7 @@ jobs:
       - name: Copiar arquivos para a VPS via rsync
         run: |
           rsync -avz --no-perms \
-            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            -e "ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no" \
             docker-compose.prod.yml \
             nginx/ \
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_DEPLOY_PATH }}/
