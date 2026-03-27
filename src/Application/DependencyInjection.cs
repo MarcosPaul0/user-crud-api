@@ -1,8 +1,9 @@
+using AutoriaStore.Application.UseCases.CreateProductCategory;
 using AutoriaStore.Application.UseCases.ListProductCategory;
+using AutoriaStore.Application.UseCases.ListProductCategoryForAdmin;
 using AutoriaStore.Application.UseCases.UpdateProductCategory;
 using Microsoft.Extensions.DependencyInjection;
 using UserCrud.Application.UseCases.CreateProduct;
-using UserCrud.Application.UseCases.CreateProductCategory;
 using UserCrud.Application.UseCases.CreateUser;
 using UserCrud.Application.UseCases.DeleteProduct;
 using UserCrud.Application.UseCases.DeleteProductCategory;
@@ -18,7 +19,7 @@ using UserCrud.Application.UseCases.SetProductImages;
 using UserCrud.Application.UseCases.UpdateProduct;
 using UserCrud.Application.UseCases.UpdateUser;
 
-namespace UserCrud.Application;
+namespace AutoriaStore.Application;
 
 public static class DependencyInjection
 {
@@ -35,6 +36,7 @@ public static class DependencyInjection
         services.AddScoped<ICreateProductCategoryUseCase, CreateProductCategoryUseCase>();
         services.AddScoped<IUpdateProductCategoryUseCase, UpdateProductCategoryUseCase>();
         services.AddScoped<IListProductCategoryUseCase, ListProductCategoryUseCase>();
+        services.AddScoped<IListProductCategoryForAdminUseCase, ListProductCategoryForAdminUseCase>();
         services.AddScoped<IDeleteProductCategoryUseCase, DeleteProductCategoryUseCase>();
         
         services.AddScoped<ICreateProductUseCase, CreateProductUseCase>();
