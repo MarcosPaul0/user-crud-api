@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace UserCrud.Infrastructure.Migrations
+namespace AutoriaStore.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class AddProductTables : Migration

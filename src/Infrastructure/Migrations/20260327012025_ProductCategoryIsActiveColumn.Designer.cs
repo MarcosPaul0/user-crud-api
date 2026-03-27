@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AutoriaStore.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260222223632_DropDisplayOrderProductImageTable")]
-    partial class DropDisplayOrderProductImageTable
+    [Migration("20260327012025_ProductCategoryIsActiveColumn")]
+    partial class ProductCategoryIsActiveColumn
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,6 +95,12 @@ namespace AutoriaStore.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("price_in_cents");
 
+                    b.Property<string>("PrintDescription")
+                        .IsRequired()
+                        .HasMaxLength(600)
+                        .HasColumnType("character varying(600)")
+                        .HasColumnName("print_description");
+
                     b.Property<Guid>("ProductCategoryId")
                         .HasColumnType("uuid")
                         .HasColumnName("product_category_id");
@@ -136,6 +142,12 @@ namespace AutoriaStore.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_active");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .ValueGeneratedOnUpdate()

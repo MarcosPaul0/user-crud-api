@@ -5,25 +5,25 @@
 namespace AutoriaStore.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddRoleColumnToTheUserTable : Migration
+    public partial class ProductCategoryIsActiveColumn : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "role",
-                table: "user",
-                type: "integer",
+            migrationBuilder.AddColumn<bool>(
+                name: "is_active",
+                table: "product_category",
+                type: "boolean",
                 nullable: false,
-                defaultValue: 3);
+                defaultValue: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "role",
-                table: "user");
+                name: "is_active",
+                table: "product_category");
         }
     }
 }
