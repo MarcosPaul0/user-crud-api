@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text.Json.Serialization;
+using AutoriaStore.Application;
 using AutoriaStore.Infrastructure;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.Cookies;
