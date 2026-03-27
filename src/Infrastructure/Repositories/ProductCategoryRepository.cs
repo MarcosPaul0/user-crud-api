@@ -1,9 +1,10 @@
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
-using UserCrud.Domain.Entities;
-using UserCrud.Domain.Interfaces;
-using UserCrud.Infrastructure.Context;
+using UserCrud.Infrastructure.Repositories;
 
-namespace UserCrud.Infrastructure.Repositories;
+namespace AutoriaStore.Infrastructure.Repositories;
 
 public class ProductCategoryRepository(ApplicationDbContext context) : BaseRepository<ProductCategory>(context), IProductCategoryRepository
 {
@@ -15,16 +16,17 @@ public class ProductCategoryRepository(ApplicationDbContext context) : BaseRepos
             cancellationToken);
     }
 
-    public async Task<IEnumerable<ProductCategory>> FindAllAsync(CancellationToken cancellationToken = default)
+    public async Task<List<ProductCategory>> FindAllAsync(CancellationToken cancellationToken = default)
     {
         return await _context.ProductCategory
             .AsNoTracking()
-            .Select(c => new ProductCategory(
-                c.Id,
-                c.Category,
-                _context.Product.Count(p => p.ProductCategoryId == c.Id),
-                c.CreatedAt,
-                c.UpdatedAt
+            .Where(productCategory => productCategory.IsActive)
+            .Select(productCategory => new ProductCategory(
+                productCategory.Id,
+                productCategory.Category,
+                _context.Product.Count(p => p.ProductCategoryId == productCategory.Id),
+                productCategory.CreatedAt,
+                productCategory.UpdatedAt
             ))
             .ToListAsync(cancellationToken);
     }
