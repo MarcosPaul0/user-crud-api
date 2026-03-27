@@ -1,6 +1,6 @@
-using UserCrud.Domain.Entities;
+using AutoriaStore.Domain.Entities;
 
-namespace UserCrud.Application.UseCases.ListProductCategory;
+namespace AutoriaStore.Application.UseCases.ListProductCategory;
 
 public interface IListProductCategoryUseCase
 {

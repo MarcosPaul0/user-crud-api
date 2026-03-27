@@ -1,9 +1,9 @@
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Domain.Enums;
+using AutoriaStore.Domain.Interfaces;
 using UserCrud.Application.Dtos;
 using UserCrud.Application.Exceptions;
 using UserCrud.Application.Interfaces;
-using UserCrud.Domain.Entities;
-using UserCrud.Domain.Enums;
-using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.CreateUser;
 

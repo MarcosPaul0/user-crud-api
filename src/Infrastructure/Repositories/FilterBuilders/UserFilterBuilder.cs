@@ -1,7 +1,7 @@
-using UserCrud.Domain.Entities;
-using UserCrud.Domain.Enums;
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Domain.Enums;
 
-namespace UserCrud.Infrastructure.Repositories.FilterBuilders;
+namespace AutoriaStore.Infrastructure.Repositories.FilterBuilders;
 
 public class UserFilterBuilder(IQueryable<User> query) : BaseFilterBuilder<User>(query)
 {

@@ -1,9 +1,9 @@
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using UserCrud.Domain.Entities;
-using UserCrud.Domain.Enums;
 
-namespace UserCrud.Infrastructure.EntitiesConfiguration;
+namespace AutoriaStore.Infrastructure.EntitiesConfiguration;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {

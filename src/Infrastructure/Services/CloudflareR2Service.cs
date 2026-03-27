@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using UserCrud.Application.Helpers;
 using UserCrud.Application.Interfaces;
 
-namespace UserCrud.Infrastructure.Services;
+namespace AutoriaStore.Infrastructure.Services;
 
 public class CloudflareR2Service(
     ILogger<CloudflareR2Service> logger,

@@ -1,6 +1,6 @@
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Domain.Interfaces;
 using UserCrud.Application.Dtos;
-using UserCrud.Domain.Entities;
-using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.ListProducts;
 

@@ -1,5 +1,5 @@
+using AutoriaStore.Domain.Interfaces;
 using UserCrud.Application.Exceptions;
-using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.DeleteProductCategory;
 

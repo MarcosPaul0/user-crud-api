@@ -1,8 +1,8 @@
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Infrastructure.Context;
+using AutoriaStore.Infrastructure.Repositories.FilterBuilders;
 using Microsoft.EntityFrameworkCore;
-using UserCrud.Domain.Entities;
-using UserCrud.Domain.Interfaces;
-using UserCrud.Infrastructure.Context;
-using UserCrud.Infrastructure.Repositories.FilterBuilders;
 
 namespace UserCrud.Infrastructure.Repositories;
 

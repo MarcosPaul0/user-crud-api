@@ -1,5 +1,5 @@
+using AutoriaStore.Domain.Entities;
 using UserCrud.Application.Dtos;
-using UserCrud.Domain.Entities;
 
 namespace UserCrud.Application.UseCases.ListUsers;
 

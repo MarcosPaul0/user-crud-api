@@ -1,6 +1,6 @@
-using UserCrud.Domain.Entities;
+using AutoriaStore.Domain.Entities;
 
-namespace UserCrud.Infrastructure.Repositories.FilterBuilders;
+namespace AutoriaStore.Infrastructure.Repositories.FilterBuilders;
 
 public class ProductFilterBuilder(IQueryable<Product> query) : BaseFilterBuilder<Product>(query)
 {

@@ -1,5 +1,5 @@
+using AutoriaStore.Domain.Entities;
 using UserCrud.API.Dtos;
-using UserCrud.Domain.Entities;
 
 namespace UserCrud.API.Presenters;
 

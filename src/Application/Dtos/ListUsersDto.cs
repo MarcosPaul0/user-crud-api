@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using UserCrud.Domain.Enums;
+using AutoriaStore.Domain.Enums;
 
 namespace UserCrud.Application.Dtos;
 

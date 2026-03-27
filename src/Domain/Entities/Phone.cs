@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace UserCrud.Domain.Entities;
+namespace AutoriaStore.Domain.Entities;
 
 public class Phone : Entity
 {

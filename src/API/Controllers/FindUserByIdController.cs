@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using UserCrud.API.Dtos;
 using UserCrud.API.Presenters;
 using UserCrud.Application.UseCases.FindUserById;
-using UserCrud.Domain.Entities;
 
 namespace UserCrud.API.Controllers;
 

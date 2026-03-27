@@ -1,7 +1,7 @@
+using AutoriaStore.Domain.Interfaces;
 using UserCrud.Application.Dtos;
 using UserCrud.Application.Exceptions;
 using UserCrud.Application.Interfaces;
-using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.Login;
 

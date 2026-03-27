@@ -1,4 +1,4 @@
-using UserCrud.Domain.Enums;
+using AutoriaStore.Domain.Enums;
 
 namespace UserCrud.API.Dtos;
 

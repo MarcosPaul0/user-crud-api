@@ -1,6 +1,6 @@
-using UserCrud.Domain.Entities;
+using AutoriaStore.Domain.Entities;
 
-namespace UserCrud.Domain.Interfaces;
+namespace AutoriaStore.Domain.Interfaces;
 
 public interface IProductImageRepository : IBaseRepository<ProductImage>
 {

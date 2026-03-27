@@ -1,7 +1,8 @@
+using AutoriaStore.Application.Dtos;
+using AutoriaStore.Application.UseCases.UpdateProductCategory;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserCrud.Application.Dtos;
-using UserCrud.Application.UseCases.UpdateProductCategory;
 
 namespace UserCrud.API.Controllers;
 

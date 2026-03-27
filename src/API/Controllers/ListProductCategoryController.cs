@@ -1,7 +1,7 @@
+using AutoriaStore.Application.UseCases.ListProductCategory;
 using Microsoft.AspNetCore.Mvc;
 using UserCrud.API.Dtos;
 using UserCrud.API.Presenters;
-using UserCrud.Application.UseCases.ListProductCategory;
 
 namespace UserCrud.API.Controllers;
 

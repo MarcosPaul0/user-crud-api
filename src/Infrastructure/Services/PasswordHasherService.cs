@@ -1,6 +1,6 @@
 using UserCrud.Application.Interfaces;
 
-namespace UserCrud.Infrastructure.Services;
+namespace AutoriaStore.Infrastructure.Services;
 
 public class PasswordHasherService : IPasswordHasherService
 {

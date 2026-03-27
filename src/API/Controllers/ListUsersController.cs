@@ -1,10 +1,10 @@
+using AutoriaStore.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserCrud.API.Dtos;
 using UserCrud.API.Presenters;
 using UserCrud.Application.Dtos;
 using UserCrud.Application.UseCases.ListUsers;
-using UserCrud.Domain.Entities;
 
 namespace UserCrud.API.Controllers;
 

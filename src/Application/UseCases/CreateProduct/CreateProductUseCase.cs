@@ -1,7 +1,7 @@
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Domain.Interfaces;
 using UserCrud.Application.Dtos;
 using UserCrud.Application.Exceptions;
-using UserCrud.Domain.Entities;
-using UserCrud.Domain.Interfaces;
 
 namespace UserCrud.Application.UseCases.CreateProduct;
 

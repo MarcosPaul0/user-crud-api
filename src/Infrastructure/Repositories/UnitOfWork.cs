@@ -1,6 +1,6 @@
+using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Infrastructure.Context;
 using Microsoft.Extensions.DependencyInjection;
-using UserCrud.Domain.Interfaces;
-using UserCrud.Infrastructure.Context;
 
 namespace UserCrud.Infrastructure.Repositories;
 

@@ -1,5 +1,3 @@
-using UserCrud.Domain.Entities;
-
 namespace UserCrud.API.Dtos;
 
 public record ProductForAdminResponseDto

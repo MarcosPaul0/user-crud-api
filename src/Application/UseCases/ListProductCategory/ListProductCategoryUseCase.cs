@@ -1,7 +1,7 @@
-using UserCrud.Domain.Entities;
-using UserCrud.Domain.Interfaces;
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Domain.Interfaces;
 
-namespace UserCrud.Application.UseCases.ListProductCategory;
+namespace AutoriaStore.Application.UseCases.ListProductCategory;
 
 public sealed class ListProductCategoryUseCase(
     IUnitOfWork unitOfWork) : IListProductCategoryUseCase

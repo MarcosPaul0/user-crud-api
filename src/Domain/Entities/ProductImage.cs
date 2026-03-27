@@ -1,4 +1,4 @@
-namespace UserCrud.Domain.Entities;
+namespace AutoriaStore.Domain.Entities;
 
 public class ProductImage : Entity
 {

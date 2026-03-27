@@ -1,6 +1,6 @@
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
-using UserCrud.Domain.Entities;
-using UserCrud.Infrastructure.Context;
 
 namespace UserCrud.Infrastructure.Repositories;
 

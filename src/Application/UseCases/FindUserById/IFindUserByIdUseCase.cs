@@ -1,4 +1,4 @@
-using UserCrud.Domain.Entities;
+using AutoriaStore.Domain.Entities;
 
 namespace UserCrud.Application.UseCases.FindUserById;
 
