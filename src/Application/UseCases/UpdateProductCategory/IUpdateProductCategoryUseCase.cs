@@ -1,6 +1,7 @@
+using AutoriaStore.Application.Dtos;
 using UserCrud.Application.Dtos;
 
-namespace UserCrud.Application.UseCases.UpdateProductCategory;
+namespace AutoriaStore.Application.UseCases.UpdateProductCategory;
 
 public interface IUpdateProductCategoryUseCase
 {
