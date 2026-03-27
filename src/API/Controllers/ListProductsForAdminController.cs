@@ -5,7 +5,7 @@ using UserCrud.API.Presenters;
 using UserCrud.Application.Dtos;
 using UserCrud.Application.UseCases.ListProductsForAdmin;
 
-namespace UserCrud.API.Controllers;
+namespace AutoriaStore.API.Controllers;
 
 [ApiController]
 [Route("api/product")]

@@ -4,7 +4,7 @@ using UserCrud.API.Dtos;
 using UserCrud.API.Presenters;
 using UserCrud.Application.UseCases.FindProductCategoryById;
 
-namespace UserCrud.API.Controllers;
+namespace AutoriaStore.API.Controllers;
 
 [ApiController]
 [Route("api/product-category")]

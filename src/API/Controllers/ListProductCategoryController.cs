@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using UserCrud.API.Dtos;
 using UserCrud.API.Presenters;
 
-namespace UserCrud.API.Controllers;
+namespace AutoriaStore.API.Controllers;
 
 [ApiController]
 [Route("api/product-category")]
 public class ListProductCategoryController(IListProductCategoryUseCase listProductCategoryUseCase) : ControllerBase
 {
-    [HttpGet]
+    [HttpGet("list")]
     [ProducesResponseType(typeof(PaginationResponseDto<ProductCategoryResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult> HandleAsync(CancellationToken cancellationToken)
     {
