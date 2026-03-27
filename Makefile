@@ -41,5 +41,10 @@ api-rebuild:
 	$(COMPOSE) stop api
 	$(COMPOSE) up -d --build api
 
+api-restart:
+	$(COMPOSE) down api	
+	$(COMPOSE) stop api
+	$(COMPOSE) up -d api
+
 api-logs:
 	$(COMPOSE) logs -f api
