@@ -4,5 +4,5 @@ namespace AutoriaStore.Application.UseCases.ListProductCategory;
 
 public interface IListProductCategoryUseCase
 {
-    Task<(IEnumerable<ProductCategory> productCategories, int count)> ExecuteAsync(CancellationToken cancellationToken);
+    Task<(List<ProductCategory> productCategories, int count)> ExecuteAsync(CancellationToken cancellationToken);
 }
