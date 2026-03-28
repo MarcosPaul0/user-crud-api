@@ -1,8 +1,8 @@
+using AutoriaStore.Application.Dtos;
 using AutoriaStore.Domain.Entities;
 using AutoriaStore.Domain.Interfaces;
-using UserCrud.Application.Dtos;
 
-namespace UserCrud.Application.UseCases.ListProductsForAdmin;
+namespace AutoriaStore.Application.UseCases.ListProductsForAdmin;
 
 public sealed class ListProductsForAdminUseCase(IUnitOfWork unitOfWork) : IListProductsForAdminUseCase
 {

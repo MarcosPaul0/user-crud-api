@@ -1,6 +1,6 @@
-using UserCrud.API.Dtos;
+using AutoriaStore.API.Dtos;
 
-namespace UserCrud.API.Helpers;
+namespace AutoriaStore.API.Helpers;
 
 public static class PaginationHelper
 {

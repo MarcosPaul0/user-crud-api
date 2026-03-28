@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using AutoriaStore.Domain.Enums;
 
-namespace UserCrud.Application.Dtos;
+namespace AutoriaStore.Application.Dtos;
 
 public record ListUsersDto : PaginationDto
 {

@@ -1,8 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
-using UserCrud.Application.Attributes;
 
-namespace UserCrud.Application.Dtos;
+namespace AutoriaStore.Application.Dtos;
 
 public record SetProductImagesDto
 {

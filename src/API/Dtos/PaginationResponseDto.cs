@@ -1,4 +1,4 @@
-namespace UserCrud.API.Dtos;
+namespace AutoriaStore.API.Dtos;
 
 public record PaginationResponseDto<T>
 {

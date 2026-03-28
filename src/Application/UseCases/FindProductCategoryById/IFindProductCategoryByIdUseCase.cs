@@ -1,6 +1,6 @@
 using AutoriaStore.Domain.Entities;
 
-namespace UserCrud.Application.UseCases.FindProductCategoryById;
+namespace AutoriaStore.Application.UseCases.FindProductCategoryById;
 
 public interface IFindProductCategoryByIdUseCase
 {

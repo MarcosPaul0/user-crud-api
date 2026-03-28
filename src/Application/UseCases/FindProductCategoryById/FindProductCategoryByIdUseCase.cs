@@ -1,8 +1,8 @@
+using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Entities;
 using AutoriaStore.Domain.Interfaces;
-using UserCrud.Application.Exceptions;
 
-namespace UserCrud.Application.UseCases.FindProductCategoryById;
+namespace AutoriaStore.Application.UseCases.FindProductCategoryById;
 
 public sealed class FindProductCategoryByIdUseCase(IUnitOfWork unitOfWork) : IFindProductCategoryByIdUseCase
 {

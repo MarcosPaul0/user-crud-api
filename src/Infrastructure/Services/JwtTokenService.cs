@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using AutoriaStore.Domain.Enums;
 using Microsoft.IdentityModel.Tokens;
-using UserCrud.Application.Interfaces;
+using AutoriaStore.Application.Interfaces;
 
 namespace AutoriaStore.Infrastructure.Services;
 

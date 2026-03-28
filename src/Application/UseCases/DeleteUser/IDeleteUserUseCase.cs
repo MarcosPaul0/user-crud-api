@@ -1,4 +1,4 @@
-namespace UserCrud.Application.UseCases.DeleteUser;
+namespace AutoriaStore.Application.UseCases.DeleteUser;
 
 public interface IDeleteUserUseCase
 {

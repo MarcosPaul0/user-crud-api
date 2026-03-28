@@ -1,9 +1,9 @@
+using AutoriaStore.Application.Dtos;
+using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Interfaces;
-using UserCrud.Application.Dtos;
-using UserCrud.Application.Exceptions;
-using UserCrud.Application.Interfaces;
+using AutoriaStore.Application.Interfaces;
 
-namespace UserCrud.Application.UseCases.Login;
+namespace AutoriaStore.Application.UseCases.Login;
 
 public sealed class LoginUseCase(
     IPasswordHasherService passwordHasherService, 

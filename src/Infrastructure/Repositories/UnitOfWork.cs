@@ -2,7 +2,7 @@ using AutoriaStore.Domain.Interfaces;
 using AutoriaStore.Infrastructure.Context;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace UserCrud.Infrastructure.Repositories;
+namespace AutoriaStore.Infrastructure.Repositories;
 
 public sealed class UnitOfWork : IUnitOfWork
 {

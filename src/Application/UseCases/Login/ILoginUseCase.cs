@@ -1,6 +1,6 @@
-using UserCrud.Application.Dtos;
+using AutoriaStore.Application.Dtos;
 
-namespace UserCrud.Application.UseCases.Login;
+namespace AutoriaStore.Application.UseCases.Login;
 
 public interface ILoginUseCase
 {

@@ -1,9 +1,9 @@
+using AutoriaStore.API.Dtos;
+using AutoriaStore.API.Presenters;
+using AutoriaStore.Application.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using UserCrud.API.Dtos;
-using UserCrud.API.Presenters;
-using UserCrud.Application.Dtos;
-using UserCrud.Application.UseCases.ListProductsForAdmin;
+using AutoriaStore.Application.UseCases.ListProductsForAdmin;
 
 namespace AutoriaStore.API.Controllers;
 

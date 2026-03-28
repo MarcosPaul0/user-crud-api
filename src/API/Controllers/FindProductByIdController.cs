@@ -1,9 +1,9 @@
+using AutoriaStore.API.Dtos;
+using AutoriaStore.API.Presenters;
 using Microsoft.AspNetCore.Mvc;
-using UserCrud.API.Dtos;
-using UserCrud.API.Presenters;
-using UserCrud.Application.UseCases.FindProductById;
+using AutoriaStore.Application.UseCases.FindProductById;
 
-namespace UserCrud.API.Controllers;
+namespace AutoriaStore.API.Controllers;
 
 [ApiController]
 [Route("api/product")]

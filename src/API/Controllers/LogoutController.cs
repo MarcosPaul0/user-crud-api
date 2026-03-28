@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using UserCrud.Application.Interfaces;
+using AutoriaStore.Application.Interfaces;
 
-namespace UserCrud.API.Controllers;
+namespace AutoriaStore.API.Controllers;
 
 [ApiController]
 [Route("api/auth/logout")]

@@ -1,9 +1,9 @@
+using AutoriaStore.Application.Dtos;
+using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Entities;
 using AutoriaStore.Domain.Interfaces;
-using UserCrud.Application.Dtos;
-using UserCrud.Application.Exceptions;
 
-namespace UserCrud.Application.UseCases.CreateProduct;
+namespace AutoriaStore.Application.UseCases.CreateProduct;
 
 public sealed class CreateProductUseCase(IUnitOfWork unitOfWork) : ICreateProductUseCase
 {

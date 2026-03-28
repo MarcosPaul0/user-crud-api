@@ -1,7 +1,7 @@
+using AutoriaStore.API.Dtos;
 using AutoriaStore.Domain.Entities;
-using UserCrud.API.Dtos;
 
-namespace UserCrud.API.Presenters;
+namespace AutoriaStore.API.Presenters;
 
 public static class ProductCategoryPresenter
 {

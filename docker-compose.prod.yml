@@ -1,5 +1,5 @@
 # =============================================================================
-# docker-compose.prod.yml — Stack de Produção UserCrud
+# docker-compose.prod.yml — Stack de Produção AutoriaStore
 # =============================================================================
 #
 # Serviços:
@@ -24,8 +24,8 @@
 #          -v "$(pwd)/src:/src" -w /src \
 #          mcr.microsoft.com/dotnet/sdk:10.0 \
 #          dotnet ef database update \
-#            --project Infrastructure/UserCrud.Infrastructure.csproj \
-#            --startup-project API/UserCrud.API.csproj
+#            --project Infrastructure/AutoriaStore.Infrastructure.csproj \
+#            --startup-project API/AutoriaStore.API.csproj
 #
 # Comandos úteis:
 #   Subir:    docker compose -f docker-compose.prod.yml up -d
@@ -47,8 +47,8 @@ services:
     image: nginx:1.27-alpine
     container_name: usercrud_nginx
     ports:
-      - "80:80"    # HTTP → redireciona para HTTPS via nginx.conf
-      - "443:443"  # HTTPS → SSL termination aqui
+      - "80:80" # HTTP → redireciona para HTTPS via nginx.conf
+      - "443:443" # HTTPS → SSL termination aqui
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./certbot/conf:/etc/letsencrypt
@@ -147,12 +147,11 @@ services:
       - backend
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_DATABASE}"]
-      interval:     10s
-      timeout:       5s
-      retries:        5
+      interval: 10s
+      timeout: 5s
+      retries: 5
       start_period: 10s
     restart: unless-stopped
-
 
 # =============================================================================
 # Volumes nomeados
@@ -165,7 +164,6 @@ volumes:
   # Persiste as chaves criptográficas usadas para assinar cookies de autenticação.
   # Sem este volume, todos os usuários são deslogados a cada restart do container.
   dataprotection_keys:
-
 
 # =============================================================================
 # Redes

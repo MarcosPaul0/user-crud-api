@@ -1,6 +1,6 @@
 using AutoriaStore.Application.Dtos;
+using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Interfaces;
-using UserCrud.Application.Exceptions;
 
 namespace AutoriaStore.Application.UseCases.UpdateProductCategory;
 

@@ -1,8 +1,8 @@
+using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Entities;
 using AutoriaStore.Domain.Interfaces;
-using UserCrud.Application.Exceptions;
 
-namespace UserCrud.Application.UseCases.FindUserById;
+namespace AutoriaStore.Application.UseCases.FindUserById;
 
 public sealed class FindUserByIdUseCase(IUnitOfWork unitOfWork) : IFindUserByIdUseCase
 {

@@ -3,7 +3,7 @@ using AutoriaStore.Domain.Interfaces;
 using AutoriaStore.Infrastructure.Context;
 using AutoriaStore.Infrastructure.Repositories.FilterBuilders;
 using Microsoft.EntityFrameworkCore;
-using UserCrud.Infrastructure.Repositories;
+using AutoriaStore.Infrastructure.Repositories;
 
 namespace AutoriaStore.Infrastructure.Repositories;
 

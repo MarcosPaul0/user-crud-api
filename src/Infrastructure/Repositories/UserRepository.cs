@@ -4,7 +4,7 @@ using AutoriaStore.Infrastructure.Context;
 using AutoriaStore.Infrastructure.Repositories.FilterBuilders;
 using Microsoft.EntityFrameworkCore;
 
-namespace UserCrud.Infrastructure.Repositories;
+namespace AutoriaStore.Infrastructure.Repositories;
 
 public class UserRepository(ApplicationDbContext context) : BaseRepository<User>(context), IUserRepository
 {

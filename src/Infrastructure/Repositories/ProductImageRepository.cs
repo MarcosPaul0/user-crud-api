@@ -3,7 +3,7 @@ using AutoriaStore.Domain.Interfaces;
 using AutoriaStore.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace UserCrud.Infrastructure.Repositories;
+namespace AutoriaStore.Infrastructure.Repositories;
 
 public class ProductImageRepository(ApplicationDbContext context) : BaseRepository<ProductImage>(context), IProductImageRepository
 {

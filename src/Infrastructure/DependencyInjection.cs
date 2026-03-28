@@ -6,8 +6,8 @@ using AutoriaStore.Infrastructure.Repositories;
 using AutoriaStore.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using UserCrud.Application.Interfaces;
-using UserCrud.Infrastructure.Repositories;
+using AutoriaStore.Application.Interfaces;
+using AutoriaStore.Infrastructure.Repositories;
 
 namespace AutoriaStore.Infrastructure;
 

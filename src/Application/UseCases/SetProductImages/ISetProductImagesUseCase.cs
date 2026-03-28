@@ -1,6 +1,6 @@
-using UserCrud.Application.Dtos;
+using AutoriaStore.Application.Dtos;
 
-namespace UserCrud.Application.UseCases.SetProductImages;
+namespace AutoriaStore.Application.UseCases.SetProductImages;
 
 public interface ISetProductImagesUseCase
 {

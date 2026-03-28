@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace UserCrud.Application.Interfaces;
+namespace AutoriaStore.Application.Interfaces;
 
 public interface IObjectStorageService
 {

@@ -1,4 +1,4 @@
-using UserCrud.Application.Interfaces;
+using AutoriaStore.Application.Interfaces;
 
 namespace AutoriaStore.Infrastructure.Services;
 

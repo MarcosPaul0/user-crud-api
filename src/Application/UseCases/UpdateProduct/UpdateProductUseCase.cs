@@ -1,8 +1,8 @@
+using AutoriaStore.Application.Dtos;
+using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Interfaces;
-using UserCrud.Application.Dtos;
-using UserCrud.Application.Exceptions;
 
-namespace UserCrud.Application.UseCases.UpdateProduct;
+namespace AutoriaStore.Application.UseCases.UpdateProduct;
 
 public sealed class UpdateProductUseCase(IUnitOfWork unitOfWork) : IUpdateProductUseCase
 {

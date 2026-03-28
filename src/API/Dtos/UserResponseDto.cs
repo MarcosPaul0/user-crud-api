@@ -1,6 +1,6 @@
 using AutoriaStore.Domain.Enums;
 
-namespace UserCrud.API.Dtos;
+namespace AutoriaStore.API.Dtos;
 
 public record UserResponseDto
 {

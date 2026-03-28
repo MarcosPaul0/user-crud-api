@@ -2,7 +2,7 @@ using AutoriaStore.Domain.Entities;
 using AutoriaStore.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace UserCrud.Infrastructure.Repositories;
+namespace AutoriaStore.Infrastructure.Repositories;
 
 public class BaseRepository<T>(ApplicationDbContext context) where T : Entity
 {

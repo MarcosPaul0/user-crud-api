@@ -1,4 +1,4 @@
-namespace UserCrud.Application.Interfaces;
+namespace AutoriaStore.Application.Interfaces;
 
 public interface IEnvironmentVariablesService
 {

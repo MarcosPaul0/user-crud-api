@@ -1,6 +1,6 @@
-using UserCrud.Application.Dtos;
+using AutoriaStore.Application.Dtos;
 
-namespace UserCrud.Application.UseCases.CreateProduct;
+namespace AutoriaStore.Application.UseCases.CreateProduct;
 
 public interface ICreateProductUseCase
 {

@@ -1,4 +1,4 @@
-namespace UserCrud.Application.Helpers;
+namespace AutoriaStore.Application.Helpers;
 
 public static class ObjectStorageHelper
 {

@@ -1,7 +1,7 @@
+using AutoriaStore.Application.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
-using UserCrud.Application.Exceptions;
 
-namespace UserCrud.API.Handlers;
+namespace AutoriaStore.API.Handlers;
 
 public class GlobalExceptionHandler : IExceptionHandler
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace UserCrud.Application.Dtos;
+namespace AutoriaStore.Application.Dtos;
 
 public record CreateUserDto
 {

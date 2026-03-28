@@ -3,7 +3,7 @@ using AutoriaStore.Domain.Interfaces;
 using AutoriaStore.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace UserCrud.Infrastructure.Repositories;
+namespace AutoriaStore.Infrastructure.Repositories;
 
 public class PhoneRepository(ApplicationDbContext context) : BaseRepository<Phone>(context), IPhoneRepository
 {

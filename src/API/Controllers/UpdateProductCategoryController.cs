@@ -2,9 +2,8 @@ using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.UseCases.UpdateProductCategory;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using UserCrud.Application.Dtos;
 
-namespace UserCrud.API.Controllers;
+namespace AutoriaStore.API.Controllers;
 
 [ApiController]
 [Route("api/product-category")]

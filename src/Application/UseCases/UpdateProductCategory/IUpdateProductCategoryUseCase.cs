@@ -1,5 +1,4 @@
 using AutoriaStore.Application.Dtos;
-using UserCrud.Application.Dtos;
 
 namespace AutoriaStore.Application.UseCases.UpdateProductCategory;
 
