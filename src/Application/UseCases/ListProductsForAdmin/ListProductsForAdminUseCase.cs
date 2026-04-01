@@ -10,10 +10,22 @@ public sealed class ListProductsForAdminUseCase(IUnitOfWork unitOfWork) : IListP
         ListProductsByAdminDto listProductsByAdminDto, 
         CancellationToken cancellationToken)
     {
-        var productFilter = new Product(
-            listProductsByAdminDto.Name,
-            listProductsByAdminDto.ProductCategoryId,
-            listProductsByAdminDto.IsActive);
+        var productFilter = new Product();
+        
+        if (listProductsByAdminDto.IsActive != null)
+        {
+            productFilter.IsActive = listProductsByAdminDto.IsActive.Value;
+        }
+        
+        if (!string.IsNullOrWhiteSpace(listProductsByAdminDto.Name))
+        {
+            productFilter.Name = listProductsByAdminDto.Name;
+        }
+        
+        if (listProductsByAdminDto.ProductCategoryId != null && listProductsByAdminDto.ProductCategoryId != Guid.Empty)
+        {
+            productFilter.ProductCategoryId = listProductsByAdminDto.ProductCategoryId.Value;
+        }
 
         var products = await unitOfWork.Product.FindAllAsync(productFilter, listProductsByAdminDto.Page,
             listProductsByAdminDto.ItemsPerPage, cancellationToken);

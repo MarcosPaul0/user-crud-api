@@ -12,11 +12,11 @@ public class ListProductCategoryForAdminController(IListProductCategoryForAdminU
 {
     [Authorize]
     [HttpGet("list/for-admin")]
-    [ProducesResponseType(typeof(PaginationResponseDto<ProductCategoryResponseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PaginationResponseDto<ProductCategoryForAdminResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult> HandleAsync(CancellationToken cancellationToken)
     {
         var (productCategories, count) = await listProductCategoryForAdminUseCase.ExecuteAsync(cancellationToken);
 
-        return Ok(ProductCategoryPresenter.ToHttp(productCategories, count));
+        return Ok(ProductCategoryForAdminPresenter.ToHttp(productCategories, count));
     }
 }
