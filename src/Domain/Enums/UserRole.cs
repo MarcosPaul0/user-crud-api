@@ -1,4 +1,4 @@
-namespace UserCrud.Domain.Enums;
+namespace AutoriaStore.Domain.Enums;
 
 public enum UserRole
 {

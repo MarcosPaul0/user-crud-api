@@ -1,9 +1,9 @@
+using AutoriaStore.Application.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using UserCrud.Application.Dtos;
-using UserCrud.Application.Interfaces;
-using UserCrud.Application.UseCases.Login;
+using AutoriaStore.Application.Interfaces;
+using AutoriaStore.Application.UseCases.Login;
 
-namespace UserCrud.API.Controllers;
+namespace AutoriaStore.API.Controllers;
 
 [ApiController]
 [Route("api/auth/login")]

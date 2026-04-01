@@ -1,8 +1,8 @@
+using AutoriaStore.Application.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using UserCrud.Application.Dtos;
-using UserCrud.Application.UseCases.CreateUser;
+using AutoriaStore.Application.UseCases.CreateUser;
 
-namespace UserCrud.API.Controllers;
+namespace AutoriaStore.API.Controllers;
 
 [ApiController]
 [Route("api/user")]

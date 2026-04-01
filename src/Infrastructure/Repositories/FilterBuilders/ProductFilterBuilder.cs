@@ -1,6 +1,6 @@
-using UserCrud.Domain.Entities;
+using AutoriaStore.Domain.Entities;
 
-namespace UserCrud.Infrastructure.Repositories.FilterBuilders;
+namespace AutoriaStore.Infrastructure.Repositories.FilterBuilders;
 
 public class ProductFilterBuilder(IQueryable<Product> query) : BaseFilterBuilder<Product>(query)
 {
@@ -24,6 +24,16 @@ public class ProductFilterBuilder(IQueryable<Product> query) : BaseFilterBuilder
         if (isActive != null)
         {
             _query = _query.Where(product => product.IsActive == isActive);
+        }
+
+        return this;
+    }
+    
+    public ProductFilterBuilder FilterByProductCategoryIsActive(bool? isActive)
+    {
+        if (isActive != null)
+        {
+            _query = _query.Where(product => product.ProductCategory.IsActive == isActive);
         }
 
         return this;

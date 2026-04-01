@@ -1,15 +1,15 @@
 using Amazon.Runtime;
 using Amazon.S3;
+using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Infrastructure.Context;
+using AutoriaStore.Infrastructure.Repositories;
+using AutoriaStore.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using UserCrud.Application.Interfaces;
-using UserCrud.Domain.Interfaces;
-using UserCrud.Infrastructure.Context;
-using UserCrud.Infrastructure.Repositories;
-using UserCrud.Infrastructure.Services;
+using AutoriaStore.Application.Interfaces;
+using AutoriaStore.Infrastructure.Repositories;
 
-namespace UserCrud.Infrastructure;
+namespace AutoriaStore.Infrastructure;
 
 public static class DependencyInjection
 {
@@ -18,7 +18,9 @@ public static class DependencyInjection
         services.AddSingleton<IEnvironmentVariablesService, EnvironmentVariablesService>();
 
         var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-
+        
+        Console.WriteLine(connectionString);
+        
         if (string.IsNullOrWhiteSpace(connectionString))
         {
             throw new InvalidOperationException("The database connection string is not set.");

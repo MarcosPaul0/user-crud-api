@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
+using AutoriaStore.Application.Attributes;
 using Microsoft.AspNetCore.Http;
-using UserCrud.Application.Attributes;
 
-namespace UserCrud.Application.Dtos;
+namespace AutoriaStore.Application.Dtos;
 
 public class ProductImageDto
 {

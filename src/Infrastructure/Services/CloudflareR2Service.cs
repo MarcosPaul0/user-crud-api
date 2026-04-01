@@ -1,11 +1,11 @@
 using Amazon.S3;
 using Amazon.S3.Model;
+using AutoriaStore.Application.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using UserCrud.Application.Helpers;
-using UserCrud.Application.Interfaces;
+using AutoriaStore.Application.Interfaces;
 
-namespace UserCrud.Infrastructure.Services;
+namespace AutoriaStore.Infrastructure.Services;
 
 public class CloudflareR2Service(
     ILogger<CloudflareR2Service> logger,

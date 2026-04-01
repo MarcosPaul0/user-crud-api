@@ -1,11 +1,10 @@
+using AutoriaStore.API.Dtos;
+using AutoriaStore.API.Presenters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using UserCrud.API.Dtos;
-using UserCrud.API.Presenters;
-using UserCrud.Application.UseCases.FindUserById;
-using UserCrud.Domain.Entities;
+using AutoriaStore.Application.UseCases.FindUserById;
 
-namespace UserCrud.API.Controllers;
+namespace AutoriaStore.API.Controllers;
 
 [ApiController]
 [Route("api/user")]

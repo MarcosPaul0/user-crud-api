@@ -1,8 +1,8 @@
+using AutoriaStore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using UserCrud.Domain.Entities;
 
-namespace UserCrud.Infrastructure.EntitiesConfiguration;
+namespace AutoriaStore.Infrastructure.EntitiesConfiguration;
 
 public class PhoneConfiguration : IEntityTypeConfiguration<Phone>
 {

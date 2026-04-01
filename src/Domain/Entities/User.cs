@@ -1,6 +1,6 @@
-using UserCrud.Domain.Enums;
+using AutoriaStore.Domain.Enums;
 
-namespace UserCrud.Domain.Entities;
+namespace AutoriaStore.Domain.Entities;
 
 public class User : Entity
 {

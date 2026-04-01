@@ -1,6 +1,6 @@
-using UserCrud.Application.Interfaces;
+using AutoriaStore.Application.Interfaces;
 
-namespace UserCrud.Infrastructure.Services;
+namespace AutoriaStore.Infrastructure.Services;
 
 public class EnvironmentVariablesService : IEnvironmentVariablesService
 {

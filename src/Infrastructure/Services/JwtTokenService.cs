@@ -1,11 +1,11 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using AutoriaStore.Domain.Enums;
 using Microsoft.IdentityModel.Tokens;
-using UserCrud.Application.Interfaces;
-using UserCrud.Domain.Enums;
+using AutoriaStore.Application.Interfaces;
 
-namespace UserCrud.Infrastructure.Services;
+namespace AutoriaStore.Infrastructure.Services;
 
 public class JwtTokenService : IJwtTokenService
 {

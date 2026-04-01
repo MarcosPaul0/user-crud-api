@@ -1,15 +1,15 @@
+using AutoriaStore.API.Dtos;
+using AutoriaStore.API.Presenters;
+using AutoriaStore.Application.UseCases.ListProductCategory;
 using Microsoft.AspNetCore.Mvc;
-using UserCrud.API.Dtos;
-using UserCrud.API.Presenters;
-using UserCrud.Application.UseCases.ListProductCategory;
 
-namespace UserCrud.API.Controllers;
+namespace AutoriaStore.API.Controllers;
 
 [ApiController]
 [Route("api/product-category")]
 public class ListProductCategoryController(IListProductCategoryUseCase listProductCategoryUseCase) : ControllerBase
 {
-    [HttpGet]
+    [HttpGet("list")]
     [ProducesResponseType(typeof(PaginationResponseDto<ProductCategoryResponseDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult> HandleAsync(CancellationToken cancellationToken)
     {

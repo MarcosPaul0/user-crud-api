@@ -1,8 +1,8 @@
-using UserCrud.Application.Dtos;
-using UserCrud.Domain.Entities;
-using UserCrud.Domain.Interfaces;
+using AutoriaStore.Application.Dtos;
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Domain.Interfaces;
 
-namespace UserCrud.Application.UseCases.ListUsers;
+namespace AutoriaStore.Application.UseCases.ListUsers;
 
 public sealed class ListUserUseCase(IUnitOfWork unitOfWork) : IListUserUseCase
 {

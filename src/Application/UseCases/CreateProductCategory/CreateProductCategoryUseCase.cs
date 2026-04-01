@@ -1,9 +1,9 @@
-using UserCrud.Application.Dtos;
-using UserCrud.Application.Exceptions;
-using UserCrud.Domain.Entities;
-using UserCrud.Domain.Interfaces;
+using AutoriaStore.Application.Dtos;
+using AutoriaStore.Application.Exceptions;
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Domain.Interfaces;
 
-namespace UserCrud.Application.UseCases.CreateProductCategory;
+namespace AutoriaStore.Application.UseCases.CreateProductCategory;
 
 public sealed class CreateProductCategoryUseCase(IUnitOfWork unitOfWork) : ICreateProductCategoryUseCase
 {
@@ -17,7 +17,13 @@ public sealed class CreateProductCategoryUseCase(IUnitOfWork unitOfWork) : ICrea
             throw new ConflictException(ExceptionMessages.PRODUCT_CATEGORY_ALREADY_EXISTS);
         }
 
-        var newProductCategory = new ProductCategory(createProductCategoryDto.Category, DateTime.UtcNow);
+        var newProductCategory = new ProductCategory()
+        {
+            Id = Guid.NewGuid(),
+            Category = createProductCategoryDto.Category,
+            IsActive = false,
+            CreatedAt = DateTime.UtcNow,
+        };
 
         await unitOfWork.ProductCategory.CreateAsync(newProductCategory, cancellationToken);
         await unitOfWork.SaveChangesAsync();

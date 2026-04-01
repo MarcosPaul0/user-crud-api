@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using UserCrud.Application.UseCases.DeleteProductCategory;
+using AutoriaStore.Application.UseCases.DeleteProductCategory;
 
-namespace UserCrud.API.Controllers;
+namespace AutoriaStore.API.Controllers;
 
 [ApiController]
 [Route("api/product-category")]

@@ -1,15 +1,16 @@
-using UserCrud.Domain.Entities;
+using AutoriaStore.Domain.Entities;
 
-namespace UserCrud.Domain.Interfaces;
+namespace AutoriaStore.Domain.Interfaces;
 
 public interface IProductRepository : IBaseRepository<Product>
 {
     Task<Product?> FindByNameAsync(string name, CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Product>> FindAllAsync(
+    Task<List<Product>> FindAllAsync(
         Product filter,
         int page,
         int itemsPerPage,
         CancellationToken cancellationToken = default);
+    
     Task<int> CountAsync(Product filter, CancellationToken cancellationToken = default);
 }

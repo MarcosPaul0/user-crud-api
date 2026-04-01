@@ -1,6 +1,6 @@
-using UserCrud.Domain.Entities;
+using AutoriaStore.Domain.Entities;
 
-namespace UserCrud.Application.UseCases.FindUserById;
+namespace AutoriaStore.Application.UseCases.FindUserById;
 
 public interface IFindUserByIdUseCase
 {

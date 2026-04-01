@@ -1,8 +1,8 @@
-using UserCrud.Application.Dtos;
-using UserCrud.Application.Exceptions;
-using UserCrud.Domain.Interfaces;
+using AutoriaStore.Application.Dtos;
+using AutoriaStore.Application.Exceptions;
+using AutoriaStore.Domain.Interfaces;
 
-namespace UserCrud.Application.UseCases.UpdateProductCategory;
+namespace AutoriaStore.Application.UseCases.UpdateProductCategory;
 
 public sealed class UpdateProductCategoryUseCase(IUnitOfWork unitOfWork) : IUpdateProductCategoryUseCase
 {
@@ -18,20 +18,35 @@ public sealed class UpdateProductCategoryUseCase(IUnitOfWork unitOfWork) : IUpda
         {
             throw new NotFoundException(ExceptionMessages.PRODUCT_CATEGORY_NOT_FOUND);
         }
-        
-        var productCategoryAlreadyExists =
-            await unitOfWork.ProductCategory.FindByCategoryAsync(updateProductCategoryDto.Category, cancellationToken);
 
-        if (productCategoryAlreadyExists != null)
+        var isUpdated = false;
+
+        if (!string.IsNullOrWhiteSpace(updateProductCategoryDto.Category))
         {
-            throw new ConflictException(ExceptionMessages.PRODUCT_CATEGORY_ALREADY_EXISTS);
+            var productCategoryAlreadyExists =
+                await unitOfWork.ProductCategory.FindByCategoryAsync(updateProductCategoryDto.Category, cancellationToken);
+
+            if (productCategoryAlreadyExists != null && productCategoryAlreadyExists.Id != productCategory.Id)
+            {
+                throw new ConflictException(ExceptionMessages.PRODUCT_CATEGORY_ALREADY_EXISTS);
+            }
+            
+            productCategory.Category = updateProductCategoryDto.Category;
+            isUpdated = true;
+        }
+        
+        if (updateProductCategoryDto.IsActive is not null)
+        {
+            productCategory.IsActive = updateProductCategoryDto.IsActive.Value;
+            isUpdated = true;
         }
 
-        productCategory.Category = updateProductCategoryDto.Category;
-        productCategory.UpdatedAt = DateTime.UtcNow;
+        if (isUpdated)
+        {
+            productCategory.UpdatedAt = DateTime.UtcNow;
 
-        await unitOfWork.ProductCategory.UpdateAsync(productCategory, cancellationToken);
-        
-        await unitOfWork.SaveChangesAsync();
+            await unitOfWork.ProductCategory.UpdateAsync(productCategory, cancellationToken);
+            await unitOfWork.SaveChangesAsync();
+        }
     }
 }

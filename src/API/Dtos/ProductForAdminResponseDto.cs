@@ -1,6 +1,4 @@
-using UserCrud.Domain.Entities;
-
-namespace UserCrud.API.Dtos;
+namespace AutoriaStore.API.Dtos;
 
 public record ProductForAdminResponseDto
 {

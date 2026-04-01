@@ -1,14 +1,19 @@
-using UserCrud.Domain.Entities;
-using UserCrud.Domain.Interfaces;
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Domain.Interfaces;
 
-namespace UserCrud.Application.UseCases.ListProductCategory;
+namespace AutoriaStore.Application.UseCases.ListProductCategory;
 
 public sealed class ListProductCategoryUseCase(
     IUnitOfWork unitOfWork) : IListProductCategoryUseCase
 {
-    public async Task<(IEnumerable<ProductCategory> productCategories, int count)> ExecuteAsync(CancellationToken cancellationToken)
+    public async Task<(List<ProductCategory> productCategories, int count)> ExecuteAsync(CancellationToken cancellationToken)
     {
-        var productCategories = await unitOfWork.ProductCategory.FindAllAsync(cancellationToken);
+        var filter = new ProductCategory()
+        {
+            IsActive = true
+        };
+        
+        var productCategories = await unitOfWork.ProductCategory.FindAllAsync(filter, cancellationToken);
 
         return (productCategories, productCategories.Count());
     }

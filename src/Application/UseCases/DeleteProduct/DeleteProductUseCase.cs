@@ -1,8 +1,8 @@
-using UserCrud.Application.Exceptions;
-using UserCrud.Application.Interfaces;
-using UserCrud.Domain.Interfaces;
+using AutoriaStore.Application.Exceptions;
+using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Application.Interfaces;
 
-namespace UserCrud.Application.UseCases.DeleteProduct;
+namespace AutoriaStore.Application.UseCases.DeleteProduct;
 
 public sealed class DeleteProductUseCase(
     IObjectStorageService objectStorageService, 

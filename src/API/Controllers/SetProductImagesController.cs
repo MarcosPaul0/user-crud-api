@@ -1,9 +1,9 @@
+using AutoriaStore.Application.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using UserCrud.Application.Dtos;
-using UserCrud.Application.UseCases.SetProductImages;
+using AutoriaStore.Application.UseCases.SetProductImages;
 
-namespace UserCrud.API.Controllers;
+namespace AutoriaStore.API.Controllers;
 
 [ApiController]
 [Route("api/product")]

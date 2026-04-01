@@ -1,10 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace UserCrud.Application.Dtos;
+namespace AutoriaStore.Application.Dtos;
 
 public record UpdateProductCategoryDto
 {
-    [Required]
     [StringLength(50, MinimumLength = 10)]
-    public string Category { get; init; }
+    public string? Category { get; init; }
+    
+    public bool? IsActive { get; init; }
 }

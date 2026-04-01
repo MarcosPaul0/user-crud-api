@@ -1,7 +1,7 @@
+using AutoriaStore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using UserCrud.Domain.Entities;
 
-namespace UserCrud.Infrastructure.Context;
+namespace AutoriaStore.Infrastructure.Context;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {

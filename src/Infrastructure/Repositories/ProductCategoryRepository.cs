@@ -1,9 +1,11 @@
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Infrastructure.Context;
+using AutoriaStore.Infrastructure.Repositories.FilterBuilders;
 using Microsoft.EntityFrameworkCore;
-using UserCrud.Domain.Entities;
-using UserCrud.Domain.Interfaces;
-using UserCrud.Infrastructure.Context;
+using AutoriaStore.Infrastructure.Repositories;
 
-namespace UserCrud.Infrastructure.Repositories;
+namespace AutoriaStore.Infrastructure.Repositories;
 
 public class ProductCategoryRepository(ApplicationDbContext context) : BaseRepository<ProductCategory>(context), IProductCategoryRepository
 {
@@ -15,17 +17,46 @@ public class ProductCategoryRepository(ApplicationDbContext context) : BaseRepos
             cancellationToken);
     }
 
-    public async Task<IEnumerable<ProductCategory>> FindAllAsync(CancellationToken cancellationToken = default)
+    public async Task<List<ProductCategory>> FindAllAsync(
+        ProductCategory? filter, 
+        CancellationToken cancellationToken = default)
     {
-        return await _context.ProductCategory
-            .AsNoTracking()
-            .Select(c => new ProductCategory(
-                c.Id,
-                c.Category,
-                _context.Product.Count(p => p.ProductCategoryId == c.Id),
-                c.CreatedAt,
-                c.UpdatedAt
-            ))
+        var query = _context.ProductCategory.AsNoTracking();
+
+        if (filter is not null)
+        {
+            query = new ProductCategoryFilterBuilder(query)
+                .FilterByCategory(filter.Category)
+                .FilterByIsActive(filter.IsActive)
+                .Build();
+        }
+        
+        return await query.ToListAsync(cancellationToken);
+    }
+    
+    public async Task<List<ProductCategory>> FindAllWithProductCountAsync(
+        ProductCategory? filter, 
+        CancellationToken cancellationToken = default)
+    {
+        var query = _context.ProductCategory.AsNoTracking();
+
+        if (filter is not null)
+        {
+            query = new ProductCategoryFilterBuilder(query)
+                .FilterByCategory(filter.Category)
+                .FilterByIsActive(filter.IsActive)
+                .Build();
+        }
+        
+        return await query
+            .Select(productCategory => new ProductCategory
+            {
+                Id = productCategory.Id,
+                Category = productCategory.Category,
+                ProductCount = _context.Product.Count(p => p.ProductCategoryId == productCategory.Id),
+                CreatedAt = productCategory.CreatedAt,
+                UpdatedAt = productCategory.UpdatedAt
+            })
             .ToListAsync(cancellationToken);
     }
 

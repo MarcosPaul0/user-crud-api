@@ -14,20 +14,20 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0
 WORKDIR /src
 
 # --- Passo 1: restore (camada cacheada enquanto os .csproj não mudam) ---
-COPY UserCrud.sln .
-COPY src/API/UserCrud.API.csproj                      src/API/
-COPY src/Application/UserCrud.Application.csproj      src/Application/
-COPY src/Domain/UserCrud.Domain.csproj                src/Domain/
-COPY src/Infrastructure/UserCrud.Infrastructure.csproj src/Infrastructure/
+COPY AutoriaStore.sln .
+COPY src/API/AutoriaStore.API.csproj                      src/API/
+COPY src/Application/AutoriaStore.Application.csproj      src/Application/
+COPY src/Domain/AutoriaStore.Domain.csproj                src/Domain/
+COPY src/Infrastructure/AutoriaStore.Infrastructure.csproj src/Infrastructure/
 
-RUN dotnet restore "UserCrud.sln"
+RUN dotnet restore "AutoriaStore.sln"
 
 # --- Passo 2: código-fonte completo ---
 COPY . .
 
 # Compila em Release durante o build da imagem.
 # Erros de compilação aparecem aqui com output completo, não suprimidos pelo EF Core.
-RUN dotnet build "src/API/UserCrud.API.csproj" \
+RUN dotnet build "src/API/AutoriaStore.API.csproj" \
     -c Release \
     --no-restore
 
@@ -40,7 +40,7 @@ ENV PATH="$PATH:/root/.dotnet/tools"
 # --configuration Release: aponta para o bin/Release gerado pelo build acima.
 # A connection string é injetada em runtime via env_file (.env) no docker-compose.
 CMD ["dotnet", "ef", "database", "update", \
-     "--project",         "src/Infrastructure/UserCrud.Infrastructure.csproj", \
-     "--startup-project", "src/API/UserCrud.API.csproj", \
+     "--project",         "src/Infrastructure/AutoriaStore.Infrastructure.csproj", \
+     "--startup-project", "src/API/AutoriaStore.API.csproj", \
      "--no-build", \
      "--configuration",   "Release"]

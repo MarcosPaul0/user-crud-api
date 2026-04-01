@@ -1,7 +1,7 @@
-using UserCrud.Application.Dtos;
-using UserCrud.Domain.Entities;
+using AutoriaStore.Application.Dtos;
+using AutoriaStore.Domain.Entities;
 
-namespace UserCrud.Application.UseCases.ListProducts;
+namespace AutoriaStore.Application.UseCases.ListProducts;
 
 public interface IListProductsUseCase
 {

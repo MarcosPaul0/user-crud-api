@@ -1,7 +1,7 @@
-using UserCrud.Application.Exceptions;
-using UserCrud.Domain.Interfaces;
+using AutoriaStore.Application.Exceptions;
+using AutoriaStore.Domain.Interfaces;
 
-namespace UserCrud.Application.UseCases.DeleteUser;
+namespace AutoriaStore.Application.UseCases.DeleteUser;
 
 public sealed class DeleteUserUseCase(IUnitOfWork unitOfWork) : IDeleteUserUseCase
 {

@@ -1,9 +1,9 @@
+using AutoriaStore.Application.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using UserCrud.Application.Dtos;
-using UserCrud.Application.UseCases.UpdateUser;
+using AutoriaStore.Application.UseCases.UpdateUser;
 
-namespace UserCrud.API.Controllers;
+namespace AutoriaStore.API.Controllers;
 
 [ApiController]
 [Route("api/user")]

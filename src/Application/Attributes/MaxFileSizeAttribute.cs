@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
-namespace UserCrud.Application.Attributes;
+namespace AutoriaStore.Application.Attributes;
 
 public class MaxFileSizeAttribute(int maxFileSizeInMb) : ValidationAttribute
 {

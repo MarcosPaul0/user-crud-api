@@ -1,4 +1,4 @@
-namespace UserCrud.Domain.Interfaces;
+namespace AutoriaStore.Domain.Interfaces;
 
 public interface IBaseRepository<T>
 {

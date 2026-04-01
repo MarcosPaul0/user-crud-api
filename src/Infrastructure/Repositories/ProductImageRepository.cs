@@ -1,9 +1,9 @@
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
-using UserCrud.Domain.Entities;
-using UserCrud.Domain.Interfaces;
-using UserCrud.Infrastructure.Context;
 
-namespace UserCrud.Infrastructure.Repositories;
+namespace AutoriaStore.Infrastructure.Repositories;
 
 public class ProductImageRepository(ApplicationDbContext context) : BaseRepository<ProductImage>(context), IProductImageRepository
 {

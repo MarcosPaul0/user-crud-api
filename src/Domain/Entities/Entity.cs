@@ -1,8 +1,8 @@
-namespace UserCrud.Domain.Entities;
+namespace AutoriaStore.Domain.Entities;
 
 public abstract class Entity
 {
-    public Guid Id { get; protected set; }
-    public DateTime CreatedAt { get; protected set; }
+    public Guid Id { get; set; }
+    public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 }

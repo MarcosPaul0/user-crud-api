@@ -1,13 +1,15 @@
 using System.Security.Cryptography;
 using System.Text.Json.Serialization;
+using AutoriaStore.API.Handlers;
+using AutoriaStore.Application;
+using AutoriaStore.Infrastructure;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
-using UserCrud.API.Handlers;
-using UserCrud.Application;
-using UserCrud.Infrastructure;
+using AutoriaStore.Application;
+using AutoriaStore.Infrastructure;
 
 Env.Load();
 

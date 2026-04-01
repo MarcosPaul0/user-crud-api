@@ -1,4 +1,4 @@
-namespace UserCrud.Application.UseCases.DeleteProduct;
+namespace AutoriaStore.Application.UseCases.DeleteProduct;
 
 public interface IDeleteProductUseCase
 {

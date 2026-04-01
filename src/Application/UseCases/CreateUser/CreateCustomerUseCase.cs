@@ -1,11 +1,11 @@
-using UserCrud.Application.Dtos;
-using UserCrud.Application.Exceptions;
-using UserCrud.Application.Interfaces;
-using UserCrud.Domain.Entities;
-using UserCrud.Domain.Enums;
-using UserCrud.Domain.Interfaces;
+using AutoriaStore.Application.Dtos;
+using AutoriaStore.Application.Exceptions;
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Domain.Enums;
+using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Application.Interfaces;
 
-namespace UserCrud.Application.UseCases.CreateUser;
+namespace AutoriaStore.Application.UseCases.CreateUser;
 
 public sealed class CreateCustomerUseCase(
     IPasswordHasherService passwordHasherService,

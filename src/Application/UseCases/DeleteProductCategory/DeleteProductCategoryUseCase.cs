@@ -1,7 +1,7 @@
-using UserCrud.Application.Exceptions;
-using UserCrud.Domain.Interfaces;
+using AutoriaStore.Application.Exceptions;
+using AutoriaStore.Domain.Interfaces;
 
-namespace UserCrud.Application.UseCases.DeleteProductCategory;
+namespace AutoriaStore.Application.UseCases.DeleteProductCategory;
 
 public sealed class DeleteProductCategoryUseCase(IUnitOfWork unitOfWork) : IDeleteProductCategoryUseCase
 {

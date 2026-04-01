@@ -1,6 +1,6 @@
-using UserCrud.Application.Dtos;
+using AutoriaStore.Application.Dtos;
 
-namespace UserCrud.Application.UseCases.UpdateUser;
+namespace AutoriaStore.Application.UseCases.UpdateUser;
 
 public interface IUpdateUserUseCase
 {

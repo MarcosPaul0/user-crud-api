@@ -1,8 +1,8 @@
-using UserCrud.Application.Dtos;
-using UserCrud.Domain.Entities;
-using UserCrud.Domain.Interfaces;
+using AutoriaStore.Application.Dtos;
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Domain.Interfaces;
 
-namespace UserCrud.Application.UseCases.ListProducts;
+namespace AutoriaStore.Application.UseCases.ListProducts;
 
 public sealed class ListProductsUseCase(IUnitOfWork unitOfWork) : IListProductsUseCase
 {
@@ -10,9 +10,29 @@ public sealed class ListProductsUseCase(IUnitOfWork unitOfWork) : IListProductsU
         ListProductsDto listProductsDto, 
         CancellationToken cancellationToken)
     {
-        var productFilter = new Product(
-            listProductsDto.Name,
-            listProductsDto.ProductCategoryId);
+        var productFilter = new Product()
+        {
+            IsActive = true,
+            ProductCategory = new ProductCategory()
+            {
+                IsActive = true
+            }
+        };
+        
+        if (!string.IsNullOrWhiteSpace(listProductsDto.Name))
+        {
+            productFilter.Name = listProductsDto.Name;
+        }
+        
+        if (listProductsDto.ProductCategoryId != null && listProductsDto.ProductCategoryId != Guid.Empty)
+        {
+            productFilter.ProductCategoryId = listProductsDto.ProductCategoryId.Value;
+        }
+        
+        if (listProductsDto.ProductCategoryId != null && listProductsDto.ProductCategoryId != Guid.Empty)
+        {
+            productFilter.ProductCategoryId = listProductsDto.ProductCategoryId.Value;
+        }
 
         var products = await unitOfWork.Product.FindAllAsync(productFilter, listProductsDto.Page,
             listProductsDto.ItemsPerPage, cancellationToken);

@@ -1,4 +1,4 @@
-namespace UserCrud.Application.Exceptions;
+namespace AutoriaStore.Application.Exceptions;
 
 public class NotFoundException(string message) : Exception(message)
 {

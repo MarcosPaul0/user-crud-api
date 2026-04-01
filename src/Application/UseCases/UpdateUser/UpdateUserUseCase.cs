@@ -1,8 +1,8 @@
-using UserCrud.Application.Dtos;
-using UserCrud.Application.Exceptions;
-using UserCrud.Domain.Interfaces;
+using AutoriaStore.Application.Dtos;
+using AutoriaStore.Application.Exceptions;
+using AutoriaStore.Domain.Interfaces;
 
-namespace UserCrud.Application.UseCases.UpdateUser;
+namespace AutoriaStore.Application.UseCases.UpdateUser;
 
 public sealed class UpdateUserUseCase(IUnitOfWork unitOfWork) : IUpdateUserUseCase
 {

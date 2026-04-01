@@ -1,7 +1,7 @@
-using UserCrud.API.Dtos;
-using UserCrud.Domain.Entities;
+using AutoriaStore.API.Dtos;
+using AutoriaStore.Domain.Entities;
 
-namespace UserCrud.API.Presenters;
+namespace AutoriaStore.API.Presenters;
 
 public static class ProductCategoryPresenter
 {
@@ -12,7 +12,6 @@ public static class ProductCategoryPresenter
         {
             Id = productCategory.Id,
             Category = productCategory.Category,
-            ProductCount = productCategory.ProductCount,
             CreatedAt = productCategory.CreatedAt
         };
     }

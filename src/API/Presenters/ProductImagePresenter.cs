@@ -1,7 +1,7 @@
-using UserCrud.API.Dtos;
-using UserCrud.Domain.Entities;
+using AutoriaStore.API.Dtos;
+using AutoriaStore.Domain.Entities;
 
-namespace UserCrud.API.Presenters;
+namespace AutoriaStore.API.Presenters;
 
 public static class ProductImagePresenter
 {
