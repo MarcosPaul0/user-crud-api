@@ -31,6 +31,23 @@ public class ProductCategoryRepository(ApplicationDbContext context) : BaseRepos
                 .Build();
         }
         
+        return await query.ToListAsync(cancellationToken);
+    }
+    
+    public async Task<List<ProductCategory>> FindAllWithProductCountAsync(
+        ProductCategory? filter, 
+        CancellationToken cancellationToken = default)
+    {
+        var query = _context.ProductCategory.AsNoTracking();
+
+        if (filter is not null)
+        {
+            query = new ProductCategoryFilterBuilder(query)
+                .FilterByCategory(filter.Category)
+                .FilterByIsActive(filter.IsActive)
+                .Build();
+        }
+        
         return await query
             .Select(productCategory => new ProductCategory
             {
