@@ -10,6 +10,7 @@ using AutoriaStore.Application.UseCases.DeleteProductCategory;
 using AutoriaStore.Application.UseCases.DeleteUser;
 using AutoriaStore.Application.UseCases.FindProductById;
 using AutoriaStore.Application.UseCases.FindProductCategoryById;
+using AutoriaStore.Application.UseCases.FindProductCategoryByIdForAdmin;
 using AutoriaStore.Application.UseCases.FindUserById;
 using AutoriaStore.Application.UseCases.ListProducts;
 using AutoriaStore.Application.UseCases.ListProductsForAdmin;
@@ -38,6 +39,7 @@ public static class DependencyInjection
         services.AddScoped<IListProductCategoryUseCase, ListProductCategoryUseCase>();
         services.AddScoped<IListProductCategoryForAdminUseCase, ListProductCategoryForAdminUseCase>();
         services.AddScoped<IDeleteProductCategoryUseCase, DeleteProductCategoryUseCase>();
+        services.AddScoped<IFindProductCategoryByIdForAdminUseCase, FindProductCategoryByIdForAdminUseCase>();
         
         services.AddScoped<ICreateProductUseCase, CreateProductUseCase>();
         services.AddScoped<IUpdateProductUseCase, UpdateProductUseCase>();

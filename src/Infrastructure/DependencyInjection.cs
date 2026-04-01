@@ -19,6 +19,8 @@ public static class DependencyInjection
 
         var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
         
+        Console.WriteLine(connectionString);
+        
         if (string.IsNullOrWhiteSpace(connectionString))
         {
             throw new InvalidOperationException("The database connection string is not set.");
