@@ -28,7 +28,9 @@
 **/out
 # Diretórios com barra invertida no nome criados pelo Rider/Windows em filesystems Linux
 # (ex: bin\Debug como nome literal — diferente de bin/Debug no Linux)
-**/*\*
+# No dockerignore, \\ é barra invertida literal, então bin\\* cobre bin\Debug, bin\Release, etc.
+**/bin\\*
+**/obj\\*
 
 # Arquivos de ambiente e segredos — NUNCA devem entrar em uma imagem Docker
 **/.env
