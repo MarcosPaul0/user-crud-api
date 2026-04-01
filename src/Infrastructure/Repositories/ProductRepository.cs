@@ -23,7 +23,7 @@ public class ProductRepository(ApplicationDbContext context) : BaseRepository<Pr
         return await _context.Product.FirstOrDefaultAsync(product => product.Name == name, cancellationToken);
     }
     
-    public async Task<IEnumerable<Product>> FindAllAsync(
+    public async Task<List<Product>> FindAllAsync(
         Product filter, 
         int page, 
         int itemsPerPage, 
@@ -35,6 +35,7 @@ public class ProductRepository(ApplicationDbContext context) : BaseRepository<Pr
             .FilterByIsActive(filter.IsActive)
             .FilterByName(filter.Name)
             .FilterByProductCategoryId(filter.ProductCategoryId)
+            .FilterByProductCategoryIsActive(filter.ProductCategory?.IsActive)
             .ApplyPagination(page, itemsPerPage)
             .Build();
         
@@ -52,6 +53,7 @@ public class ProductRepository(ApplicationDbContext context) : BaseRepository<Pr
             .FilterByIsActive(filter.IsActive)
             .FilterByName(filter.Name)
             .FilterByProductCategoryId(filter.ProductCategoryId)
+            .FilterByProductCategoryIsActive(filter.ProductCategory?.IsActive)
             .Build();
         
         return await query.CountAsync(cancellationToken);

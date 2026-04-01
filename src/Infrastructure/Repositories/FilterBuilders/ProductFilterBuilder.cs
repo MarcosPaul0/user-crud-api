@@ -28,6 +28,16 @@ public class ProductFilterBuilder(IQueryable<Product> query) : BaseFilterBuilder
 
         return this;
     }
+    
+    public ProductFilterBuilder FilterByProductCategoryIsActive(bool? isActive)
+    {
+        if (isActive != null)
+        {
+            _query = _query.Where(product => product.ProductCategory.IsActive == isActive);
+        }
+
+        return this;
+    }
 
     public ProductFilterBuilder FilterByProductCategoryId(Guid? productCategoryId)
     {
