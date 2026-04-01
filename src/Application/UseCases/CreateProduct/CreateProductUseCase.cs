@@ -24,16 +24,19 @@ public sealed class CreateProductUseCase(IUnitOfWork unitOfWork) : ICreateProduc
             throw new ConflictException(ExceptionMessages.PRODUCT_ALREADY_EXISTS);
         }
 
-        var newProduct = new Product(
-            createProductDto.Name,
-            createProductDto.Description,
-            createProductDto.PrintDescription,
-            createProductDto.PriceInCents,
-            createProductDto.ProductionTimeInMinutes,
-            createProductDto.DiscountPercentage,
-            createProductDto.StockQuantity,
-            createProductDto.ProductCategoryId,
-            DateTime.UtcNow);
+        var newProduct = new Product()
+        {
+            Id = Guid.NewGuid(),
+            Name = createProductDto.Name,
+            Description = createProductDto.Description,
+            PrintDescription = createProductDto.PrintDescription,
+            PriceInCents = createProductDto.PriceInCents,
+            ProductionTimeInMinutes = createProductDto.ProductionTimeInMinutes,
+            DiscountPercentage = createProductDto.DiscountPercentage,
+            StockQuantity = createProductDto.StockQuantity,
+            ProductCategoryId = createProductDto.ProductCategoryId,
+            CreatedAt = DateTime.UtcNow
+        };
 
         await unitOfWork.Product.CreateAsync(newProduct, cancellationToken);
         await unitOfWork.SaveChangesAsync();
