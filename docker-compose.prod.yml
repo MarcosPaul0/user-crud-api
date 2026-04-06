@@ -77,9 +77,7 @@ services:
   # este container completar com sucesso (condition: service_completed_successfully).
   # ---------------------------------------------------------------------------
   migrator:
-    build:
-      context: .
-      dockerfile: Dockerfile.migrator
+docker    image: marcosphip7/autoria-migrator:latest
     container_name: usercrud_migrator
     env_file:
       - .env
