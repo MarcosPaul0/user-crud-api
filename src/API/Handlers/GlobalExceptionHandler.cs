@@ -11,6 +11,7 @@ public class GlobalExceptionHandler : IExceptionHandler
 
         var (statusCode, message) = exception switch
         {
+            BadRequestException => (StatusCodes.Status400BadRequest, exception.Message),
             NotFoundException => (StatusCodes.Status404NotFound, exception.Message),
             ConflictException => (StatusCodes.Status409Conflict, exception.Message),
             UnauthorizeException => (StatusCodes.Status401Unauthorized, exception.Message),
