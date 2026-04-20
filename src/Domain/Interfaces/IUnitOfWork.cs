@@ -6,5 +6,7 @@ public interface IUnitOfWork : IDisposable
     IProductRepository Product { get; }
     IProductCategoryRepository ProductCategory { get; }
     IProductImageRepository ProductImage { get; }
+    IOrderRepository Order { get; }
+    IIdempotencyKeyRepository IdempotencyKey { get; }
     Task SaveChangesAsync();
 }
