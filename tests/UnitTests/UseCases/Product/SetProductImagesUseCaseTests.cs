@@ -1,0 +1,234 @@
+using AutoriaStore.Application.Dtos;
+using AutoriaStore.Application.Exceptions;
+using AutoriaStore.Application.Interfaces;
+using AutoriaStore.Application.UseCases.SetProductImages;
+using AutoriaStore.Domain.Entities;
+using AutoriaStore.Domain.Interfaces;
+using Microsoft.AspNetCore.Http;
+
+namespace AutoriaStore.UnitTests.UseCases.Product;
+
+public class SetProductImagesUseCaseTests
+{
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
+    private readonly Mock<IProductRepository> _productRepositoryMock;
+    private readonly Mock<IProductImageRepository> _productImageRepositoryMock;
+    private readonly Mock<IObjectStorageService> _objectStorageMock;
+    private readonly SetProductImagesUseCase _sut;
+
+    public SetProductImagesUseCaseTests()
+    {
+        _unitOfWorkMock = new Mock<IUnitOfWork>();
+        _productRepositoryMock = new Mock<IProductRepository>();
+        _productImageRepositoryMock = new Mock<IProductImageRepository>();
+        _objectStorageMock = new Mock<IObjectStorageService>();
+
+        _unitOfWorkMock.Setup(u => u.Product).Returns(_productRepositoryMock.Object);
+        _unitOfWorkMock.Setup(u => u.ProductImage).Returns(_productImageRepositoryMock.Object);
+
+        _sut = new SetProductImagesUseCase(_objectStorageMock.Object, _unitOfWorkMock.Object);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_WhenProductNotFound_ThrowsNotFoundException()
+    {
+        var productId = Guid.NewGuid();
+        var dto = new SetProductImagesDto { Images = new List<ProductImageDto>() };
+
+        _productRepositoryMock
+            .Setup(r => r.FindByIdAsync(productId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync((AutoriaStore.Domain.Entities.Product?)null);
+
+        var act = () => _sut.ExecuteAsync(productId, dto, CancellationToken.None);
+
+        var exception = await Assert.ThrowsAsync<NotFoundException>(act);
+        Assert.Equal(ExceptionMessages.PRODUCT_NOT_FOUND, exception.Message);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_WhenMaxImagesWouldBeExceeded_ThrowsConflictException()
+    {
+        var productId = Guid.NewGuid();
+        var existingProduct = new AutoriaStore.Domain.Entities.Product
+        {
+            Id = productId,
+            Name = "Test Product",
+            CreatedAt = DateTime.UtcNow
+        };
+
+        var existingImages = new List<ProductImage>
+        {
+            new("url1", 1, productId, DateTime.UtcNow) { Id = Guid.NewGuid() },
+            new("url2", 2, productId, DateTime.UtcNow) { Id = Guid.NewGuid() },
+            new("url3", 3, productId, DateTime.UtcNow) { Id = Guid.NewGuid() },
+            new("url4", 4, productId, DateTime.UtcNow) { Id = Guid.NewGuid() }
+        };
+
+        var mockFile = new Mock<IFormFile>();
+        mockFile.Setup(f => f.FileName).Returns("new_image.jpg");
+
+        // 4 existing + 2 new = 6, exceeds limit of 5
+        var dto = new SetProductImagesDto
+        {
+            Images = new List<ProductImageDto>
+            {
+                new() { File = mockFile.Object, DisplayOrder = 1 },
+                new() { File = mockFile.Object, DisplayOrder = 2 }
+            }
+        };
+
+        _productRepositoryMock
+            .Setup(r => r.FindByIdAsync(productId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(existingProduct);
+
+        _productImageRepositoryMock
+            .Setup(r => r.FindAllByProductIdAsync(productId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(existingImages);
+
+        var act = () => _sut.ExecuteAsync(productId, dto, CancellationToken.None);
+
+        var exception = await Assert.ThrowsAsync<ConflictException>(act);
+        Assert.Equal(ExceptionMessages.PRODUCT_MAX_IMAGES_REACHED, exception.Message);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_WhenCreatingNewImages_UploadsFilesAndCreatesImageRecords()
+    {
+        var productId = Guid.NewGuid();
+        var existingProduct = new AutoriaStore.Domain.Entities.Product
+        {
+            Id = productId,
+            Name = "Test Product",
+            CreatedAt = DateTime.UtcNow
+        };
+
+        var mockFile = new Mock<IFormFile>();
+        mockFile.Setup(f => f.FileName).Returns("photo.jpg");
+
+        var dto = new SetProductImagesDto
+        {
+            Images = new List<ProductImageDto>
+            {
+                new() { File = mockFile.Object, DisplayOrder = 1 }
+            }
+        };
+
+        _productRepositoryMock
+            .Setup(r => r.FindByIdAsync(productId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(existingProduct);
+
+        _productImageRepositoryMock
+            .Setup(r => r.FindAllByProductIdAsync(productId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<ProductImage>());
+
+        _objectStorageMock
+            .Setup(s => s.UploadAsync(mockFile.Object, It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync("https://storage.example.com/products/image.jpg");
+
+        await _sut.ExecuteAsync(productId, dto, CancellationToken.None);
+
+        _objectStorageMock.Verify(s => s.UploadAsync(mockFile.Object, It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        _productImageRepositoryMock.Verify(r => r.CreateAsync(It.IsAny<ProductImage>(), It.IsAny<CancellationToken>()), Times.Once);
+        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_WhenUpdatingExistingImageWithNewFile_DeletesOldFileAndUploadsNew()
+    {
+        var productId = Guid.NewGuid();
+        var imageId = Guid.NewGuid();
+
+        var existingProduct = new AutoriaStore.Domain.Entities.Product
+        {
+            Id = productId,
+            Name = "Test Product",
+            CreatedAt = DateTime.UtcNow
+        };
+
+        var existingImage = new ProductImage("https://storage.example.com/old_image.jpg", 1, productId, DateTime.UtcNow)
+        {
+            Id = imageId
+        };
+
+        var mockFile = new Mock<IFormFile>();
+        mockFile.Setup(f => f.FileName).Returns("new_photo.jpg");
+
+        var dto = new SetProductImagesDto
+        {
+            Images = new List<ProductImageDto>
+            {
+                new() { Id = imageId, File = mockFile.Object, DisplayOrder = 2 }
+            }
+        };
+
+        _productRepositoryMock
+            .Setup(r => r.FindByIdAsync(productId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(existingProduct);
+
+        _productImageRepositoryMock
+            .Setup(r => r.FindAllByProductIdAsync(productId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<ProductImage>());
+
+        _productImageRepositoryMock
+            .Setup(r => r.FindByIdAsync(imageId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(existingImage);
+
+        _objectStorageMock
+            .Setup(s => s.UploadAsync(mockFile.Object, It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync("https://storage.example.com/new_image.jpg");
+
+        await _sut.ExecuteAsync(productId, dto, CancellationToken.None);
+
+        _objectStorageMock.Verify(s => s.DeleteAsync("https://storage.example.com/old_image.jpg", It.IsAny<CancellationToken>()), Times.Once);
+        _objectStorageMock.Verify(s => s.UploadAsync(mockFile.Object, It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        _productImageRepositoryMock.Verify(r => r.UpdateAsync(existingImage, It.IsAny<CancellationToken>()), Times.Once);
+        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_WhenUpdatingExistingImageWithoutNewFile_OnlyUpdatesDisplayOrder()
+    {
+        var productId = Guid.NewGuid();
+        var imageId = Guid.NewGuid();
+
+        var existingProduct = new AutoriaStore.Domain.Entities.Product
+        {
+            Id = productId,
+            Name = "Test Product",
+            CreatedAt = DateTime.UtcNow
+        };
+
+        var existingImage = new ProductImage("https://storage.example.com/image.jpg", 1, productId, DateTime.UtcNow)
+        {
+            Id = imageId
+        };
+
+        var dto = new SetProductImagesDto
+        {
+            Images = new List<ProductImageDto>
+            {
+                new() { Id = imageId, File = null, DisplayOrder = 3 }
+            }
+        };
+
+        _productRepositoryMock
+            .Setup(r => r.FindByIdAsync(productId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(existingProduct);
+
+        _productImageRepositoryMock
+            .Setup(r => r.FindAllByProductIdAsync(productId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<ProductImage>());
+
+        _productImageRepositoryMock
+            .Setup(r => r.FindByIdAsync(imageId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(existingImage);
+
+        await _sut.ExecuteAsync(productId, dto, CancellationToken.None);
+
+        _objectStorageMock.Verify(s => s.DeleteAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+        _objectStorageMock.Verify(s => s.UploadAsync(It.IsAny<IFormFile>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+        Assert.Equal(3, existingImage.DisplayOrder);
+        _productImageRepositoryMock.Verify(r => r.UpdateAsync(existingImage, It.IsAny<CancellationToken>()), Times.Once);
+        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
+    }
+}
