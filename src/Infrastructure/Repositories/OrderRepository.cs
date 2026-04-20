@@ -6,5 +6,4 @@ namespace AutoriaStore.Infrastructure.Repositories;
 
 public class OrderRepository(ApplicationDbContext context) : BaseRepository<Order>(context), IOrderRepository
 {
-    
 }
