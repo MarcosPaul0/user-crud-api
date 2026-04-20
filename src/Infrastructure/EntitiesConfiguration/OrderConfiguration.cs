@@ -13,9 +13,15 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.HasKey(order => order.Id);
 
         builder.Property(order => order.Id).HasColumnName("id").ValueGeneratedOnAdd();
+        builder.Property(order => order.UserId).HasColumnName("user_id").IsRequired();
         builder.Property(order => order.TotalPriceInCents).HasColumnName("total_price_in_cents").IsRequired();
         builder.Property(order => order.CreatedAt).HasColumnName("created_at").IsRequired().ValueGeneratedOnAdd();
         builder.Property(order => order.UpdatedAt).HasColumnName("updated_at").IsRequired(false).ValueGeneratedOnUpdate();
+
+        builder.HasOne(order => order.User)
+            .WithMany()
+            .HasForeignKey(order => order.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(order => order.ProductOrders)
             .WithOne(orderProduct => orderProduct.Order)
