@@ -13,6 +13,12 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Product> Product { get; set; }
     
     public DbSet<ProductImage> ProductImage { get; set; }
+
+    public DbSet<Order> Order { get; set; }
+
+    public DbSet<OrderProduct> OrderProduct { get; set; }
+
+    public DbSet<IdempotencyKey> IdempotencyKey { get; set; }
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -47,4 +53,3 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 }
-
