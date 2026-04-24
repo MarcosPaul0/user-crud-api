@@ -95,9 +95,8 @@ COPY src/Application/AutoriaStore.Application.csproj   src/Application/
 COPY src/Domain/AutoriaStore.Domain.csproj             src/Domain/
 COPY src/Infrastructure/AutoriaStore.Infrastructure.csproj src/Infrastructure/
 
-# Restaura todos os pacotes NuGet declarados na solution.
-# Esta camada fica em cache enquanto os .csproj não mudam.
-RUN dotnet restore "AutoriaStore.sln"
+# Restaura apenas as dependências da API e seus projetos referenciados.
+RUN dotnet restore "src/API/AutoriaStore.API.csproj"
 
 # --- Passo 2: copiar o restante do código-fonte ---
 COPY . .

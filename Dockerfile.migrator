@@ -20,7 +20,7 @@ COPY src/Application/AutoriaStore.Application.csproj      src/Application/
 COPY src/Domain/AutoriaStore.Domain.csproj                src/Domain/
 COPY src/Infrastructure/AutoriaStore.Infrastructure.csproj src/Infrastructure/
 
-RUN dotnet restore "AutoriaStore.sln"
+RUN dotnet restore "src/API/AutoriaStore.API.csproj"
 
 # --- Passo 2: código-fonte completo ---
 COPY . .
