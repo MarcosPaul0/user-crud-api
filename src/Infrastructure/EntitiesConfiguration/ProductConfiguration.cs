@@ -24,6 +24,11 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(product => product.StockQuantity).HasColumnName("stock_quantity").IsRequired();
         builder.Property(product => product.CreatedAt).HasColumnName("created_at").IsRequired().ValueGeneratedOnAdd();
         builder.Property(product => product.UpdatedAt).HasColumnName("updated_at").IsRequired(false).ValueGeneratedOnUpdate();
+        // TODO definir valores padrões
+        builder.Property(product => product.WeightInGrams).HasColumnName("weight_in_grams").HasDefaultValue(415).IsRequired();
+        builder.Property(product => product.HeightInCentimeters).HasColumnName("height_in_centimeters").HasDefaultValue(15).IsRequired();
+        builder.Property(product => product.WidthInCentimeters).HasColumnName("width_in_centimeters").HasDefaultValue(15).IsRequired();
+        builder.Property(product => product.DepthInCentimeters).HasColumnName("depth_in_centimeters").HasDefaultValue(15).IsRequired();
         
         builder.Property(product => product.ProductCategoryId).HasColumnName("product_category_id").IsRequired();
         builder.HasOne(product => product.ProductCategory)

@@ -22,6 +22,148 @@ namespace AutoriaStore.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.IdempotencyKey", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Endpoint")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("endpoint");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("idempotency_key");
+
+                    b.Property<string>("RequestHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("request_hash");
+
+                    b.Property<string>("ResponseBody")
+                        .HasColumnType("jsonb")
+                        .HasColumnName("response_body");
+
+                    b.Property<int>("ResponseStatus")
+                        .HasColumnType("integer")
+                        .HasColumnName("response_status");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpiresAt")
+                        .HasDatabaseName("idx_idempotency_keys_expires");
+
+                    b.HasIndex("Key")
+                        .HasDatabaseName("idx_idempotency_keys_key");
+
+                    b.HasIndex("UserId", "Endpoint", "Key")
+                        .IsUnique();
+
+                    b.ToTable("idempotency_keys", null, t =>
+                        {
+                            t.HasCheckConstraint("chk_idempotency_keys_expires", "expires_at > created_at");
+                        });
+                });
+
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("TotalPriceInCents")
+                        .HasColumnType("integer")
+                        .HasColumnName("total_price_in_cents");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("order", (string)null);
+                });
+
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.OrderProduct", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("order_id");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("quantity");
+
+                    b.Property<int>("UnitPriceInCents")
+                        .HasColumnType("integer")
+                        .HasColumnName("unit_price_in_cents");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("order_product", (string)null);
+                });
+
             modelBuilder.Entity("AutoriaStore.Domain.Entities.Phone", b =>
                 {
                     b.Property<Guid>("Id")
@@ -68,6 +210,12 @@ namespace AutoriaStore.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
+                    b.Property<int>("DepthInCentimeters")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(15)
+                        .HasColumnName("depth_in_centimeters");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1200)
@@ -77,6 +225,12 @@ namespace AutoriaStore.Infrastructure.Migrations
                     b.Property<byte>("DiscountPercentage")
                         .HasColumnType("smallint")
                         .HasColumnName("discount_percentage");
+
+                    b.Property<int>("HeightInCentimeters")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(15)
+                        .HasColumnName("height_in_centimeters");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
@@ -114,6 +268,18 @@ namespace AutoriaStore.Infrastructure.Migrations
                         .ValueGeneratedOnUpdate()
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
+
+                    b.Property<int>("WeightInGrams")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(415)
+                        .HasColumnName("weight_in_grams");
+
+                    b.Property<int>("WidthInCentimeters")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(15)
+                        .HasColumnName("width_in_centimeters");
 
                     b.HasKey("Id");
 
@@ -246,6 +412,36 @@ namespace AutoriaStore.Infrastructure.Migrations
                     b.ToTable("user", (string)null);
                 });
 
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.Order", b =>
+                {
+                    b.HasOne("AutoriaStore.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.OrderProduct", b =>
+                {
+                    b.HasOne("AutoriaStore.Domain.Entities.Order", "Order")
+                        .WithMany("ProductOrders")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AutoriaStore.Domain.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("AutoriaStore.Domain.Entities.Phone", b =>
                 {
                     b.HasOne("AutoriaStore.Domain.Entities.User", "User")
@@ -277,6 +473,11 @@ namespace AutoriaStore.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("AutoriaStore.Domain.Entities.Order", b =>
+                {
+                    b.Navigation("ProductOrders");
                 });
 
             modelBuilder.Entity("AutoriaStore.Domain.Entities.Product", b =>

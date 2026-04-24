@@ -3,7 +3,7 @@ using Amazon.S3.Model;
 using AutoriaStore.Application.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using AutoriaStore.Application.Interfaces;
+using AutoriaStore.Domain.Interfaces.Services;
 
 namespace AutoriaStore.Infrastructure.Services;
 

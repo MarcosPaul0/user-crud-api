@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using AutoriaStore.Application.Interfaces;
+using AutoriaStore.Domain.Interfaces.Services;
 
 namespace AutoriaStore.API.Controllers;
 

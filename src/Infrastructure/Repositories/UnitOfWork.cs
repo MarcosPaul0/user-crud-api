@@ -1,4 +1,4 @@
-using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Domain.Interfaces.Repositories;
 using AutoriaStore.Infrastructure.Context;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +12,8 @@ public sealed class UnitOfWork : IUnitOfWork
     private readonly Lazy<IProductRepository> _product;
     private readonly Lazy<IProductCategoryRepository> _productCategory;
     private readonly Lazy<IProductImageRepository> _productImage;
+    private readonly Lazy<IOrderRepository> _order;
+    private readonly Lazy<IIdempotencyKeyRepository> _idempotencyKey;
 
     public UnitOfWork(ApplicationDbContext context, IServiceProvider serviceProvider)
     {
@@ -25,12 +27,18 @@ public sealed class UnitOfWork : IUnitOfWork
             serviceProvider.GetRequiredService<IProductCategoryRepository>);
         _productImage = new Lazy<IProductImageRepository>(
             serviceProvider.GetRequiredService<IProductImageRepository>);
+        _order = new Lazy<IOrderRepository>(
+            serviceProvider.GetRequiredService<IOrderRepository>);
+        _idempotencyKey = new Lazy<IIdempotencyKeyRepository>(
+            serviceProvider.GetRequiredService<IIdempotencyKeyRepository>);
     }
     
     public IUserRepository User => _user.Value;
     public IProductRepository Product => _product.Value;
     public IProductCategoryRepository ProductCategory => _productCategory.Value;
     public IProductImageRepository ProductImage => _productImage.Value;
+    public IOrderRepository Order => _order.Value;
+    public IIdempotencyKeyRepository IdempotencyKey => _idempotencyKey.Value;
     
     public async Task SaveChangesAsync()
     {

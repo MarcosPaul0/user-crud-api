@@ -1,9 +1,11 @@
+using AutoriaStore.Application.UseCases.CalculateShipping;
 using AutoriaStore.Application.UseCases.CreateProductCategory;
 using AutoriaStore.Application.UseCases.ListProductCategory;
 using AutoriaStore.Application.UseCases.ListProductCategoryForAdmin;
 using AutoriaStore.Application.UseCases.UpdateProductCategory;
 using Microsoft.Extensions.DependencyInjection;
 using AutoriaStore.Application.UseCases.CreateProduct;
+using AutoriaStore.Application.UseCases.CreateOrder;
 using AutoriaStore.Application.UseCases.CreateUser;
 using AutoriaStore.Application.UseCases.DeleteProduct;
 using AutoriaStore.Application.UseCases.DeleteProductCategory;
@@ -27,6 +29,7 @@ public static class DependencyInjection
     public static IServiceCollection AddUseCases(this IServiceCollection services)
     {
         services.AddScoped<ICreateCustomerUseCase, CreateCustomerUseCase>();
+        services.AddScoped<ICreateOrderUseCase, CreateOrderUseCase>();
         services.AddScoped<IFindUserByIdUseCase, FindUserByIdUseCase>();
         services.AddScoped<IListUserUseCase, ListUserUseCase>();
         services.AddScoped<IUpdateUserUseCase, UpdateUserUseCase>();
@@ -49,6 +52,7 @@ public static class DependencyInjection
         services.AddScoped<IDeleteProductUseCase, DeleteProductUseCase>();
 
         services.AddScoped<ISetProductImagesUseCase, SetProductImagesUseCase>();
+        services.AddScoped<ICalculateShippingUseCase, CalculateShippingUseCase>();
 
         return services;
     }

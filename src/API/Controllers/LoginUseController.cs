@@ -1,7 +1,7 @@
 using AutoriaStore.Application.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using AutoriaStore.Application.Interfaces;
 using AutoriaStore.Application.UseCases.Login;
+using AutoriaStore.Domain.Interfaces.Services;
 
 namespace AutoriaStore.API.Controllers;
 

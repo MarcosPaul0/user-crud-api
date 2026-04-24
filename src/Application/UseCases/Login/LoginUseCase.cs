@@ -1,7 +1,7 @@
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
-using AutoriaStore.Domain.Interfaces;
-using AutoriaStore.Application.Interfaces;
+using AutoriaStore.Domain.Interfaces.Repositories;
+using AutoriaStore.Domain.Interfaces.Services;
 
 namespace AutoriaStore.Application.UseCases.Login;
 
