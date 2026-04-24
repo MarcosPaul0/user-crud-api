@@ -1,6 +1,6 @@
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
-using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Domain.Interfaces.Repositories;
 
 namespace AutoriaStore.Application.UseCases.UpdateProduct;
 
@@ -83,6 +83,30 @@ public sealed class UpdateProductUseCase(IUnitOfWork unitOfWork) : IUpdateProduc
         if (updateProductDto.IsActive != null && updateProductDto.IsActive != product.IsActive)
         {
             product.IsActive = updateProductDto.IsActive.Value;
+            isUpdated = true;
+        }
+        
+        if (updateProductDto.HeightInCentimeters != null && updateProductDto.HeightInCentimeters != product.HeightInCentimeters)
+        {
+            product.HeightInCentimeters = updateProductDto.HeightInCentimeters.Value;
+            isUpdated = true;
+        }
+        
+        if (updateProductDto.WidthInCentimeters != null && updateProductDto.WidthInCentimeters != product.WidthInCentimeters)
+        {
+            product.WidthInCentimeters = updateProductDto.WidthInCentimeters.Value;
+            isUpdated = true;
+        }
+        
+        if (updateProductDto.DepthInCentimeters != null && updateProductDto.DepthInCentimeters != product.DepthInCentimeters)
+        {
+            product.DepthInCentimeters = updateProductDto.DepthInCentimeters.Value;
+            isUpdated = true;
+        }
+        
+        if (updateProductDto.WeightInGrams != null && updateProductDto.WeightInGrams != product.WeightInGrams)
+        {
+            product.WeightInGrams = updateProductDto.WeightInGrams.Value;
             isUpdated = true;
         }
         

@@ -25,6 +25,18 @@ public record UpdateProductDto
     [Range(0, 30)]
     public byte? DiscountPercentage { get; init; }
     
+    [Range(1, 100)]
+    public int? DepthInCentimeters { get; set; }
+    
+    [Range(1, 100)]
+    public int? WidthInCentimeters { get; set; }
+    
+    [Range(1, 100)]
+    public int? HeightInCentimeters { get; set; }
+    
+    [Range(1, 10_000)]
+    public int? WeightInGrams { get; set; }
+    
     public Guid? ProductCategoryId { get; init; }
     
     public bool? IsActive { get; init; }

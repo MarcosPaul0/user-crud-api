@@ -2,14 +2,14 @@ using System.Security.Cryptography;
 using System.Text.Json.Serialization;
 using AutoriaStore.API.Handlers;
 using AutoriaStore.Application;
+using AutoriaStore.Domain.Interfaces.Clients;
 using AutoriaStore.Infrastructure;
+using AutoriaStore.Infrastructure.Clients;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
-using AutoriaStore.Application;
-using AutoriaStore.Infrastructure;
 
 Env.Load();
 
@@ -79,7 +79,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     })
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
         options => builder.Configuration.Bind("CookieSettings", options));
-
+builder.Services.AddHttpClient<IPostageHttpClient, CorreiosHttpClient>();
+builder.Services.AddMemoryCache();
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks();
 

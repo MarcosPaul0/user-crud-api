@@ -1,7 +1,7 @@
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Entities;
-using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Domain.Interfaces.Repositories;
 
 namespace AutoriaStore.Application.UseCases.CreateProduct;
 
@@ -35,6 +35,10 @@ public sealed class CreateProductUseCase(IUnitOfWork unitOfWork) : ICreateProduc
             DiscountPercentage = createProductDto.DiscountPercentage,
             StockQuantity = createProductDto.StockQuantity,
             ProductCategoryId = createProductDto.ProductCategoryId,
+            DepthInCentimeters = createProductDto.DepthInCentimeters,
+            WidthInCentimeters = createProductDto.WidthInCentimeters,
+            HeightInCentimeters = createProductDto.HeightInCentimeters,
+            WeightInGrams = createProductDto.WeightInGrams,
             CreatedAt = DateTime.UtcNow
         };
 

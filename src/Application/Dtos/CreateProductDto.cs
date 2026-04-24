@@ -13,7 +13,7 @@ public class CreateProductDto
     public string PrintDescription { get; init; }
     
     [Required]
-    [StringLength(1200, MinimumLength = 10)]
+    [StringLength(1_200, MinimumLength = 10)]
     public string Description { get; init; }
     
     [Required]
@@ -34,4 +34,20 @@ public class CreateProductDto
     
     [Required]
     public Guid ProductCategoryId { get; init; }
+    
+    [Required]
+    [Range(1, 100)]
+    public int DepthInCentimeters { get; set; }
+    
+    [Required]
+    [Range(1, 100)]
+    public int WidthInCentimeters { get; set; }
+    
+    [Required]
+    [Range(1, 100)]
+    public int HeightInCentimeters { get; set; }
+    
+    [Required]
+    [Range(1, 10_000)]
+    public int WeightInGrams { get; set; }
 }

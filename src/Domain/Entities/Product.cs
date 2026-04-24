@@ -10,6 +10,10 @@ public class Product : Entity
     public byte DiscountPercentage { get; set; }
     public bool? IsActive { get; set; }
     public int StockQuantity { get; set; }
+    public int DepthInCentimeters { get; set; }
+    public int WidthInCentimeters { get; set; }
+    public int HeightInCentimeters { get; set; }
+    public int WeightInGrams { get; set; }
     
     public Guid ProductCategoryId { get; set; }
     public ProductCategory ProductCategory { get; set; }

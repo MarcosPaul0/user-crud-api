@@ -1,21 +1,28 @@
-using AutoriaStore.Application.Interfaces;
+using AutoriaStore.Domain.Interfaces.Services;
 
 namespace AutoriaStore.Infrastructure.Services;
 
 public class EnvironmentVariablesService : IEnvironmentVariablesService
 {
     public string Origin { get; private set; } = GetRequiredAndConvert<string>("ORIGIN");
+    
     public string JwtPrivateKey { get; private set; } = GetRequiredAndConvert<string>("JWT_PRIVATE_KEY");
     public string JwtPublicKey { get; private set; } = GetRequiredAndConvert<string>("JWT_PUBLIC_KEY");
     public string JwtIssuer { get; private set; } = GetRequiredAndConvert<string>("JWT_ISSUER");
     public string JwtAudience { get; private set; } = GetRequiredAndConvert<string>("JWT_AUDIENCE");
     public int JwtExpirationTimeInMinutes { get; private set; } = GetRequiredAndConvert<int>("JWT_EXPIRATION_TIME_IN_MINUTES");
+   
     public string ObjectStorageBucket { get; private set; } = GetRequiredAndConvert<string>("OBJECT_STORAGE_BUCKET");
     public string ObjectStorageEndpoint { get; private set; } = GetRequiredAndConvert<string>("OBJECT_STORAGE_ENDPOINT");
     public string ObjectStoragePublicUrl { get; private set; } = GetRequiredAndConvert<string>("OBJECT_STORAGE_PUBLIC_URL");
     public string ObjectStorageAccessKey { get; private set; } = GetRequiredAndConvert<string>("OBJECT_STORAGE_ACCESS_KEY");
     public string ObjectStorageSecretKey { get; private set; } = GetRequiredAndConvert<string>("OBJECT_STORAGE_SECRET_KEY");
+    
     public string AuthTokenCookie { get; private set; } = GetRequiredAndConvert<string>("AUTH_TOKEN_COOKIE");
+    
+    public string OriginPostalCode { get; private set; } = GetRequiredAndConvert<string>("ORIGIN_POSTAL_CODE");
+    public string PostageApiKey { get; private set; } = GetRequiredAndConvert<string>("POSTAGE_API_KEY");
+    public string PostageApiServiceCode { get; private set; } = GetRequiredAndConvert<string>("POSTAGE_API_SERVICE_CODE");
 
     private static T GetRequiredAndConvert<T>(string variableName)
     {

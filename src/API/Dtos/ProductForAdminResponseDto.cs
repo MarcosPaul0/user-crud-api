@@ -11,6 +11,10 @@ public record ProductForAdminResponseDto
     public required byte DiscountPercentage { get; init; }
     public required bool? IsActive { get; init; }
     public required int StockQuantity { get; init; }
+    public required int DepthInCentimeters { get; init; }
+    public required int WidthInCentimeters { get; init; }
+    public required int HeightInCentimeters { get; init; }
+    public required int WeightInGrams { get; init; }
     public required Guid ProductCategoryId { get; init; }
     public required string Category { get; init; }
     public required List<ProductImageResponseDto> ProductImages { get; init; }
