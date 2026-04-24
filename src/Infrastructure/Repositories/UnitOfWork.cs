@@ -1,4 +1,4 @@
-using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Domain.Interfaces.Repositories;
 using AutoriaStore.Infrastructure.Context;
 using Microsoft.Extensions.DependencyInjection;
 

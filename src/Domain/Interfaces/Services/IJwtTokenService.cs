@@ -1,6 +1,6 @@
 using AutoriaStore.Domain.Enums;
 
-namespace AutoriaStore.Application.Interfaces;
+namespace AutoriaStore.Domain.Interfaces.Services;
 
 public interface IJwtTokenService
 {

@@ -1,9 +1,7 @@
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Application.UseCases.FindUserById;
-using AutoriaStore.Domain.Entities;
 using AutoriaStore.Domain.Enums;
-using AutoriaStore.Domain.Interfaces;
-using Moq;
+using AutoriaStore.Domain.Interfaces.Repositories;
 
 namespace AutoriaStore.UnitTests.UseCases.User;
 

@@ -1,10 +1,8 @@
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
-using AutoriaStore.Application.Interfaces;
 using AutoriaStore.Application.UseCases.CreateUser;
-using AutoriaStore.Domain.Entities;
-using AutoriaStore.Domain.Interfaces;
-using Moq;
+using AutoriaStore.Domain.Interfaces.Repositories;
+using AutoriaStore.Domain.Interfaces.Services;
 
 namespace AutoriaStore.UnitTests.UseCases.User;
 

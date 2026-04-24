@@ -1,3 +1,4 @@
+using AutoriaStore.Application.UseCases.CalculateShipping;
 using AutoriaStore.Application.UseCases.CreateProductCategory;
 using AutoriaStore.Application.UseCases.ListProductCategory;
 using AutoriaStore.Application.UseCases.ListProductCategoryForAdmin;
@@ -51,6 +52,7 @@ public static class DependencyInjection
         services.AddScoped<IDeleteProductUseCase, DeleteProductUseCase>();
 
         services.AddScoped<ISetProductImagesUseCase, SetProductImagesUseCase>();
+        services.AddScoped<ICalculateShippingUseCase, CalculateShippingUseCase>();
 
         return services;
     }

@@ -1,4 +1,4 @@
-namespace AutoriaStore.Application.Interfaces;
+namespace AutoriaStore.Domain.Interfaces.Services;
 
 public interface IPasswordHasherService
 {

@@ -1,6 +1,6 @@
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Domain.Entities;
-using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Domain.Interfaces.Repositories;
 
 namespace AutoriaStore.Application.UseCases.ListProducts;
 

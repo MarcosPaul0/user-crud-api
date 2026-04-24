@@ -1,4 +1,4 @@
-namespace AutoriaStore.Domain.Interfaces;
+namespace AutoriaStore.Domain.Interfaces.Repositories;
 
 public interface IUnitOfWork : IDisposable
 {

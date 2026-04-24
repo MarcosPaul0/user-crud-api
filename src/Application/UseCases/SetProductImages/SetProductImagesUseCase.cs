@@ -1,9 +1,9 @@
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Entities;
-using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Domain.Interfaces.Repositories;
 using Microsoft.AspNetCore.Http;
-using AutoriaStore.Application.Interfaces;
+using AutoriaStore.Domain.Interfaces.Services;
 
 namespace AutoriaStore.Application.UseCases.SetProductImages;
 

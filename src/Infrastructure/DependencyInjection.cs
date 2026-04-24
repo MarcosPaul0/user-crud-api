@@ -1,12 +1,14 @@
 using Amazon.Runtime;
 using Amazon.S3;
-using AutoriaStore.Domain.Interfaces;
 using AutoriaStore.Infrastructure.Context;
 using AutoriaStore.Infrastructure.Repositories;
 using AutoriaStore.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using AutoriaStore.Application.Interfaces;
+using AutoriaStore.Domain.Interfaces.Clients;
+using AutoriaStore.Domain.Interfaces.Repositories;
+using AutoriaStore.Domain.Interfaces.Services;
+using AutoriaStore.Infrastructure.Clients;
 
 namespace AutoriaStore.Infrastructure;
 
@@ -42,6 +44,7 @@ public static class DependencyInjection
         services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IIdempotencyService, IdempotencyService>();
+        services.AddScoped<IPostageHttpClient, CorreiosHttpClient>();
         services.AddSingleton<IAmazonS3>(serviceProvider =>
         {
             var environmentVariablesService = serviceProvider.GetRequiredService<IEnvironmentVariablesService>();

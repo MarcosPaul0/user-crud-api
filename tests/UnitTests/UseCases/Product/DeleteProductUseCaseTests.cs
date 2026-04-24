@@ -1,8 +1,8 @@
 using AutoriaStore.Application.Exceptions;
-using AutoriaStore.Application.Interfaces;
 using AutoriaStore.Application.UseCases.DeleteProduct;
 using AutoriaStore.Domain.Entities;
-using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Domain.Interfaces.Repositories;
+using AutoriaStore.Domain.Interfaces.Services;
 
 namespace AutoriaStore.UnitTests.UseCases.Product;
 

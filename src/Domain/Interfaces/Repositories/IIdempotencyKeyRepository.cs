@@ -1,6 +1,6 @@
 using AutoriaStore.Domain.Entities;
 
-namespace AutoriaStore.Domain.Interfaces;
+namespace AutoriaStore.Domain.Interfaces.Repositories;
 
 public interface IIdempotencyKeyRepository : IBaseRepository<IdempotencyKey>
 {

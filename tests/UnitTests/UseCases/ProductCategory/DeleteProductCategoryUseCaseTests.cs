@@ -1,8 +1,6 @@
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Application.UseCases.DeleteProductCategory;
-using AutoriaStore.Domain.Entities;
-using AutoriaStore.Domain.Interfaces;
-using Moq;
+using AutoriaStore.Domain.Interfaces.Repositories;
 
 namespace AutoriaStore.UnitTests.UseCases.ProductCategory;
 

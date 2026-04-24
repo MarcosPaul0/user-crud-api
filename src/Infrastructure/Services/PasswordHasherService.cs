@@ -1,4 +1,4 @@
-using AutoriaStore.Application.Interfaces;
+using AutoriaStore.Domain.Interfaces.Services;
 
 namespace AutoriaStore.Infrastructure.Services;
 

@@ -1,9 +1,8 @@
 using AutoriaStore.Domain.Entities;
-using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Domain.Interfaces.Repositories;
 using AutoriaStore.Infrastructure.Context;
 using AutoriaStore.Infrastructure.Repositories.FilterBuilders;
 using Microsoft.EntityFrameworkCore;
-using AutoriaStore.Infrastructure.Repositories;
 
 namespace AutoriaStore.Infrastructure.Repositories;
 

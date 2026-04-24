@@ -1,7 +1,7 @@
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Entities;
-using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Domain.Interfaces.Repositories;
 
 namespace AutoriaStore.Application.UseCases.CreateProductCategory;
 

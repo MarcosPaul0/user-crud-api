@@ -1,6 +1,6 @@
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Application.UseCases.FindProductById;
-using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Domain.Interfaces.Repositories;
 
 namespace AutoriaStore.UnitTests.UseCases.Product;
 

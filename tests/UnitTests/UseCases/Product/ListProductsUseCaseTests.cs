@@ -1,6 +1,6 @@
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.UseCases.ListProducts;
-using AutoriaStore.Domain.Interfaces;
+using AutoriaStore.Domain.Interfaces.Repositories;
 
 namespace AutoriaStore.UnitTests.UseCases.Product;
 
