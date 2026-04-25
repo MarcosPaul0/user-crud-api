@@ -37,14 +37,6 @@ public sealed class CorreiosHttpClient : IPostageHttpClient
         GetShippingPriceDto getShippingPriceDto, 
         CancellationToken cancellationToken = default)
     {
-        if (_originPostalCode == getShippingPriceDto.DestinationPostalCode)
-        {
-            return new GetShippingPriceResponseDto()
-            {
-                PriceInCents = 0,
-            };
-        }
-        
         var endpoint = $"/preco/v1/nacional/{_serviceCode}";
         
         var queryParams = new Dictionary<string, string?>
@@ -90,14 +82,6 @@ public sealed class CorreiosHttpClient : IPostageHttpClient
         GetDeliveryTimeDto getDeliveryTimeDto, 
         CancellationToken cancellationToken = default)
     {
-        if (_originPostalCode == getDeliveryTimeDto.DestinationPostalCode)
-        {
-            return new GetDeliveryTimeResponseDto()
-            {
-                EstimationDeliveryDate = DateTime.Today + TimeSpan.FromDays(2),
-            };
-        }
-        
         var endpoint = $"/prazo/v1/nacional/{_serviceCode}";
         
         var queryParams = new Dictionary<string, string?>
