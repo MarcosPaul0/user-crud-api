@@ -4,19 +4,32 @@ using AutoriaStore.Domain.Dto.Clients;
 using AutoriaStore.Domain.Interfaces;
 using AutoriaStore.Domain.Interfaces.Clients;
 using AutoriaStore.Domain.Interfaces.Repositories;
+using AutoriaStore.Domain.Interfaces.Services;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace AutoriaStore.Application.UseCases.CalculateShipping;
 
 public sealed class CalculateShippingUseCase(
     IMemoryCache memoryCache,
-    IPostageHttpClient postageHttpClient, 
+    IPostageHttpClient postageHttpClient,
+    IEnvironmentVariablesService environmentVariablesService,
     IUnitOfWork unitOfWork) : ICalculateShippingUseCase
 {
     public async Task<CalculateShippingResultDto> ExecuteAsync(
         CalculateShippingDto calculateShippingDto, 
         CancellationToken cancellationToken)
     {
+        var originPostalCode = environmentVariablesService.OriginPostalCode;
+
+        if (calculateShippingDto.DestinationPostalCode == originPostalCode)
+        {
+            return new CalculateShippingResultDto()
+            {
+                ShippingPriceInCents = 0,
+                EstimationDeliveryDate = DateTime.Today + TimeSpan.FromDays(2),
+            };
+        }
+        
         var product = await unitOfWork.Product.FindByIdAsync(calculateShippingDto.ProductId, cancellationToken);
 
         if (product is null)
@@ -50,10 +63,12 @@ public sealed class CalculateShippingUseCase(
 
         var shippingPrice = await postageHttpClient.GetShippingPriceAsync(getShippingPriceDto, cancellationToken);
 
+        const int subsidyInCents = 300;
+        
         var shippingResult = new CalculateShippingResultDto()
         {
-            ShippingPriceInCents = shippingPrice.PriceInCents,
-            EstimationDeliveryDate = deliveryResult.EstimationDeliveryDate
+            ShippingPriceInCents = shippingPrice.PriceInCents - subsidyInCents,
+            EstimationDeliveryDate = deliveryResult.EstimationDeliveryDate + TimeSpan.FromDays(2)
         };
         
         memoryCache.Set($"shipping:{calculateShippingDto.DestinationPostalCode}", shippingResult, TimeSpan.FromDays(7));
