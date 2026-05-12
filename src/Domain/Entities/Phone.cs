@@ -8,15 +8,15 @@ namespace AutoriaStore.Domain.Entities;
 
 public class Phone : Entity
 {
+    public Phone(string phoneNumber)
+    {
+        this.PhoneNumber = phoneNumber;
+    }
+
     public string? PhoneNumber { get; set; }
 
     public Guid UserId { get; set; }
 
     [JsonIgnore]
     public User User { get; set; } = null!;
-
-    public Phone(string phoneNumber)
-    {
-        this.PhoneNumber = phoneNumber;
-    }
 }

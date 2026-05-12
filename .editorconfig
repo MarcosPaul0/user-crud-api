@@ -13,3 +13,6 @@ dotnet_diagnostic.SA1633.severity = none
 
 # File-scoped namespaces (namespace Foo;) are incompatible with this rule
 dotnet_diagnostic.SA1200.severity = none
+
+# All actual violations fixed; analyzer crashes on record declarations (StyleCop 1.x bug)
+dotnet_diagnostic.SA1201.severity = none

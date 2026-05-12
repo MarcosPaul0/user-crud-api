@@ -8,14 +8,6 @@ namespace AutoriaStore.Domain.Entities;
 
 public class User : Entity
 {
-    public string Name { get; set; } = null!;
-
-    public string Email { get; set; } = null!;
-
-    public string Password { get; set; } = null!;
-
-    public UserRole Role { get; set; }
-
     public User(string name, string email, string password, UserRole role, DateTime createdAt)
     {
         this.Name = name;
@@ -37,4 +29,12 @@ public class User : Entity
             this.Role = role.Value;
         }
     }
+
+    public string Name { get; set; } = null!;
+
+    public string Email { get; set; } = null!;
+
+    public string Password { get; set; } = null!;
+
+    public UserRole Role { get; set; }
 }
