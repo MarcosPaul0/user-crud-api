@@ -1,3 +1,7 @@
+// <copyright file="IIdempotencyService.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Domain.Dto.Services;
 using AutoriaStore.Domain.Entities;
 
@@ -7,8 +11,8 @@ public interface IIdempotencyService
 {
     Task<IdempotencyKey?> GetIdempotencyKeyAsync(
         Guid authenticatedUserId,
-        string idempotencyKey, 
-        string endpoint, 
+        string idempotencyKey,
+        string endpoint,
         CancellationToken cancellationToken = default);
 
     Task CreateIdempotencyKeyAsync(
@@ -17,6 +21,5 @@ public interface IIdempotencyService
 
     Task<bool> RemoveIdempotencyKeyIfExpiredAsync(
         IdempotencyKey idempotencyKey,
-        CancellationToken cancellationToken = default
-    );
+        CancellationToken cancellationToken = default);
 }

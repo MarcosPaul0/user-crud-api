@@ -1,3 +1,7 @@
+// <copyright file="CreateProductCategoryUseCaseTests.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Application.UseCases.CreateProductCategory;
@@ -7,18 +11,18 @@ namespace AutoriaStore.UnitTests.UseCases.ProductCategory;
 
 public class CreateProductCategoryUseCaseTests
 {
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-    private readonly Mock<IProductCategoryRepository> _productCategoryRepositoryMock;
-    private readonly CreateProductCategoryUseCase _sut;
+    private readonly Mock<IUnitOfWork> unitOfWorkMock;
+    private readonly Mock<IProductCategoryRepository> productCategoryRepositoryMock;
+    private readonly CreateProductCategoryUseCase sut;
 
     public CreateProductCategoryUseCaseTests()
     {
-        _unitOfWorkMock = new Mock<IUnitOfWork>();
-        _productCategoryRepositoryMock = new Mock<IProductCategoryRepository>();
+        this.unitOfWorkMock = new Mock<IUnitOfWork>();
+        this.productCategoryRepositoryMock = new Mock<IProductCategoryRepository>();
 
-        _unitOfWorkMock.Setup(u => u.ProductCategory).Returns(_productCategoryRepositoryMock.Object);
+        this.unitOfWorkMock.Setup(u => u.ProductCategory).Returns(this.productCategoryRepositoryMock.Object);
 
-        _sut = new CreateProductCategoryUseCase(_unitOfWorkMock.Object);
+        this.sut = new CreateProductCategoryUseCase(this.unitOfWorkMock.Object);
     }
 
     [Fact]
@@ -31,17 +35,17 @@ public class CreateProductCategoryUseCaseTests
             Id = Guid.NewGuid(),
             Category = "Electronics",
             IsActive = true,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
         };
 
-        _productCategoryRepositoryMock
+        this.productCategoryRepositoryMock
             .Setup(r => r.FindByCategoryAsync(dto.Category, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingCategory);
 
-        var act = () => _sut.ExecuteAsync(dto, CancellationToken.None);
+        var act = () => this.sut.ExecuteAsync(dto, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<ConflictException>(act);
-        Assert.Equal(ExceptionMessages.PRODUCT_CATEGORY_ALREADY_EXISTS, exception.Message);
+        Assert.Equal(ExceptionMessages.PRODUCTCATEGORYALREADYEXISTS, exception.Message);
     }
 
     [Fact]
@@ -49,18 +53,19 @@ public class CreateProductCategoryUseCaseTests
     {
         var dto = new CreateProductCategoryDto { Category = "Electronics" };
 
-        _productCategoryRepositoryMock
+        this.productCategoryRepositoryMock
             .Setup(r => r.FindByCategoryAsync(dto.Category, It.IsAny<CancellationToken>()))
             .ReturnsAsync((AutoriaStore.Domain.Entities.ProductCategory?)null);
 
-        await _sut.ExecuteAsync(dto, CancellationToken.None);
+        await this.sut.ExecuteAsync(dto, CancellationToken.None);
 
-        _productCategoryRepositoryMock.Verify(r => r.CreateAsync(
+        this.productCategoryRepositoryMock.Verify(
+            r => r.CreateAsync(
             It.Is<AutoriaStore.Domain.Entities.ProductCategory>(c =>
                 c.Category == dto.Category &&
-                c.IsActive == false),
+!c.IsActive),
             It.IsAny<CancellationToken>()), Times.Once);
 
-        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
+        this.unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
     }
 }

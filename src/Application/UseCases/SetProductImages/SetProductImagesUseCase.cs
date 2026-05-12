@@ -38,7 +38,7 @@ public sealed class SetProductImagesUseCase(
                 continue;
             }
 
-            var productImage = new ProductImage(null, productImageDto.DisplayOrder, productId, DateTime.UtcNow);
+            var productImage = new ProductImage(null!, productImageDto.DisplayOrder, productId, DateTime.UtcNow);
 
             productImagesToCreate.Add((productImageDto.File!, productImage));
             index++;

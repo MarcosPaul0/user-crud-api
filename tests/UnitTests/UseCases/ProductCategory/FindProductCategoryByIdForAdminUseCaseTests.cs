@@ -1,3 +1,7 @@
+// <copyright file="FindProductCategoryByIdForAdminUseCaseTests.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Application.UseCases.FindProductCategoryByIdForAdmin;
 using AutoriaStore.Domain.Interfaces.Repositories;
@@ -6,18 +10,18 @@ namespace AutoriaStore.UnitTests.UseCases.ProductCategory;
 
 public class FindProductCategoryByIdForAdminUseCaseTests
 {
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-    private readonly Mock<IProductCategoryRepository> _productCategoryRepositoryMock;
-    private readonly FindProductCategoryByIdForAdminUseCase _sut;
+    private readonly Mock<IUnitOfWork> unitOfWorkMock;
+    private readonly Mock<IProductCategoryRepository> productCategoryRepositoryMock;
+    private readonly FindProductCategoryByIdForAdminUseCase sut;
 
     public FindProductCategoryByIdForAdminUseCaseTests()
     {
-        _unitOfWorkMock = new Mock<IUnitOfWork>();
-        _productCategoryRepositoryMock = new Mock<IProductCategoryRepository>();
+        this.unitOfWorkMock = new Mock<IUnitOfWork>();
+        this.productCategoryRepositoryMock = new Mock<IProductCategoryRepository>();
 
-        _unitOfWorkMock.Setup(u => u.ProductCategory).Returns(_productCategoryRepositoryMock.Object);
+        this.unitOfWorkMock.Setup(u => u.ProductCategory).Returns(this.productCategoryRepositoryMock.Object);
 
-        _sut = new FindProductCategoryByIdForAdminUseCase(_unitOfWorkMock.Object);
+        this.sut = new FindProductCategoryByIdForAdminUseCase(this.unitOfWorkMock.Object);
     }
 
     [Fact]
@@ -25,14 +29,14 @@ public class FindProductCategoryByIdForAdminUseCaseTests
     {
         var categoryId = Guid.NewGuid();
 
-        _productCategoryRepositoryMock
+        this.productCategoryRepositoryMock
             .Setup(r => r.FindByIdAsync(categoryId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((AutoriaStore.Domain.Entities.ProductCategory?)null);
 
-        var act = () => _sut.ExecuteAsync(categoryId, CancellationToken.None);
+        var act = () => this.sut.ExecuteAsync(categoryId, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(act);
-        Assert.Equal(ExceptionMessages.PRODUCT_CATEGORY_NOT_FOUND, exception.Message);
+        Assert.Equal(ExceptionMessages.PRODUCTCATEGORYNOTFOUND, exception.Message);
     }
 
     [Fact]
@@ -44,14 +48,14 @@ public class FindProductCategoryByIdForAdminUseCaseTests
             Id = categoryId,
             Category = "Electronics",
             IsActive = false,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
         };
 
-        _productCategoryRepositoryMock
+        this.productCategoryRepositoryMock
             .Setup(r => r.FindByIdAsync(categoryId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedCategory);
 
-        var result = await _sut.ExecuteAsync(categoryId, CancellationToken.None);
+        var result = await this.sut.ExecuteAsync(categoryId, CancellationToken.None);
 
         Assert.Equal(expectedCategory, result);
     }

@@ -1,3 +1,7 @@
+// <copyright file="ProductPresenter.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.API.Dtos;
 using AutoriaStore.API.Helpers;
 using AutoriaStore.Domain.Entities;
@@ -9,10 +13,10 @@ public static class ProductPresenter
     public static ProductByIdResponseDto ToHttp(Product product)
     {
         ArgumentNullException.ThrowIfNull(product.ProductCategory);
-        
+
         ArgumentNullException.ThrowIfNull(product.ProductImages);
-        
-        return  new ProductByIdResponseDto()
+
+        return new ProductByIdResponseDto()
         {
             Id = product.Id,
             Name = product.Name,
@@ -22,16 +26,16 @@ public static class ProductPresenter
             DiscountPercentage = product.DiscountPercentage,
             ProductCategoryId = product.ProductCategoryId,
             Category = product.ProductCategory.Category,
-            ProductImages = ProductImagePresenter.ToHttp(product.ProductImages)
+            ProductImages = ProductImagePresenter.ToHttp(product.ProductImages),
         };
     }
-    
+
     public static PaginationResponseDto<ProductListResponseDto> ToHttp(IEnumerable<Product> products, int count, int page, int itemsPerPage)
     {
         var productsResponse = products.Select(product =>
         {
             ArgumentNullException.ThrowIfNull(product.ProductCategory);
-            
+
             var principalImage = product.ProductImages.FirstOrDefault(pi => pi.DisplayOrder == 1);
             ArgumentNullException.ThrowIfNull(principalImage);
 
@@ -46,7 +50,7 @@ public static class ProductPresenter
                 ProductImage = ProductImagePresenter.ToHttp(principalImage),
             };
         });
-        
+
         return PaginationHelper.FormatResponse(productsResponse, count, page, itemsPerPage);
     }
 }

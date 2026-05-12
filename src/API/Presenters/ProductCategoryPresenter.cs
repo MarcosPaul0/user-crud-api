@@ -1,3 +1,7 @@
+// <copyright file="ProductCategoryPresenter.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.API.Dtos;
 using AutoriaStore.Domain.Entities;
 
@@ -7,19 +11,18 @@ public static class ProductCategoryPresenter
 {
     public static ProductCategoryResponseDto ToHttp(ProductCategory productCategory)
     {
-        
         return new ProductCategoryResponseDto()
         {
             Id = productCategory.Id,
             Category = productCategory.Category,
-            CreatedAt = productCategory.CreatedAt
+            CreatedAt = productCategory.CreatedAt,
         };
     }
-    
+
     public static PaginationResponseDto<ProductCategoryResponseDto> ToHttp(IEnumerable<ProductCategory> products, int count)
     {
         var productCategoriesResponse = products.Select(ToHttp);
-        
+
         return new PaginationResponseDto<ProductCategoryResponseDto>()
         {
             HasNext = false,

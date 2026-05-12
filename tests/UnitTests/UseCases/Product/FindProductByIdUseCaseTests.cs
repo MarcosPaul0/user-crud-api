@@ -1,3 +1,7 @@
+// <copyright file="FindProductByIdUseCaseTests.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Application.UseCases.FindProductById;
 using AutoriaStore.Domain.Interfaces.Repositories;
@@ -6,18 +10,18 @@ namespace AutoriaStore.UnitTests.UseCases.Product;
 
 public class FindProductByIdUseCaseTests
 {
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-    private readonly Mock<IProductRepository> _productRepositoryMock;
-    private readonly FindProductByIdUseCase _sut;
+    private readonly Mock<IUnitOfWork> unitOfWorkMock;
+    private readonly Mock<IProductRepository> productRepositoryMock;
+    private readonly FindProductByIdUseCase sut;
 
     public FindProductByIdUseCaseTests()
     {
-        _unitOfWorkMock = new Mock<IUnitOfWork>();
-        _productRepositoryMock = new Mock<IProductRepository>();
+        this.unitOfWorkMock = new Mock<IUnitOfWork>();
+        this.productRepositoryMock = new Mock<IProductRepository>();
 
-        _unitOfWorkMock.Setup(u => u.Product).Returns(_productRepositoryMock.Object);
+        this.unitOfWorkMock.Setup(u => u.Product).Returns(this.productRepositoryMock.Object);
 
-        _sut = new FindProductByIdUseCase(_unitOfWorkMock.Object);
+        this.sut = new FindProductByIdUseCase(this.unitOfWorkMock.Object);
     }
 
     [Fact]
@@ -25,14 +29,14 @@ public class FindProductByIdUseCaseTests
     {
         var productId = Guid.NewGuid();
 
-        _productRepositoryMock
+        this.productRepositoryMock
             .Setup(r => r.FindByIdAsync(productId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((AutoriaStore.Domain.Entities.Product?)null);
 
-        var act = () => _sut.ExecuteAsync(productId, CancellationToken.None);
+        var act = () => this.sut.ExecuteAsync(productId, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(act);
-        Assert.Equal(ExceptionMessages.PRODUCT_NOT_FOUND, exception.Message);
+        Assert.Equal(ExceptionMessages.PRODUCTNOTFOUND, exception.Message);
     }
 
     [Fact]
@@ -43,14 +47,14 @@ public class FindProductByIdUseCaseTests
         {
             Id = productId,
             Name = "Test Product",
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
         };
 
-        _productRepositoryMock
+        this.productRepositoryMock
             .Setup(r => r.FindByIdAsync(productId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedProduct);
 
-        var result = await _sut.ExecuteAsync(productId, CancellationToken.None);
+        var result = await this.sut.ExecuteAsync(productId, CancellationToken.None);
 
         Assert.Equal(expectedProduct, result);
     }

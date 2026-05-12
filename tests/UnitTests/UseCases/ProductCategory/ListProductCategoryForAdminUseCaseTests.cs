@@ -1,3 +1,7 @@
+// <copyright file="ListProductCategoryForAdminUseCaseTests.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.UseCases.ListProductCategoryForAdmin;
 using AutoriaStore.Domain.Interfaces.Repositories;
 
@@ -5,18 +9,18 @@ namespace AutoriaStore.UnitTests.UseCases.ProductCategory;
 
 public class ListProductCategoryForAdminUseCaseTests
 {
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-    private readonly Mock<IProductCategoryRepository> _productCategoryRepositoryMock;
-    private readonly ListProductCategoryForAdminUseCase _sut;
+    private readonly Mock<IUnitOfWork> unitOfWorkMock;
+    private readonly Mock<IProductCategoryRepository> productCategoryRepositoryMock;
+    private readonly ListProductCategoryForAdminUseCase sut;
 
     public ListProductCategoryForAdminUseCaseTests()
     {
-        _unitOfWorkMock = new Mock<IUnitOfWork>();
-        _productCategoryRepositoryMock = new Mock<IProductCategoryRepository>();
+        this.unitOfWorkMock = new Mock<IUnitOfWork>();
+        this.productCategoryRepositoryMock = new Mock<IProductCategoryRepository>();
 
-        _unitOfWorkMock.Setup(u => u.ProductCategory).Returns(_productCategoryRepositoryMock.Object);
+        this.unitOfWorkMock.Setup(u => u.ProductCategory).Returns(this.productCategoryRepositoryMock.Object);
 
-        _sut = new ListProductCategoryForAdminUseCase(_unitOfWorkMock.Object);
+        this.sut = new ListProductCategoryForAdminUseCase(this.unitOfWorkMock.Object);
     }
 
     [Fact]
@@ -24,15 +28,15 @@ public class ListProductCategoryForAdminUseCaseTests
     {
         var allCategories = new List<AutoriaStore.Domain.Entities.ProductCategory>
         {
-            new() { Id = Guid.NewGuid(), Category = "Electronics", IsActive = true, CreatedAt = DateTime.UtcNow },
-            new() { Id = Guid.NewGuid(), Category = "Discontinued", IsActive = false, CreatedAt = DateTime.UtcNow }
+            new () { Id = Guid.NewGuid(), Category = "Electronics", IsActive = true, CreatedAt = DateTime.UtcNow },
+            new () { Id = Guid.NewGuid(), Category = "Discontinued", IsActive = false, CreatedAt = DateTime.UtcNow },
         };
 
-        _productCategoryRepositoryMock
+        this.productCategoryRepositoryMock
             .Setup(r => r.FindAllAsync(null, It.IsAny<CancellationToken>()))
             .ReturnsAsync(allCategories);
 
-        var (resultCategories, resultCount) = await _sut.ExecuteAsync(CancellationToken.None);
+        var (resultCategories, resultCount) = await this.sut.ExecuteAsync(CancellationToken.None);
 
         Assert.Equal(allCategories, resultCategories);
         Assert.Equal(allCategories.Count, resultCount);

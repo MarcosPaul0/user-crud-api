@@ -1,6 +1,11 @@
+// <copyright file="CreateCustomerUseCaseTests.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Application.UseCases.CreateUser;
+using AutoriaStore.Domain.Dto.Services;
 using AutoriaStore.Domain.Interfaces.Repositories;
 using AutoriaStore.Domain.Interfaces.Services;
 
@@ -8,20 +13,22 @@ namespace AutoriaStore.UnitTests.UseCases.User;
 
 public class CreateCustomerUseCaseTests
 {
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-    private readonly Mock<IUserRepository> _userRepositoryMock;
-    private readonly Mock<IPasswordHasherService> _passwordHasherMock;
-    private readonly CreateCustomerUseCase _sut;
+    private readonly Mock<IUnitOfWork> unitOfWorkMock;
+    private readonly Mock<IUserRepository> userRepositoryMock;
+    private readonly Mock<IPasswordHasherService> passwordHasherMock;
+    private readonly Mock<IEmailService> emailServiceMock;
+    private readonly CreateCustomerUseCase sut;
 
     public CreateCustomerUseCaseTests()
     {
-        _unitOfWorkMock = new Mock<IUnitOfWork>();
-        _userRepositoryMock = new Mock<IUserRepository>();
-        _passwordHasherMock = new Mock<IPasswordHasherService>();
+        this.unitOfWorkMock = new Mock<IUnitOfWork>();
+        this.userRepositoryMock = new Mock<IUserRepository>();
+        this.passwordHasherMock = new Mock<IPasswordHasherService>();
+        this.emailServiceMock = new Mock<IEmailService>();
 
-        _unitOfWorkMock.Setup(u => u.User).Returns(_userRepositoryMock.Object);
+        this.unitOfWorkMock.Setup(u => u.User).Returns(this.userRepositoryMock.Object);
 
-        _sut = new CreateCustomerUseCase(_passwordHasherMock.Object, _unitOfWorkMock.Object);
+        this.sut = new CreateCustomerUseCase(this.passwordHasherMock.Object, this.emailServiceMock.Object, this.unitOfWorkMock.Object);
     }
 
     [Fact]
@@ -31,19 +38,19 @@ public class CreateCustomerUseCaseTests
         {
             Name = "John Doe Test",
             Email = "john@example.com",
-            Password = "password1234"
+            Password = "password1234",
         };
 
         var existingUser = new AutoriaStore.Domain.Entities.User("John Doe Test", "john@example.com", "hash", Domain.Enums.UserRole.Customer, DateTime.UtcNow);
 
-        _userRepositoryMock
+        this.userRepositoryMock
             .Setup(r => r.FindByEmailAsync(dto.Email, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingUser);
 
-        var act = () => _sut.ExecuteAsync(dto, CancellationToken.None);
+        var act = () => this.sut.ExecuteAsync(dto, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<ConflictException>(act);
-        Assert.Equal(ExceptionMessages.USER_ALREADY_EXISTS, exception.Message);
+        Assert.Equal(ExceptionMessages.USERALREADYEXISTS, exception.Message);
     }
 
     [Fact]
@@ -53,20 +60,21 @@ public class CreateCustomerUseCaseTests
         {
             Name = "John Doe Test",
             Email = "john@example.com",
-            Password = "password1234"
+            Password = "password1234",
         };
 
-        _userRepositoryMock
+        this.userRepositoryMock
             .Setup(r => r.FindByEmailAsync(dto.Email, It.IsAny<CancellationToken>()))
             .ReturnsAsync((AutoriaStore.Domain.Entities.User?)null);
 
-        _passwordHasherMock
+        this.passwordHasherMock
             .Setup(p => p.Hash(dto.Password))
             .Returns("hashed_password");
 
-        await _sut.ExecuteAsync(dto, CancellationToken.None);
+        await this.sut.ExecuteAsync(dto, CancellationToken.None);
 
-        _userRepositoryMock.Verify(r => r.CreateAsync(
+        this.userRepositoryMock.Verify(
+            r => r.CreateAsync(
             It.Is<AutoriaStore.Domain.Entities.User>(u =>
                 u.Name == dto.Name &&
                 u.Email == dto.Email &&
@@ -74,6 +82,13 @@ public class CreateCustomerUseCaseTests
                 u.Role == Domain.Enums.UserRole.Customer),
             It.IsAny<CancellationToken>()), Times.Once);
 
-        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
+        this.unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
+        this.emailServiceMock.Verify(
+            service => service.SendAsync(
+            It.Is<SendEmailDto>(email =>
+                email.To == dto.Email &&
+                email.Subject == "Bem-vindo(a) a Autoria Store" &&
+                email.HtmlBody.Contains(dto.Name)),
+            It.IsAny<CancellationToken>()), Times.Once);
     }
 }

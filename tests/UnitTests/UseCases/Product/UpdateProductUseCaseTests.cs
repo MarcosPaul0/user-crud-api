@@ -1,3 +1,7 @@
+// <copyright file="UpdateProductUseCaseTests.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Application.UseCases.UpdateProduct;
@@ -7,21 +11,21 @@ namespace AutoriaStore.UnitTests.UseCases.Product;
 
 public class UpdateProductUseCaseTests
 {
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-    private readonly Mock<IProductRepository> _productRepositoryMock;
-    private readonly Mock<IProductCategoryRepository> _productCategoryRepositoryMock;
-    private readonly UpdateProductUseCase _sut;
+    private readonly Mock<IUnitOfWork> unitOfWorkMock;
+    private readonly Mock<IProductRepository> productRepositoryMock;
+    private readonly Mock<IProductCategoryRepository> productCategoryRepositoryMock;
+    private readonly UpdateProductUseCase sut;
 
     public UpdateProductUseCaseTests()
     {
-        _unitOfWorkMock = new Mock<IUnitOfWork>();
-        _productRepositoryMock = new Mock<IProductRepository>();
-        _productCategoryRepositoryMock = new Mock<IProductCategoryRepository>();
+        this.unitOfWorkMock = new Mock<IUnitOfWork>();
+        this.productRepositoryMock = new Mock<IProductRepository>();
+        this.productCategoryRepositoryMock = new Mock<IProductCategoryRepository>();
 
-        _unitOfWorkMock.Setup(u => u.Product).Returns(_productRepositoryMock.Object);
-        _unitOfWorkMock.Setup(u => u.ProductCategory).Returns(_productCategoryRepositoryMock.Object);
+        this.unitOfWorkMock.Setup(u => u.Product).Returns(this.productRepositoryMock.Object);
+        this.unitOfWorkMock.Setup(u => u.ProductCategory).Returns(this.productCategoryRepositoryMock.Object);
 
-        _sut = new UpdateProductUseCase(_unitOfWorkMock.Object);
+        this.sut = new UpdateProductUseCase(this.unitOfWorkMock.Object);
     }
 
     [Fact]
@@ -30,14 +34,14 @@ public class UpdateProductUseCaseTests
         var productId = Guid.NewGuid();
         var dto = new UpdateProductDto { Name = "New Name" };
 
-        _productRepositoryMock
+        this.productRepositoryMock
             .Setup(r => r.FindByIdAsync(productId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((AutoriaStore.Domain.Entities.Product?)null);
 
-        var act = () => _sut.ExecuteAsync(productId, dto, CancellationToken.None);
+        var act = () => this.sut.ExecuteAsync(productId, dto, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(act);
-        Assert.Equal(ExceptionMessages.PRODUCT_NOT_FOUND, exception.Message);
+        Assert.Equal(ExceptionMessages.PRODUCTNOTFOUND, exception.Message);
     }
 
     [Fact]
@@ -48,30 +52,30 @@ public class UpdateProductUseCaseTests
         {
             Id = productId,
             Name = "Original Product Name",
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
         };
 
         var conflictingProduct = new AutoriaStore.Domain.Entities.Product
         {
             Id = Guid.NewGuid(),
             Name = "Conflicting Product",
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
         };
 
         var dto = new UpdateProductDto { Name = "Conflicting Product" };
 
-        _productRepositoryMock
+        this.productRepositoryMock
             .Setup(r => r.FindByIdAsync(productId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingProduct);
 
-        _productRepositoryMock
+        this.productRepositoryMock
             .Setup(r => r.FindByNameAsync(dto.Name, It.IsAny<CancellationToken>()))
             .ReturnsAsync(conflictingProduct);
 
-        var act = () => _sut.ExecuteAsync(productId, dto, CancellationToken.None);
+        var act = () => this.sut.ExecuteAsync(productId, dto, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<ConflictException>(act);
-        Assert.Equal(ExceptionMessages.PRODUCT_ALREADY_EXISTS, exception.Message);
+        Assert.Equal(ExceptionMessages.PRODUCTALREADYEXISTS, exception.Message);
     }
 
     [Fact]
@@ -85,23 +89,23 @@ public class UpdateProductUseCaseTests
             Id = productId,
             Name = "Original Product",
             ProductCategoryId = Guid.NewGuid(),
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
         };
 
         var dto = new UpdateProductDto { ProductCategoryId = newCategoryId };
 
-        _productRepositoryMock
+        this.productRepositoryMock
             .Setup(r => r.FindByIdAsync(productId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingProduct);
 
-        _productCategoryRepositoryMock
+        this.productCategoryRepositoryMock
             .Setup(r => r.FindByIdAsync(newCategoryId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((AutoriaStore.Domain.Entities.ProductCategory?)null);
 
-        var act = () => _sut.ExecuteAsync(productId, dto, CancellationToken.None);
+        var act = () => this.sut.ExecuteAsync(productId, dto, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(act);
-        Assert.Equal(ExceptionMessages.PRODUCT_CATEGORY_NOT_FOUND, exception.Message);
+        Assert.Equal(ExceptionMessages.PRODUCTCATEGORYNOTFOUND, exception.Message);
     }
 
     [Fact]
@@ -116,19 +120,19 @@ public class UpdateProductUseCaseTests
             PriceInCents = 1000,
             StockQuantity = 5,
             IsActive = true,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
         };
 
         var dto = new UpdateProductDto();
 
-        _productRepositoryMock
+        this.productRepositoryMock
             .Setup(r => r.FindByIdAsync(productId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingProduct);
 
-        await _sut.ExecuteAsync(productId, dto, CancellationToken.None);
+        await this.sut.ExecuteAsync(productId, dto, CancellationToken.None);
 
-        _productRepositoryMock.Verify(r => r.UpdateAsync(It.IsAny<AutoriaStore.Domain.Entities.Product>(), It.IsAny<CancellationToken>()), Times.Never);
-        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Never);
+        this.productRepositoryMock.Verify(r => r.UpdateAsync(It.IsAny<AutoriaStore.Domain.Entities.Product>(), It.IsAny<CancellationToken>()), Times.Never);
+        this.unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Never);
     }
 
     [Fact]
@@ -139,24 +143,24 @@ public class UpdateProductUseCaseTests
         {
             Id = productId,
             Name = "Original Name",
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
         };
 
         var dto = new UpdateProductDto { Name = "Updated Product Name" };
 
-        _productRepositoryMock
+        this.productRepositoryMock
             .Setup(r => r.FindByIdAsync(productId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingProduct);
 
-        _productRepositoryMock
+        this.productRepositoryMock
             .Setup(r => r.FindByNameAsync(dto.Name, It.IsAny<CancellationToken>()))
             .ReturnsAsync((AutoriaStore.Domain.Entities.Product?)null);
 
-        await _sut.ExecuteAsync(productId, dto, CancellationToken.None);
+        await this.sut.ExecuteAsync(productId, dto, CancellationToken.None);
 
         Assert.Equal("Updated Product Name", existingProduct.Name);
-        _productRepositoryMock.Verify(r => r.UpdateAsync(existingProduct, It.IsAny<CancellationToken>()), Times.Once);
-        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
+        this.productRepositoryMock.Verify(r => r.UpdateAsync(existingProduct, It.IsAny<CancellationToken>()), Times.Once);
+        this.unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
     }
 
     [Fact]
@@ -168,19 +172,19 @@ public class UpdateProductUseCaseTests
             Id = productId,
             Name = "Test Product",
             IsActive = false,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
         };
 
         var dto = new UpdateProductDto { IsActive = true };
 
-        _productRepositoryMock
+        this.productRepositoryMock
             .Setup(r => r.FindByIdAsync(productId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingProduct);
 
-        await _sut.ExecuteAsync(productId, dto, CancellationToken.None);
+        await this.sut.ExecuteAsync(productId, dto, CancellationToken.None);
 
         Assert.True(existingProduct.IsActive);
-        _productRepositoryMock.Verify(r => r.UpdateAsync(existingProduct, It.IsAny<CancellationToken>()), Times.Once);
-        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
+        this.productRepositoryMock.Verify(r => r.UpdateAsync(existingProduct, It.IsAny<CancellationToken>()), Times.Once);
+        this.unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
     }
 }

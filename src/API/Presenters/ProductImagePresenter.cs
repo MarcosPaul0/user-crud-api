@@ -1,3 +1,7 @@
+// <copyright file="ProductImagePresenter.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.API.Dtos;
 using AutoriaStore.Domain.Entities;
 
@@ -16,7 +20,7 @@ public static class ProductImagePresenter
             UpdatedAt = productImage.UpdatedAt,
         };
     }
-    
+
     public static List<ProductImageResponseDto> ToHttp(List<ProductImage> productImages)
     {
         return productImages.Select(ToHttp).ToList();

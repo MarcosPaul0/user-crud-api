@@ -1,3 +1,7 @@
+// <copyright file="LoginUseCaseTests.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Application.UseCases.Login;
@@ -9,22 +13,22 @@ namespace AutoriaStore.UnitTests.UseCases.User;
 
 public class LoginUseCaseTests
 {
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-    private readonly Mock<IUserRepository> _userRepositoryMock;
-    private readonly Mock<IPasswordHasherService> _passwordHasherMock;
-    private readonly Mock<IJwtTokenService> _jwtTokenServiceMock;
-    private readonly LoginUseCase _sut;
+    private readonly Mock<IUnitOfWork> unitOfWorkMock;
+    private readonly Mock<IUserRepository> userRepositoryMock;
+    private readonly Mock<IPasswordHasherService> passwordHasherMock;
+    private readonly Mock<IJwtTokenService> jwtTokenServiceMock;
+    private readonly LoginUseCase sut;
 
     public LoginUseCaseTests()
     {
-        _unitOfWorkMock = new Mock<IUnitOfWork>();
-        _userRepositoryMock = new Mock<IUserRepository>();
-        _passwordHasherMock = new Mock<IPasswordHasherService>();
-        _jwtTokenServiceMock = new Mock<IJwtTokenService>();
+        this.unitOfWorkMock = new Mock<IUnitOfWork>();
+        this.userRepositoryMock = new Mock<IUserRepository>();
+        this.passwordHasherMock = new Mock<IPasswordHasherService>();
+        this.jwtTokenServiceMock = new Mock<IJwtTokenService>();
 
-        _unitOfWorkMock.Setup(u => u.User).Returns(_userRepositoryMock.Object);
+        this.unitOfWorkMock.Setup(u => u.User).Returns(this.userRepositoryMock.Object);
 
-        _sut = new LoginUseCase(_passwordHasherMock.Object, _unitOfWorkMock.Object, _jwtTokenServiceMock.Object);
+        this.sut = new LoginUseCase(this.passwordHasherMock.Object, this.unitOfWorkMock.Object, this.jwtTokenServiceMock.Object);
     }
 
     [Fact]
@@ -32,14 +36,14 @@ public class LoginUseCaseTests
     {
         var dto = new LoginDto { Email = "notfound@example.com", Password = "password1234" };
 
-        _userRepositoryMock
+        this.userRepositoryMock
             .Setup(r => r.FindByEmailAsync(dto.Email, It.IsAny<CancellationToken>()))
             .ReturnsAsync((AutoriaStore.Domain.Entities.User?)null);
 
-        var act = () => _sut.ExecuteAsync(dto, CancellationToken.None);
+        var act = () => this.sut.ExecuteAsync(dto, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<UnauthorizeException>(act);
-        Assert.Equal(ExceptionMessages.LOGIN_FAILED, exception.Message);
+        Assert.Equal(ExceptionMessages.LOGINFAILED, exception.Message);
     }
 
     [Fact]
@@ -49,18 +53,18 @@ public class LoginUseCaseTests
 
         var existingUser = new AutoriaStore.Domain.Entities.User("John Doe Test", "john@example.com", "hashed_correct_password", UserRole.Customer, DateTime.UtcNow);
 
-        _userRepositoryMock
+        this.userRepositoryMock
             .Setup(r => r.FindByEmailAsync(dto.Email, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingUser);
 
-        _passwordHasherMock
+        this.passwordHasherMock
             .Setup(p => p.Verify(dto.Password, existingUser.Password))
             .Returns(false);
 
-        var act = () => _sut.ExecuteAsync(dto, CancellationToken.None);
+        var act = () => this.sut.ExecuteAsync(dto, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<UnauthorizeException>(act);
-        Assert.Equal(ExceptionMessages.LOGIN_FAILED, exception.Message);
+        Assert.Equal(ExceptionMessages.LOGINFAILED, exception.Message);
     }
 
     [Fact]
@@ -70,22 +74,22 @@ public class LoginUseCaseTests
 
         var existingUser = new AutoriaStore.Domain.Entities.User("John Doe Test", "john@example.com", "hashed_password", UserRole.Customer, DateTime.UtcNow)
         {
-            Id = Guid.NewGuid()
+            Id = Guid.NewGuid(),
         };
 
-        _userRepositoryMock
+        this.userRepositoryMock
             .Setup(r => r.FindByEmailAsync(dto.Email, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingUser);
 
-        _passwordHasherMock
+        this.passwordHasherMock
             .Setup(p => p.Verify(dto.Password, existingUser.Password))
             .Returns(true);
 
-        _jwtTokenServiceMock
+        this.jwtTokenServiceMock
             .Setup(j => j.GenerateToken(existingUser.Id, existingUser.Role))
             .Returns("jwt_token");
 
-        var result = await _sut.ExecuteAsync(dto, CancellationToken.None);
+        var result = await this.sut.ExecuteAsync(dto, CancellationToken.None);
 
         Assert.Equal("jwt_token", result);
     }

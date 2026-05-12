@@ -1,3 +1,7 @@
+// <copyright file="IBaseRepository.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 namespace AutoriaStore.Domain.Interfaces.Repositories;
 
 public interface IBaseRepository<T>
