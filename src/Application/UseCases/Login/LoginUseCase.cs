@@ -1,3 +1,7 @@
+// <copyright file="LoginUseCase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Interfaces.Repositories;
@@ -6,8 +10,8 @@ using AutoriaStore.Domain.Interfaces.Services;
 namespace AutoriaStore.Application.UseCases.Login;
 
 public sealed class LoginUseCase(
-    IPasswordHasherService passwordHasherService, 
-    IUnitOfWork unitOfWork, 
+    IPasswordHasherService passwordHasherService,
+    IUnitOfWork unitOfWork,
     IJwtTokenService jwtTokenService) : ILoginUseCase
 {
     public async Task<string> ExecuteAsync(LoginDto loginDto, CancellationToken cancellationToken)
@@ -16,14 +20,14 @@ public sealed class LoginUseCase(
 
         if (user is null)
         {
-            throw new UnauthorizeException(ExceptionMessages.LOGIN_FAILED);
+            throw new UnauthorizeException(ExceptionMessages.LOGINFAILED);
         }
-        
+
         var passwordIsValid = passwordHasherService.Verify(loginDto.Password, user.Password);
 
         if (!passwordIsValid)
         {
-            throw new UnauthorizeException(ExceptionMessages.LOGIN_FAILED);
+            throw new UnauthorizeException(ExceptionMessages.LOGINFAILED);
         }
 
         var token = jwtTokenService.GenerateToken(user.Id, user.Role);

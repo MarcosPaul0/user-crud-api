@@ -1,7 +1,11 @@
+// <copyright file="UpdateUserController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
+using AutoriaStore.Application.UseCases.UpdateUser;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoriaStore.Application.UseCases.UpdateUser;
 
 namespace AutoriaStore.API.Controllers;
 
@@ -12,12 +16,12 @@ public class UpdateUserController(IUpdateUserUseCase updateUserUseCase) : Contro
     [Authorize]
     [HttpPatch("{userId:guid}")]
     public async Task<IActionResult> Handle(
-        Guid userId, 
-        [FromBody] UpdateUserDto updateUserDto, 
+        Guid userId,
+        [FromBody] UpdateUserDto updateUserDto,
         CancellationToken cancellationToken)
     {
         await updateUserUseCase.ExecuteAsync(userId, updateUserDto, cancellationToken);
 
-        return NoContent();
+        return this.NoContent();
     }
 }

@@ -1,3 +1,7 @@
+// <copyright file="FindProductByIdUseCase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Entities;
 using AutoriaStore.Domain.Interfaces.Repositories;
@@ -12,9 +16,9 @@ public sealed class FindProductByIdUseCase(IUnitOfWork unitOfWork) : IFindProduc
 
         if (product == null)
         {
-            throw new NotFoundException(ExceptionMessages.PRODUCT_NOT_FOUND);
+            throw new NotFoundException(ExceptionMessages.PRODUCTNOTFOUND);
         }
-        
+
         return product;
     }
 }

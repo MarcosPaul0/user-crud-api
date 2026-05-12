@@ -1,3 +1,7 @@
+// <copyright file="DeleteProductCategoryUseCase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Interfaces.Repositories;
 
@@ -11,11 +15,11 @@ public sealed class DeleteProductCategoryUseCase(IUnitOfWork unitOfWork) : IDele
 
         if (productCategory == null)
         {
-            throw new NotFoundException(ExceptionMessages.PRODUCT_CATEGORY_NOT_FOUND);
+            throw new NotFoundException(ExceptionMessages.PRODUCTCATEGORYNOTFOUND);
         }
-        
+
         await unitOfWork.ProductCategory.DeleteAsync(productCategory, cancellationToken);
-        
+
         await unitOfWork.SaveChangesAsync();
     }
 }

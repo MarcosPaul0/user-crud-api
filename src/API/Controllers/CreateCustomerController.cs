@@ -1,6 +1,10 @@
+// <copyright file="CreateCustomerController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
-using Microsoft.AspNetCore.Mvc;
 using AutoriaStore.Application.UseCases.CreateUser;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AutoriaStore.API.Controllers;
 
@@ -15,6 +19,6 @@ public class CreateCustomerController(ICreateCustomerUseCase createCustomerUseCa
     {
         await createCustomerUseCase.ExecuteAsync(createUserDto, cancellationToken);
 
-        return Created();
+        return this.Created();
     }
 }

@@ -1,10 +1,14 @@
+// <copyright file="ListUsersController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.API.Dtos;
 using AutoriaStore.API.Presenters;
 using AutoriaStore.Application.Dtos;
+using AutoriaStore.Application.UseCases.ListUsers;
 using AutoriaStore.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoriaStore.Application.UseCases.ListUsers;
 
 namespace AutoriaStore.API.Controllers;
 
@@ -21,6 +25,6 @@ public class FindAllUsersController(IListUserUseCase listUsersUseCase) : Control
     {
         var (users, usersCount) = await listUsersUseCase.ExecuteAsync(listUsersDto, cancellationToken);
 
-        return Ok(UserPresenter.ToHttp(users, usersCount, listUsersDto.Page, listUsersDto.ItemsPerPage));
+        return this.Ok(UserPresenter.ToHttp(users, usersCount, listUsersDto.Page, listUsersDto.ItemsPerPage));
     }
 }

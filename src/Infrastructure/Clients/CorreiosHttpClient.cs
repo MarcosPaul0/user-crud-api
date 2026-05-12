@@ -1,3 +1,7 @@
+// <copyright file="CorreiosHttpClient.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using System.Globalization;
 using System.Net;
 using System.Text.Json;
@@ -12,36 +16,36 @@ namespace AutoriaStore.Infrastructure.Clients;
 
 public sealed class CorreiosHttpClient : IPostageHttpClient
 {
-    private readonly HttpClient _httpClient;
-    
+    private readonly HttpClient httpClient;
+
     private const string BaseUrl = "https://api.correios.com.br";
-    
-    private readonly string _originPostalCode; 
-    private readonly string _serviceCode; 
+
+    private readonly string originPostalCode;
+    private readonly string serviceCode;
 
     public CorreiosHttpClient(
         HttpClient httpClient,
         IEnvironmentVariablesService environmentVariablesService)
     {
-        _httpClient = httpClient;
-        _httpClient.BaseAddress = new Uri(BaseUrl);
-        _httpClient.Timeout = TimeSpan.FromSeconds(30);
-        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-        _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {environmentVariablesService.PostageApiKey}");
-            
-        _originPostalCode = environmentVariablesService.OriginPostalCode;
-        _serviceCode = environmentVariablesService.PostageApiServiceCode;
+        this.httpClient = httpClient;
+        this.httpClient.BaseAddress = new Uri(BaseUrl);
+        this.httpClient.Timeout = TimeSpan.FromSeconds(30);
+        this.httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        this.httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {environmentVariablesService.PostageApiKey}");
+
+        this.originPostalCode = environmentVariablesService.OriginPostalCode;
+        this.serviceCode = environmentVariablesService.PostageApiServiceCode;
     }
 
     public async Task<GetShippingPriceResponseDto> GetShippingPriceAsync(
-        GetShippingPriceDto getShippingPriceDto, 
+        GetShippingPriceDto getShippingPriceDto,
         CancellationToken cancellationToken = default)
     {
-        var endpoint = $"/preco/v1/nacional/{_serviceCode}";
-        
+        var endpoint = $"/preco/v1/nacional/{this.serviceCode}";
+
         var queryParams = new Dictionary<string, string?>
         {
-            ["cepOrigem"] = _originPostalCode,
+            ["cepOrigem"] = this.originPostalCode,
             ["cepDestino"] = getShippingPriceDto.DestinationPostalCode,
             ["psObjeto"] = getShippingPriceDto.WeightInGrams.ToString(),
             ["tpObjeto"] = "2",
@@ -49,10 +53,10 @@ public sealed class CorreiosHttpClient : IPostageHttpClient
             ["altura"] = getShippingPriceDto.HeightInCentimeters.ToString(),
             ["largura"] = getShippingPriceDto.WidthInCentimeters.ToString(),
         };
-        
+
         var urlWithQuery = QueryHelpers.AddQueryString(endpoint, queryParams);
-        
-        var response = await _httpClient.GetAsync(urlWithQuery, cancellationToken);
+
+        var response = await this.httpClient.GetAsync(urlWithQuery, cancellationToken);
 
         if (response.StatusCode == HttpStatusCode.NotFound)
         {
@@ -63,10 +67,10 @@ public sealed class CorreiosHttpClient : IPostageHttpClient
         {
             throw new Exception("Postal service error");
         }
-        
+
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
         var responseData = JsonSerializer.Deserialize<CorreiosPriceResponse>(content);
-        
+
         if (responseData is null)
         {
             throw new Exception("Postal response parse error");
@@ -79,21 +83,21 @@ public sealed class CorreiosHttpClient : IPostageHttpClient
     }
 
     public async Task<GetDeliveryTimeResponseDto> GetDeliveryTimeAsync(
-        GetDeliveryTimeDto getDeliveryTimeDto, 
+        GetDeliveryTimeDto getDeliveryTimeDto,
         CancellationToken cancellationToken = default)
     {
-        var endpoint = $"/prazo/v1/nacional/{_serviceCode}";
-        
+        var endpoint = $"/prazo/v1/nacional/{this.serviceCode}";
+
         var queryParams = new Dictionary<string, string?>
         {
-            ["cepOrigem"] = _originPostalCode,
+            ["cepOrigem"] = this.originPostalCode,
             ["cepDestino"] = getDeliveryTimeDto.DestinationPostalCode,
         };
-        
+
         var urlWithQuery = QueryHelpers.AddQueryString(endpoint, queryParams);
-        
-        var response = await _httpClient.GetAsync(urlWithQuery, cancellationToken);
-        
+
+        var response = await this.httpClient.GetAsync(urlWithQuery, cancellationToken);
+
         if (response.StatusCode == HttpStatusCode.NotFound)
         {
             throw new NotFoundException("Delivery time not found for this postal code.");
@@ -103,10 +107,10 @@ public sealed class CorreiosHttpClient : IPostageHttpClient
         {
             throw new Exception("Postal service error");
         }
-        
+
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
         var responseData = JsonSerializer.Deserialize<CorreiosTimeResponse>(content);
-        
+
         if (responseData is null)
         {
             throw new Exception("Postal response parse error");
@@ -120,7 +124,7 @@ public sealed class CorreiosHttpClient : IPostageHttpClient
 
     private static int RealToCents(string value)
     {
-        return int.TryParse(value.Replace(",", ""), out var result) ? result : 0;
+        return int.TryParse(value.Replace(",", string.Empty), out var result) ? result : 0;
     }
 
     private static DateTime StringToDateTime(string value)

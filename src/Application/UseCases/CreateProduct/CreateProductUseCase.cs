@@ -1,3 +1,7 @@
+// <copyright file="CreateProductUseCase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Entities;
@@ -14,14 +18,14 @@ public sealed class CreateProductUseCase(IUnitOfWork unitOfWork) : ICreateProduc
 
         if (productCategory == null)
         {
-            throw new NotFoundException(ExceptionMessages.PRODUCT_CATEGORY_NOT_FOUND);
+            throw new NotFoundException(ExceptionMessages.PRODUCTCATEGORYNOTFOUND);
         }
-        
+
         var productAlreadyExists = await unitOfWork.Product.FindByNameAsync(createProductDto.Name, cancellationToken);
 
         if (productAlreadyExists != null)
         {
-            throw new ConflictException(ExceptionMessages.PRODUCT_ALREADY_EXISTS);
+            throw new ConflictException(ExceptionMessages.PRODUCTALREADYEXISTS);
         }
 
         var newProduct = new Product()
@@ -39,7 +43,7 @@ public sealed class CreateProductUseCase(IUnitOfWork unitOfWork) : ICreateProduc
             WidthInCentimeters = createProductDto.WidthInCentimeters,
             HeightInCentimeters = createProductDto.HeightInCentimeters,
             WeightInGrams = createProductDto.WeightInGrams,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
         };
 
         await unitOfWork.Product.CreateAsync(newProduct, cancellationToken);

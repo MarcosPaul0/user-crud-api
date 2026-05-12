@@ -1,3 +1,7 @@
+// <copyright file="ListProductCategoryForAdminController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.API.Dtos;
 using AutoriaStore.API.Presenters;
 using AutoriaStore.Application.UseCases.ListProductCategoryForAdmin;
@@ -17,6 +21,6 @@ public class ListProductCategoryForAdminController(IListProductCategoryForAdminU
     {
         var (productCategories, count) = await listProductCategoryForAdminUseCase.ExecuteAsync(cancellationToken);
 
-        return Ok(ProductCategoryForAdminPresenter.ToHttp(productCategories, count));
+        return this.Ok(ProductCategoryForAdminPresenter.ToHttp(productCategories, count));
     }
 }

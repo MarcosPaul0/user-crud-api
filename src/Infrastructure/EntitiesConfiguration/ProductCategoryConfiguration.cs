@@ -1,3 +1,7 @@
+// <copyright file="ProductCategoryConfiguration.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -9,7 +13,7 @@ public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCate
     public void Configure(EntityTypeBuilder<ProductCategory> builder)
     {
         builder.HasKey(productCategory => productCategory.Id);
-        
+
         builder.ToTable("product_category");
 
         builder.Property(productCategory => productCategory.Id).HasColumnName("id").ValueGeneratedOnAdd();

@@ -1,6 +1,10 @@
+// <copyright file="DeleteProductCategoryController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+using AutoriaStore.Application.UseCases.DeleteProductCategory;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoriaStore.Application.UseCases.DeleteProductCategory;
 
 namespace AutoriaStore.API.Controllers;
 
@@ -13,7 +17,7 @@ public class DeleteProductCategoryController(IDeleteProductCategoryUseCase delet
     public async Task<ActionResult> HandleAsync(Guid productCategoryId, CancellationToken cancellationToken)
     {
         await deleteProductCategoryUseCase.ExecuteAsync(productCategoryId, cancellationToken);
-        
-        return NoContent();
+
+        return this.NoContent();
     }
 }

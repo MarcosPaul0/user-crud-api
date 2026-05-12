@@ -1,3 +1,7 @@
+// <copyright file="UpdateProductCategoryUseCase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Interfaces.Repositories;
@@ -8,15 +12,15 @@ public sealed class UpdateProductCategoryUseCase(IUnitOfWork unitOfWork) : IUpda
 {
     public async Task ExecuteAsync(
         Guid productCategoryId,
-        UpdateProductCategoryDto updateProductCategoryDto, 
+        UpdateProductCategoryDto updateProductCategoryDto,
         CancellationToken cancellationToken)
     {
         var productCategory =
             await unitOfWork.ProductCategory.FindByIdAsync(productCategoryId, cancellationToken);
-        
+
         if (productCategory == null)
         {
-            throw new NotFoundException(ExceptionMessages.PRODUCT_CATEGORY_NOT_FOUND);
+            throw new NotFoundException(ExceptionMessages.PRODUCTCATEGORYNOTFOUND);
         }
 
         var isUpdated = false;
@@ -28,13 +32,13 @@ public sealed class UpdateProductCategoryUseCase(IUnitOfWork unitOfWork) : IUpda
 
             if (productCategoryAlreadyExists != null && productCategoryAlreadyExists.Id != productCategory.Id)
             {
-                throw new ConflictException(ExceptionMessages.PRODUCT_CATEGORY_ALREADY_EXISTS);
+                throw new ConflictException(ExceptionMessages.PRODUCTCATEGORYALREADYEXISTS);
             }
-            
+
             productCategory.Category = updateProductCategoryDto.Category;
             isUpdated = true;
         }
-        
+
         if (updateProductCategoryDto.IsActive is not null)
         {
             productCategory.IsActive = updateProductCategoryDto.IsActive.Value;

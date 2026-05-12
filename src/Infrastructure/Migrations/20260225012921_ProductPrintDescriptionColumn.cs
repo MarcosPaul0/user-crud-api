@@ -1,9 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿// <copyright file="20260225012921_ProductPrintDescriptionColumn.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 #nullable disable
 
 namespace AutoriaStore.Infrastructure.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     /// <inheritdoc />
     public partial class ProductPrintDescriptionColumn : Migration
     {
@@ -16,7 +20,7 @@ namespace AutoriaStore.Infrastructure.Migrations
                 type: "character varying(600)",
                 maxLength: 600,
                 nullable: false,
-                defaultValue: "");
+                defaultValue: string.Empty);
         }
 
         /// <inheritdoc />

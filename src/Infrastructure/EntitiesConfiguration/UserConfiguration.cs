@@ -1,3 +1,7 @@
+// <copyright file="UserConfiguration.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Domain.Entities;
 using AutoriaStore.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +14,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.ToTable("user");
-        
+
         builder.HasKey(user => user.Id);
 
         builder.Property(user => user.Id).HasColumnName("id").ValueGeneratedOnAdd();

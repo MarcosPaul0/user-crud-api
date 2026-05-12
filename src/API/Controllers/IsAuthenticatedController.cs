@@ -1,3 +1,7 @@
+// <copyright file="IsAuthenticatedController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +15,6 @@ public class IsAuthenticatedController() : ControllerBase
     [HttpGet("verify")]
     public ActionResult Handle(CancellationToken cancellationToken)
     {
-        return NoContent();
+        return this.NoContent();
     }
 }

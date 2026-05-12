@@ -1,3 +1,7 @@
+// <copyright file="ListProductCategoryUseCase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Domain.Entities;
 using AutoriaStore.Domain.Interfaces.Repositories;
 
@@ -10,9 +14,9 @@ public sealed class ListProductCategoryUseCase(
     {
         var filter = new ProductCategory()
         {
-            IsActive = true
+            IsActive = true,
         };
-        
+
         var productCategories = await unitOfWork.ProductCategory.FindAllAsync(filter, cancellationToken);
 
         return (productCategories, productCategories.Count());

@@ -1,3 +1,7 @@
+// <copyright file="CreateProductCategoryUseCase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Entities;
@@ -14,7 +18,7 @@ public sealed class CreateProductCategoryUseCase(IUnitOfWork unitOfWork) : ICrea
 
         if (productCategoryAlreadyExists != null)
         {
-            throw new ConflictException(ExceptionMessages.PRODUCT_CATEGORY_ALREADY_EXISTS);
+            throw new ConflictException(ExceptionMessages.PRODUCTCATEGORYALREADYEXISTS);
         }
 
         var newProductCategory = new ProductCategory()

@@ -1,3 +1,7 @@
+// <copyright file="FindUserByIdUseCase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Entities;
 using AutoriaStore.Domain.Interfaces.Repositories;
@@ -9,12 +13,12 @@ public sealed class FindUserByIdUseCase(IUnitOfWork unitOfWork) : IFindUserByIdU
     public async Task<User> ExecuteAsync(Guid userId, CancellationToken cancellationToken)
     {
         var user = await unitOfWork.User.FindByIdAsync(userId, cancellationToken);
-        
+
         if (user is null)
         {
-            throw new NotFoundException(ExceptionMessages.USER_NOT_FOUND);
+            throw new NotFoundException(ExceptionMessages.USERNOTFOUND);
         }
-        
+
         return user;
     }
 }

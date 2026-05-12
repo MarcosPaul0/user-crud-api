@@ -1,3 +1,7 @@
+// <copyright file="AllowedImageExtensionsAttribute.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
@@ -5,24 +9,26 @@ namespace AutoriaStore.Application.Attributes;
 
 public class AllowedImageExtensionsAttribute(params string[] extensions) : ValidationAttribute
 {
-    private readonly ValidationResult _errorMessage = new($"Only files with the {string.Join(", ", extensions)} extension are allowed.");
-    
+    private readonly ValidationResult errorMessage = new ($"Only files with the {string.Join(", ", extensions)} extension are allowed.");
+
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
         switch (value)
         {
             case IFormFile file:
-                if (!IsValidExtension(file))
+                if (!this.IsValidExtension(file))
                 {
-                    return _errorMessage;
+                    return this.errorMessage;
                 }
+
                 break;
-            
+
             case List<IFormFile> files:
-                if (files.Any(currentFile => !IsValidExtension(currentFile)))
+                if (files.Any(currentFile => !this.IsValidExtension(currentFile)))
                 {
-                    return _errorMessage;
+                    return this.errorMessage;
                 }
+
                 break;
         }
 

@@ -1,8 +1,12 @@
+// <copyright file="FindProductByIdForAdminController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.API.Dtos;
 using AutoriaStore.API.Presenters;
+using AutoriaStore.Application.UseCases.FindProductById;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoriaStore.Application.UseCases.FindProductById;
 
 namespace AutoriaStore.API.Controllers;
 
@@ -19,6 +23,6 @@ public class FindProductByIdForAdminController(IFindProductByIdUseCase findProdu
     {
         var product = await findProductByIdUseCase.ExecuteAsync(productId, cancellationToken);
 
-        return Ok(ProductForAdminPresenter.ToHttp(product));
+        return this.Ok(ProductForAdminPresenter.ToHttp(product));
     }
 }

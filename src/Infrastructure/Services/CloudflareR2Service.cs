@@ -1,15 +1,19 @@
+// <copyright file="CloudflareR2Service.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using Amazon.S3;
 using Amazon.S3.Model;
 using AutoriaStore.Application.Helpers;
+using AutoriaStore.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using AutoriaStore.Domain.Interfaces.Services;
 
 namespace AutoriaStore.Infrastructure.Services;
 
 public class CloudflareR2Service(
     ILogger<CloudflareR2Service> logger,
-    IAmazonS3 s3, 
+    IAmazonS3 s3,
     IEnvironmentVariablesService environmentVariablesService) : IObjectStorageService
 {
     public async Task<string> UploadAsync(
@@ -27,15 +31,16 @@ public class CloudflareR2Service(
                 Key = objectKey,
                 InputStream = stream,
                 ContentType = file.ContentType,
-                DisablePayloadSigning = true
+                DisablePayloadSigning = true,
             };
 
             await s3.PutObjectAsync(request, cancellationToken);
-            
+
             logger.LogInformation("File uploaded from Cloudflare R2 successfully.");
 
             return $"{environmentVariablesService.ObjectStoragePublicUrl}/{objectKey}";
-        } catch (Exception exception)
+        }
+        catch (Exception exception)
         {
             logger.LogError(exception, "Error uploading file to Cloudflare R2.");
             throw;
@@ -49,17 +54,18 @@ public class CloudflareR2Service(
         try
         {
             var objectKey = ObjectStorageHelper.ExtractObjectKey(imageUrl);
-            
+
             var request = new DeleteObjectRequest
             {
                 BucketName = environmentVariablesService.ObjectStorageBucket,
-                Key = objectKey
+                Key = objectKey,
             };
 
             await s3.DeleteObjectAsync(request, cancellationToken);
-            
+
             logger.LogInformation("File deleted from Cloudflare R2 successfully.");
-        } catch (Exception exception)
+        }
+        catch (Exception exception)
         {
             logger.LogError(exception, "Error deleting file to Cloudflare R2.");
             throw;

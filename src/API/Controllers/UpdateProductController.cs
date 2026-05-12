@@ -1,7 +1,11 @@
+// <copyright file="UpdateProductController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
+using AutoriaStore.Application.UseCases.UpdateProduct;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoriaStore.Application.UseCases.UpdateProduct;
 
 namespace AutoriaStore.API.Controllers;
 
@@ -18,6 +22,6 @@ public class UpdateProductController(IUpdateProductUseCase updateProductUseCase)
     {
         await updateProductUseCase.ExecuteAsync(productId, updateProductDto, cancellationToken);
 
-        return NoContent();
+        return this.NoContent();
     }
 }

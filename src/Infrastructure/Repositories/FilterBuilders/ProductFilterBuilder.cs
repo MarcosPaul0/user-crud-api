@@ -1,3 +1,7 @@
+// <copyright file="ProductFilterBuilder.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Domain.Entities;
 
 namespace AutoriaStore.Infrastructure.Repositories.FilterBuilders;
@@ -6,34 +10,34 @@ public class ProductFilterBuilder(IQueryable<Product> query) : BaseFilterBuilder
 {
     protected override void Order()
     {
-        _query = _query.OrderBy(product => product.CreatedAt);
+        this.query = this.query.OrderBy(product => product.CreatedAt);
     }
-    
+
     public ProductFilterBuilder FilterByName(string? name)
     {
         if (!string.IsNullOrEmpty(name))
         {
-            _query = _query.Where(product => product.Name == name);
+            this.query = this.query.Where(product => product.Name == name);
         }
 
         return this;
     }
-    
+
     public ProductFilterBuilder FilterByIsActive(bool? isActive)
     {
         if (isActive != null)
         {
-            _query = _query.Where(product => product.IsActive == isActive);
+            this.query = this.query.Where(product => product.IsActive == isActive);
         }
 
         return this;
     }
-    
+
     public ProductFilterBuilder FilterByProductCategoryIsActive(bool? isActive)
     {
         if (isActive != null)
         {
-            _query = _query.Where(product => product.ProductCategory.IsActive == isActive);
+            this.query = this.query.Where(product => product.ProductCategory.IsActive == isActive);
         }
 
         return this;
@@ -43,7 +47,7 @@ public class ProductFilterBuilder(IQueryable<Product> query) : BaseFilterBuilder
     {
         if (productCategoryId != null && productCategoryId != Guid.Empty)
         {
-            _query = _query.Where(product => product.ProductCategoryId == productCategoryId);
+            this.query = this.query.Where(product => product.ProductCategoryId == productCategoryId);
         }
 
         return this;

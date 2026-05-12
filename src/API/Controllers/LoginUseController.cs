@@ -1,7 +1,11 @@
+// <copyright file="LoginUseController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
-using Microsoft.AspNetCore.Mvc;
 using AutoriaStore.Application.UseCases.Login;
 using AutoriaStore.Domain.Interfaces.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AutoriaStore.API.Controllers;
 
@@ -17,15 +21,15 @@ public class LoginUseController(ILoginUseCase loginUseCase, IEnvironmentVariable
         var token = await loginUseCase.ExecuteAsync(loginDto, cancellationToken);
 
         var authTokenCookie = environmentVariablesService.AuthTokenCookie;
-        
-        Response.Cookies.Append(authTokenCookie, token, new CookieOptions()
+
+        this.Response.Cookies.Append(authTokenCookie, token, new CookieOptions()
         {
             HttpOnly = true,
             Secure = true,
             SameSite = SameSiteMode.None,
-            Expires = DateTimeOffset.UtcNow.AddHours(4)
+            Expires = DateTimeOffset.UtcNow.AddHours(4),
         });
-        
-        return NoContent();
+
+        return this.NoContent();
     }
 }

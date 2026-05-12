@@ -1,3 +1,7 @@
+// <copyright file="FindProductCategoryByIdUseCase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Entities;
 using AutoriaStore.Domain.Interfaces.Repositories;
@@ -12,9 +16,9 @@ public sealed class FindProductCategoryByIdUseCase(IUnitOfWork unitOfWork) : IFi
 
         if (productCategory == null)
         {
-            throw new NotFoundException(ExceptionMessages.PRODUCT_CATEGORY_NOT_FOUND);
+            throw new NotFoundException(ExceptionMessages.PRODUCTCATEGORYNOTFOUND);
         }
-        
+
         return productCategory;
     }
 }

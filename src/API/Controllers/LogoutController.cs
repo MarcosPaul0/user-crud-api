@@ -1,5 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
+// <copyright file="LogoutController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Domain.Interfaces.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AutoriaStore.API.Controllers;
 
@@ -11,9 +15,9 @@ public class LogoutController(IEnvironmentVariablesService environmentVariablesS
     public async Task<ActionResult> HandleAsync(CancellationToken cancellationToken)
     {
         var authTokenCookie = environmentVariablesService.AuthTokenCookie;
-        
-        Response.Cookies.Delete(authTokenCookie);
-        
-        return NoContent();
+
+        this.Response.Cookies.Delete(authTokenCookie);
+
+        return this.NoContent();
     }
 }

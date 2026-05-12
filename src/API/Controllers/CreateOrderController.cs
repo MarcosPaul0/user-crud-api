@@ -1,6 +1,11 @@
+// <copyright file="CreateOrderController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Application.UseCases.CreateOrder;
+using AutoriaStore.Application.UseCases.FindOrderById;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +13,9 @@ namespace AutoriaStore.API.Controllers;
 
 [ApiController]
 [Route("api/order")]
-public sealed class CreateOrderController(ICreateOrderUseCase createOrderUseCase) : ControllerBase
+public sealed class CreateOrderController(
+    ICreateOrderUseCase createOrderUseCase,
+    IFindOrderByIdUseCase findOrderByIdUseCase) : ControllerBase
 {
     [Authorize]
     [HttpPost]
@@ -19,12 +26,23 @@ public sealed class CreateOrderController(ICreateOrderUseCase createOrderUseCase
     {
         if (string.IsNullOrWhiteSpace(idempotencyKey))
         {
-            throw new BadRequestException(ExceptionMessages.IDEMPOTENCY_KEY_REQUIRED);
+            throw new BadRequestException(ExceptionMessages.IDEMPOTENCYKEYREQUIRED);
         }
 
-        var endpoint = $"{HttpContext.Request.Method}:{HttpContext.Request.Path}";
-        await createOrderUseCase.ExecuteAsync(createOrderDto, idempotencyKey, endpoint, cancellationToken);
+        var endpoint = $"{this.HttpContext.Request.Method}:{this.HttpContext.Request.Path}";
+        var result = await createOrderUseCase.ExecuteAsync(createOrderDto, idempotencyKey, endpoint, cancellationToken);
 
-        return NoContent();
+        return this.Ok(result);
+    }
+
+    [Authorize]
+    [HttpGet("{orderId:guid}")]
+    public async Task<ActionResult<OrderDetailsDto>> FindByIdAsync(
+        [FromRoute] Guid orderId,
+        CancellationToken cancellationToken)
+    {
+        var result = await findOrderByIdUseCase.ExecuteAsync(orderId, cancellationToken);
+
+        return this.Ok(result);
     }
 }

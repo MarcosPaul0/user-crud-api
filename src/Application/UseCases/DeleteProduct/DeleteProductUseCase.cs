@@ -1,3 +1,7 @@
+// <copyright file="DeleteProductUseCase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Interfaces.Repositories;
 using AutoriaStore.Domain.Interfaces.Services;
@@ -5,7 +9,7 @@ using AutoriaStore.Domain.Interfaces.Services;
 namespace AutoriaStore.Application.UseCases.DeleteProduct;
 
 public sealed class DeleteProductUseCase(
-    IObjectStorageService objectStorageService, 
+    IObjectStorageService objectStorageService,
     IUnitOfWork unitOfWork) : IDeleteProductUseCase
 {
     public async Task ExecuteAsync(Guid productId, CancellationToken cancellationToken)
@@ -14,9 +18,9 @@ public sealed class DeleteProductUseCase(
 
         if (product == null)
         {
-            throw new NotFoundException(ExceptionMessages.PRODUCT_NOT_FOUND);
+            throw new NotFoundException(ExceptionMessages.PRODUCTNOTFOUND);
         }
-        
+
         var productImages = await unitOfWork.ProductImage.FindAllByProductIdAsync(productId, cancellationToken);
 
         foreach (var productImage in productImages)
@@ -25,7 +29,7 @@ public sealed class DeleteProductUseCase(
         }
 
         await unitOfWork.Product.DeleteAsync(product, cancellationToken);
-        
+
         await unitOfWork.SaveChangesAsync();
     }
 }

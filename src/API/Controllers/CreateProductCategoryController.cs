@@ -1,3 +1,7 @@
+// <copyright file="CreateProductCategoryController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.UseCases.CreateProductCategory;
 using Microsoft.AspNetCore.Authorization;
@@ -17,6 +21,6 @@ public class CreateProductCategoryController(ICreateProductCategoryUseCase creat
     {
         await createProductCategoryUseCase.ExecuteAsync(createProductCategoryDto, cancellationToken);
 
-        return Created();
+        return this.Created();
     }
 }
