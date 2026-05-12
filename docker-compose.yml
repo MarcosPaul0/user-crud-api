@@ -22,7 +22,7 @@ services:
     image: postgres:14
     restart: always
     env_file:
-      - src/API/.env
+      - ./src/API/.env
     environment:
       DATABASE: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USER}

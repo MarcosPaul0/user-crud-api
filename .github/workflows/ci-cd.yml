@@ -24,9 +24,9 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+#  pull_request:
+#    branches:
+#      - main
 
 # Permissões mínimas necessárias para o GITHUB_TOKEN publicar no ghcr.io
 permissions:
