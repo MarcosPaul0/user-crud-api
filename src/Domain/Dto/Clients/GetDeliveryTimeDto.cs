@@ -1,6 +1,10 @@
+// <copyright file="GetDeliveryTimeDto.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 namespace AutoriaStore.Domain.Dto.Clients;
 
 public record GetDeliveryTimeDto
 {
-    public required string DestinationPostalCode { get; init; }
+    required public string DestinationPostalCode { get; init; }
 }

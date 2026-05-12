@@ -1,7 +1,11 @@
+// <copyright file="CalculateShippingResultDto.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 namespace AutoriaStore.Application.Dtos;
 
 public record CalculateShippingResultDto()
 {
-    public required int ShippingPriceInCents { get; init; }
-    public required DateTime EstimationDeliveryDate { get; init; }
+    required public int ShippingPriceInCents { get; init; }
+    required public DateTime EstimationDeliveryDate { get; init; }
 }
