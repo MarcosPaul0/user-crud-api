@@ -1,0 +1,15 @@
+[*.cs]
+# Desativa documentação obrigatória em membros públicos
+dotnet_diagnostic.SA1600.severity = none
+
+# Desativa documentação obrigatória em elementos internos
+dotnet_diagnostic.SA1601.severity = none
+
+# Desativa documentação obrigatória em membros privados
+dotnet_diagnostic.SA1602.severity = none
+
+# Desativa cabeçalho de copyright obrigatório
+dotnet_diagnostic.SA1633.severity = none
+
+# File-scoped namespaces (namespace Foo;) are incompatible with this rule
+dotnet_diagnostic.SA1200.severity = none
