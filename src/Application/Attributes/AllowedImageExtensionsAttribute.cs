@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace AutoriaStore.Application.Attributes;
 
+[AttributeUsage(AttributeTargets.Property)]
 public class AllowedImageExtensionsAttribute(params string[] extensions) : ValidationAttribute
 {
     private readonly ValidationResult errorMessage = new ($"Only files with the {string.Join(", ", extensions)} extension are allowed.");

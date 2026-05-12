@@ -42,7 +42,7 @@ public class Order : Entity
 
     public string? ReceiptUrl { get; private set; }
 
-    public List<OrderProduct> ProductOrders { get; set; } =[];
+    public List<OrderProduct> ProductOrders { get; set; } = [];
 
     public void StartPixPayment(
         string paymentProvider,

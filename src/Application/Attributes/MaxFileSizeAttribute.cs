@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace AutoriaStore.Application.Attributes;
 
+[AttributeUsage(AttributeTargets.Property)]
 public class MaxFileSizeAttribute(int maxFileSizeInMb) : ValidationAttribute
 {
     private readonly ValidationResult errorMessage = new ($"The maximum allowed size per file is{maxFileSizeInMb}MB");
