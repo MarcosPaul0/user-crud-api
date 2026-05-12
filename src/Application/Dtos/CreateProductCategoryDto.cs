@@ -10,5 +10,5 @@ public class CreateProductCategoryDto
 {
     [Required]
     [StringLength(50, MinimumLength = 10)]
-    public string Category { get; init; }
+    public string Category { get; init; } = null!;
 }

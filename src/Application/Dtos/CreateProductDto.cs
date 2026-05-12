@@ -10,15 +10,15 @@ public class CreateProductDto
 {
     [Required]
     [StringLength(100, MinimumLength = 10)]
-    public string Name { get; init; }
+    public string Name { get; init; } = null!;
 
     [Required]
     [StringLength(600, MinimumLength = 10)]
-    public string PrintDescription { get; init; }
+    public string PrintDescription { get; init; } = null!;
 
     [Required]
     [StringLength(1_200, MinimumLength = 10)]
-    public string Description { get; init; }
+    public string Description { get; init; } = null!;
 
     [Required]
     [Range(1, int.MaxValue)]

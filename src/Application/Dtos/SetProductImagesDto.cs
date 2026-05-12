@@ -9,5 +9,5 @@ namespace AutoriaStore.Application.Dtos;
 public record SetProductImagesDto
 {
     [Required]
-    public List<ProductImageDto> Images { get; init; }
+    public List<ProductImageDto> Images { get; init; } = null!;
 }

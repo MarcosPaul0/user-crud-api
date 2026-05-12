@@ -9,5 +9,5 @@ public record CalculateShippingDto
 
     [Required]
     [MinLength(8)]
-    public string DestinationPostalCode { get; set; }
+    public string DestinationPostalCode { get; set; } = null!;
 }

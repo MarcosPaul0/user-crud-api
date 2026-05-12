@@ -1,33 +1,40 @@
+// <copyright file="User.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Domain.Enums;
 
 namespace AutoriaStore.Domain.Entities;
 
 public class User : Entity
 {
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
+    public string Name { get; set; } = null!;
+
+    public string Email { get; set; } = null!;
+
+    public string Password { get; set; } = null!;
+
     public UserRole Role { get; set; }
 
-    public User(string name, string email, string password, UserRole role, DateTime createdAt) 
+    public User(string name, string email, string password, UserRole role, DateTime createdAt)
     {
-        Name = name;
-        Email = email;
-        Password = password;
-        Role = role;
-        CreatedAt = createdAt;
+        this.Name = name;
+        this.Email = email;
+        this.Password = password;
+        this.Role = role;
+        this.CreatedAt = createdAt;
     }
 
     public User(string? name, UserRole? role)
     {
         if (!string.IsNullOrEmpty(name))
         {
-            Name = name;
+            this.Name = name;
         }
-        
+
         if (role != null)
         {
-            Role = role.Value;
+            this.Role = role.Value;
         }
     }
 }

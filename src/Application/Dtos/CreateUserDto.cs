@@ -10,15 +10,15 @@ public record CreateUserDto
 {
     [Required]
     [StringLength(50, MinimumLength = 10)]
-    public string Name { get; init; }
+    public string Name { get; init; } = null!;
 
     [Required]
     [EmailAddress]
     [StringLength(255, MinimumLength = 1)]
-    public string Email { get; init; }
+    public string Email { get; init; } = null!;
 
     [Required]
     [MinLength(10)]
     [StringLength(50, MinimumLength = 10)]
-    public string Password { get; init; }
+    public string Password { get; init; } = null!;
 }
