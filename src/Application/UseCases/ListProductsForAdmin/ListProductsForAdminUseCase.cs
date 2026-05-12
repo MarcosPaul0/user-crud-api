@@ -31,8 +31,11 @@ public sealed class ListProductsForAdminUseCase(IUnitOfWork unitOfWork) : IListP
             productFilter.ProductCategoryId = listProductsByAdminDto.ProductCategoryId.Value;
         }
 
-        var products = await unitOfWork.Product.FindAllAsync(productFilter, listProductsByAdminDto.Page,
-            listProductsByAdminDto.ItemsPerPage, cancellationToken);
+        var products = await unitOfWork.Product.FindAllAsync(
+            productFilter,
+            listProductsByAdminDto.Page,
+            listProductsByAdminDto.ItemsPerPage,
+            cancellationToken);
 
         var productsCount = await unitOfWork.Product.CountAsync(productFilter, cancellationToken);
 

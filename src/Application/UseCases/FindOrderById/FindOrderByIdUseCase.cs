@@ -40,32 +40,6 @@ public sealed class FindOrderByIdUseCase(
         return Map(order);
     }
 
-    private async Task SynchronizePendingPaymentAsync(Order order, CancellationToken cancellationToken)
-    {
-        if (string.IsNullOrWhiteSpace(order.PaymentId) || order.PaymentStatus != OrderPaymentStatus.Pending)
-        {
-            return;
-        }
-
-        var paymentStatus = await pixPaymentService.GetStatusAsync(order.PaymentId, cancellationToken);
-        var mappedStatus = OrderPaymentStatusExtensions.FromProviderStatus(paymentStatus.Status);
-
-        if (mappedStatus == order.PaymentStatus &&
-            paymentStatus.ExpiresAt == order.PaymentExpiresAt &&
-            paymentStatus.ReceiptUrl == order.ReceiptUrl)
-        {
-            return;
-        }
-
-        order.ApplyPaymentStatus(
-            mappedStatus,
-            paymentStatus.ExpiresAt ?? DateTime.UtcNow,
-            paymentStatus.ReceiptUrl,
-            paymentStatus.ExpiresAt);
-
-        await unitOfWork.SaveChangesAsync();
-    }
-
     private static OrderDetailsDto Map(Order order)
     {
         return new OrderDetailsDto
@@ -91,5 +65,31 @@ public sealed class FindOrderByIdUseCase(
                 TotalPriceInCents = item.TotalPriceInCents,
             }).ToList(),
         };
+    }
+
+    private async Task SynchronizePendingPaymentAsync(Order order, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(order.PaymentId) || order.PaymentStatus != OrderPaymentStatus.Pending)
+        {
+            return;
+        }
+
+        var paymentStatus = await pixPaymentService.GetStatusAsync(order.PaymentId, cancellationToken);
+        var mappedStatus = OrderPaymentStatusExtensions.FromProviderStatus(paymentStatus.Status);
+
+        if (mappedStatus == order.PaymentStatus &&
+            paymentStatus.ExpiresAt == order.PaymentExpiresAt &&
+            paymentStatus.ReceiptUrl == order.ReceiptUrl)
+        {
+            return;
+        }
+
+        order.ApplyPaymentStatus(
+            mappedStatus,
+            paymentStatus.ExpiresAt ?? DateTime.UtcNow,
+            paymentStatus.ReceiptUrl,
+            paymentStatus.ExpiresAt);
+
+        await unitOfWork.SaveChangesAsync();
     }
 }

@@ -58,6 +58,21 @@ public sealed class IdempotencyService(IUnitOfWork unitOfWork) : IIdempotencySer
         await unitOfWork.IdempotencyKey.CreateAsync(idempotencyKeyEntry, cancellationToken);
     }
 
+    public async Task<bool> RemoveIdempotencyKeyIfExpiredAsync(
+        IdempotencyKey idempotencyKey,
+        CancellationToken cancellationToken = default)
+    {
+        if (idempotencyKey.ExpiresAt > DateTime.UtcNow)
+        {
+            return false;
+        }
+
+        await unitOfWork.IdempotencyKey.DeleteAsync(idempotencyKey, cancellationToken);
+        await unitOfWork.SaveChangesAsync();
+
+        return true;
+    }
+
     private static string GenerateHash(object data)
     {
         var payloadJson = JsonSerializer.Serialize(data);
@@ -74,20 +89,5 @@ public sealed class IdempotencyService(IUnitOfWork unitOfWork) : IIdempotencySer
         }
 
         return JsonSerializer.Serialize(data);
-    }
-
-    public async Task<bool> RemoveIdempotencyKeyIfExpiredAsync(
-        IdempotencyKey idempotencyKey,
-        CancellationToken cancellationToken = default)
-    {
-        if (idempotencyKey.ExpiresAt > DateTime.UtcNow)
-        {
-            return false;
-        }
-
-        await unitOfWork.IdempotencyKey.DeleteAsync(idempotencyKey, cancellationToken);
-        await unitOfWork.SaveChangesAsync();
-
-        return true;
     }
 }

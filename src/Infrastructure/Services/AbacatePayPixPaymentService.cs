@@ -22,22 +22,24 @@ public sealed class AbacatePayPixPaymentService(
         var request = new HttpRequestMessage(HttpMethod.Post, "v2/transparents/create");
         request.Headers.Authorization =
             new AuthenticationHeaderValue("Bearer", environmentVariablesService.AbacatePayApiKey);
+        var customer = createPixPaymentDto.Customer is null
+            ? null
+            : new AbacatePayCreatePixRequestCustomer(
+                createPixPaymentDto.Customer.Name,
+                createPixPaymentDto.Customer.Email,
+                createPixPaymentDto.Customer.TaxId,
+                createPixPaymentDto.Customer.Cellphone);
+
+        var pixData = new AbacatePayCreatePixRequestData(
+            createPixPaymentDto.AmountInCents,
+            createPixPaymentDto.ExpiresInSeconds,
+            createPixPaymentDto.Description,
+            createPixPaymentDto.ExternalId,
+            createPixPaymentDto.Metadata,
+            customer);
+
         request.Content = new StringContent(
-            JsonSerializer.Serialize(new AbacatePayCreatePixRequest(
-                "PIX",
-                new AbacatePayCreatePixRequestData(
-                    createPixPaymentDto.AmountInCents,
-                    createPixPaymentDto.ExpiresInSeconds,
-                    createPixPaymentDto.Description,
-                    createPixPaymentDto.ExternalId,
-                    createPixPaymentDto.Metadata,
-                    createPixPaymentDto.Customer is null
-                        ? null
-                        : new AbacatePayCreatePixRequestCustomer(
-                            createPixPaymentDto.Customer.Name,
-                            createPixPaymentDto.Customer.Email,
-                            createPixPaymentDto.Customer.TaxId,
-                            createPixPaymentDto.Customer.Cellphone)))),
+            JsonSerializer.Serialize(new AbacatePayCreatePixRequest("PIX", pixData)),
             Encoding.UTF8,
             "application/json");
 

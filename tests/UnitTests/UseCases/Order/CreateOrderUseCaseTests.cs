@@ -239,6 +239,7 @@ public class CreateOrderUseCaseTests
             .ReturnsAsync(new ProductEntity
             {
                 Id = firstProductId,
+                Name = "Product A",
                 PriceInCents = 1500,
                 IsActive = true,
             });
@@ -248,6 +249,7 @@ public class CreateOrderUseCaseTests
             .ReturnsAsync(new ProductEntity
             {
                 Id = secondProductId,
+                Name = "Product B",
                 PriceInCents = 2300,
                 IsActive = true,
             });

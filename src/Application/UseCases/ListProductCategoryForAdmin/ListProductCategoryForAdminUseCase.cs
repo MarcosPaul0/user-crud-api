@@ -13,6 +13,6 @@ public class ListProductCategoryForAdminUseCase(IUnitOfWork unitOfWork) : IListP
     {
         var productCategories = await unitOfWork.ProductCategory.FindAllAsync(null, cancellationToken);
 
-        return (productCategories, productCategories.Count());
+        return (productCategories, productCategories.Count);
     }
 }

@@ -8,16 +8,11 @@ namespace AutoriaStore.Infrastructure.Repositories.FilterBuilders;
 
 public class ProductCategoryFilterBuilder(IQueryable<ProductCategory> query) : BaseFilterBuilder<ProductCategory>(query)
 {
-    protected override void Order()
-    {
-        this.query = this.query.OrderBy(productCategory => productCategory.CreatedAt);
-    }
-
     public ProductCategoryFilterBuilder FilterByCategory(string? category)
     {
         if (!string.IsNullOrEmpty(category))
         {
-            this.query = this.query.Where(productCategory => productCategory.Category.ToLower().Contains(category.ToLower()));
+            this.Query = this.Query.Where(productCategory => productCategory.Category.ToLower().Contains(category.ToLower()));
         }
 
         return this;
@@ -27,9 +22,14 @@ public class ProductCategoryFilterBuilder(IQueryable<ProductCategory> query) : B
     {
         if (isActive != null)
         {
-            this.query = this.query.Where(productCategory => productCategory.IsActive == isActive);
+            this.Query = this.Query.Where(productCategory => productCategory.IsActive == isActive);
         }
 
         return this;
+    }
+
+    protected override void Order()
+    {
+        this.Query = this.Query.OrderBy(productCategory => productCategory.CreatedAt);
     }
 }

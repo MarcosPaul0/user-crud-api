@@ -38,8 +38,11 @@ public sealed class ListProductsUseCase(IUnitOfWork unitOfWork) : IListProductsU
             productFilter.ProductCategoryId = listProductsDto.ProductCategoryId.Value;
         }
 
-        var products = await unitOfWork.Product.FindAllAsync(productFilter, listProductsDto.Page,
-            listProductsDto.ItemsPerPage, cancellationToken);
+        var products = await unitOfWork.Product.FindAllAsync(
+            productFilter,
+            listProductsDto.Page,
+            listProductsDto.ItemsPerPage,
+            cancellationToken);
 
         var productsCount = await unitOfWork.Product.CountAsync(productFilter, cancellationToken);
 

@@ -10,6 +10,6 @@ public interface IUpdateProductCategoryUseCase
 {
     Task ExecuteAsync(
         Guid productCategoryId,
-        UpdateProductCategoryDto createProductCategoryDto,
+        UpdateProductCategoryDto updateProductCategoryDto,
         CancellationToken cancellationToken);
 }

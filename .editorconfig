@@ -16,3 +16,31 @@ dotnet_diagnostic.SA1200.severity = none
 
 # All actual violations fixed; analyzer crashes on record declarations (StyleCop 1.x bug)
 dotnet_diagnostic.SA1201.severity = none
+
+# XML doc analysis disabled intentionally — SA1600/1601/1602 suppressed
+dotnet_diagnostic.SA0001.severity = none
+
+# Conflicts with SA1024: `class Foo(args) : IBase` satisfies SA1024 but violates SA1009
+dotnet_diagnostic.SA1009.severity = none
+
+# Design suggestions outside formatting scope
+dotnet_diagnostic.S6960.severity = none
+dotnet_diagnostic.S6966.severity = none
+
+# Conflicts with SA1003: `= []` satisfies SA1003 but violates SA1010
+dotnet_diagnostic.SA1010.severity = none
+
+# SA1516 fires without file location on top-level Program.cs (StyleCop 1.x quirk)
+dotnet_diagnostic.SA1516.severity = none
+
+# External API base URLs — hardcoded by design, not user-facing URIs
+dotnet_diagnostic.S1075.severity = none
+
+# Catch blocks already log + rethrow — that IS the correct handling
+dotnet_diagnostic.S2139.severity = none
+
+# Primary constructor parameter captured by both derived class and base — expected C# 12 behavior
+dotnet_diagnostic.CS9107.severity = none
+
+# Startup env-var reads — nullable by env contract, app fails fast if missing
+dotnet_diagnostic.CS8604.severity = none

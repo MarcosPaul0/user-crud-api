@@ -16,10 +16,9 @@ namespace AutoriaStore.Infrastructure.Clients;
 
 public sealed class CorreiosHttpClient : IPostageHttpClient
 {
-    private readonly HttpClient httpClient;
-
     private const string BaseUrl = "https://api.correios.com.br";
 
+    private readonly HttpClient httpClient;
     private readonly string originPostalCode;
     private readonly string serviceCode;
 
@@ -65,7 +64,7 @@ public sealed class CorreiosHttpClient : IPostageHttpClient
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception("Postal service error");
+            throw new InvalidOperationException("Postal service error");
         }
 
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
@@ -73,7 +72,7 @@ public sealed class CorreiosHttpClient : IPostageHttpClient
 
         if (responseData is null)
         {
-            throw new Exception("Postal response parse error");
+            throw new InvalidOperationException("Postal response parse error");
         }
 
         return new GetShippingPriceResponseDto()
@@ -105,7 +104,7 @@ public sealed class CorreiosHttpClient : IPostageHttpClient
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception("Postal service error");
+            throw new InvalidOperationException("Postal service error");
         }
 
         var content = await response.Content.ReadAsStringAsync(cancellationToken);
@@ -113,7 +112,7 @@ public sealed class CorreiosHttpClient : IPostageHttpClient
 
         if (responseData is null)
         {
-            throw new Exception("Postal response parse error");
+            throw new InvalidOperationException("Postal response parse error");
         }
 
         return new GetDeliveryTimeResponseDto()

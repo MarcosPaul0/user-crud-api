@@ -19,6 +19,6 @@ public sealed class ListProductCategoryUseCase(
 
         var productCategories = await unitOfWork.ProductCategory.FindAllAsync(filter, cancellationToken);
 
-        return (productCategories, productCategories.Count());
+        return (productCategories, productCategories.Count);
     }
 }

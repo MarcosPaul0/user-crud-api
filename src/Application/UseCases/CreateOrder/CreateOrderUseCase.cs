@@ -68,6 +68,33 @@ public sealed class CreateOrderUseCase(
             cancellationToken);
     }
 
+    private static string BuildPixDescription(Guid orderId)
+    {
+        return $"Pedido {orderId.ToString("N")[..8]}";
+    }
+
+    private static CreateOrderResultDto DeserializeResponse(string? responseBody)
+    {
+        if (string.IsNullOrWhiteSpace(responseBody))
+        {
+            throw new ConflictException("Idempotency key already used without stored response.");
+        }
+
+        var response = JsonSerializer.Deserialize<CreateOrderResultDto>(
+            responseBody,
+            new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            });
+
+        if (response is null)
+        {
+            throw new InvalidOperationException("Stored idempotency response is invalid.");
+        }
+
+        return response;
+    }
+
     private async Task<CreateOrderResultDto> CreateOrderAsync(
         CreateOrderDto createOrderDto,
         Guid authenticatedUserId,
@@ -177,32 +204,5 @@ public sealed class CreateOrderUseCase(
         await unitOfWork.SaveChangesAsync();
 
         return result;
-    }
-
-    private static string BuildPixDescription(Guid orderId)
-    {
-        return $"Pedido {orderId.ToString("N")[..8]}";
-    }
-
-    private static CreateOrderResultDto DeserializeResponse(string? responseBody)
-    {
-        if (string.IsNullOrWhiteSpace(responseBody))
-        {
-            throw new ConflictException("Idempotency key already used without stored response.");
-        }
-
-        var response = JsonSerializer.Deserialize<CreateOrderResultDto>(
-            responseBody,
-            new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            });
-
-        if (response is null)
-        {
-            throw new InvalidOperationException("Stored idempotency response is invalid.");
-        }
-
-        return response;
     }
 }

@@ -51,24 +51,6 @@ public sealed class HandleAbacatePayWebhookUseCase(
         await unitOfWork.SaveChangesAsync();
     }
 
-    private void ValidateWebhook(HandleAbacatePayWebhookDto handleAbacatePayWebhookDto)
-    {
-        if (!string.Equals(
-                handleAbacatePayWebhookDto.WebhookSecret,
-                environmentVariablesService.AbacatePayWebhookSecret,
-                StringComparison.Ordinal))
-        {
-            throw new UnauthorizeException(ExceptionMessages.ABACATEPAYWEBHOOKUNAUTHORIZED);
-        }
-
-        if (!abacatePayWebhookSignatureService.IsValid(
-                handleAbacatePayWebhookDto.RawBody,
-                handleAbacatePayWebhookDto.Signature))
-        {
-            throw new UnauthorizeException(ExceptionMessages.ABACATEPAYWEBHOOKUNAUTHORIZED);
-        }
-    }
-
     private static void ApplyEvent(Order order, string eventName, JsonElement transparent)
     {
         var paymentStatus = eventName switch
@@ -90,5 +72,23 @@ public sealed class HandleAbacatePayWebhookUseCase(
             : null;
 
         order.ApplyPaymentStatus(paymentStatus, updatedAt, receiptUrl);
+    }
+
+    private void ValidateWebhook(HandleAbacatePayWebhookDto handleAbacatePayWebhookDto)
+    {
+        if (!string.Equals(
+                handleAbacatePayWebhookDto.WebhookSecret,
+                environmentVariablesService.AbacatePayWebhookSecret,
+                StringComparison.Ordinal))
+        {
+            throw new UnauthorizeException(ExceptionMessages.ABACATEPAYWEBHOOKUNAUTHORIZED);
+        }
+
+        if (!abacatePayWebhookSignatureService.IsValid(
+                handleAbacatePayWebhookDto.RawBody,
+                handleAbacatePayWebhookDto.Signature))
+        {
+            throw new UnauthorizeException(ExceptionMessages.ABACATEPAYWEBHOOKUNAUTHORIZED);
+        }
     }
 }

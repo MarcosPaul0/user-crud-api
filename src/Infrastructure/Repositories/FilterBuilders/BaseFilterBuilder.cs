@@ -9,13 +9,9 @@ namespace AutoriaStore.Infrastructure.Repositories.FilterBuilders;
 public abstract class BaseFilterBuilder<T>(IQueryable<T> query)
     where T : Entity
 {
-    protected IQueryable<T> query = query;
-
-    protected abstract void Order();
-
     public IQueryable<T> Build()
     {
-        return this.query;
+        return this.Query;
     }
 
     public BaseFilterBuilder<T> ApplyPagination(int page, int itemsPerPage)
@@ -24,8 +20,12 @@ public abstract class BaseFilterBuilder<T>(IQueryable<T> query)
 
         var currentPage = page > 0 ? page - 1 : 0;
 
-        this.query = this.query.Skip(currentPage * itemsPerPage).Take(itemsPerPage);
+        this.Query = this.Query.Skip(currentPage * itemsPerPage).Take(itemsPerPage);
 
         return this;
     }
+
+    protected IQueryable<T> Query { get; set; } = query;
+
+    protected abstract void Order();
 }

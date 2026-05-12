@@ -48,17 +48,17 @@ public class CloudflareR2Service(
     }
 
     public async Task DeleteAsync(
-        string imageUrl,
+        string objectKey,
         CancellationToken cancellationToken)
     {
         try
         {
-            var objectKey = ObjectStorageHelper.ExtractObjectKey(imageUrl);
+            var key = ObjectStorageHelper.ExtractObjectKey(objectKey);
 
             var request = new DeleteObjectRequest
             {
                 BucketName = environmentVariablesService.ObjectStorageBucket,
-                Key = objectKey,
+                Key = key,
             };
 
             await s3.DeleteObjectAsync(request, cancellationToken);
