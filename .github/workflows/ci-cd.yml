@@ -10,7 +10,7 @@
 #
 # Triggers:
 #   - Push na branch main
-#   - Pull Request direcionado à main (somente o estágio build é executado)
+#   - Pull Request direcionado à main (estágios lint e test são executados)
 #
 # Secrets necessários (Settings → Secrets and variables → Actions):
 #   VPS_HOST        → IP ou domínio da VPS
@@ -26,9 +26,9 @@ on:
   push:
     branches:
       - main
-#  pull_request:
-#    branches:
-#      - main
+  pull_request:
+    branches:
+      - main
 
 # Permissões mínimas necessárias para o GITHUB_TOKEN publicar no ghcr.io
 permissions:
@@ -167,7 +167,6 @@ jobs:
     name: Deploy na VPS
     runs-on: ubuntu-latest
     needs: build
-    if: false
     # Garante que deploy só rode em push na main (nunca em PRs)
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
