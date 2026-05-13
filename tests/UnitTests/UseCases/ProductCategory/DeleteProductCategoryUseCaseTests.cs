@@ -1,3 +1,7 @@
+// <copyright file="DeleteProductCategoryUseCaseTests.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Application.UseCases.DeleteProductCategory;
 using AutoriaStore.Domain.Interfaces.Repositories;
@@ -6,18 +10,18 @@ namespace AutoriaStore.UnitTests.UseCases.ProductCategory;
 
 public class DeleteProductCategoryUseCaseTests
 {
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-    private readonly Mock<IProductCategoryRepository> _productCategoryRepositoryMock;
-    private readonly DeleteProductCategoryUseCase _sut;
+    private readonly Mock<IUnitOfWork> unitOfWorkMock;
+    private readonly Mock<IProductCategoryRepository> productCategoryRepositoryMock;
+    private readonly DeleteProductCategoryUseCase sut;
 
     public DeleteProductCategoryUseCaseTests()
     {
-        _unitOfWorkMock = new Mock<IUnitOfWork>();
-        _productCategoryRepositoryMock = new Mock<IProductCategoryRepository>();
+        this.unitOfWorkMock = new Mock<IUnitOfWork>();
+        this.productCategoryRepositoryMock = new Mock<IProductCategoryRepository>();
 
-        _unitOfWorkMock.Setup(u => u.ProductCategory).Returns(_productCategoryRepositoryMock.Object);
+        this.unitOfWorkMock.Setup(u => u.ProductCategory).Returns(this.productCategoryRepositoryMock.Object);
 
-        _sut = new DeleteProductCategoryUseCase(_unitOfWorkMock.Object);
+        this.sut = new DeleteProductCategoryUseCase(this.unitOfWorkMock.Object);
     }
 
     [Fact]
@@ -25,11 +29,11 @@ public class DeleteProductCategoryUseCaseTests
     {
         var categoryId = Guid.NewGuid();
 
-        _productCategoryRepositoryMock
+        this.productCategoryRepositoryMock
             .Setup(r => r.FindByIdAsync(categoryId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((AutoriaStore.Domain.Entities.ProductCategory?)null);
 
-        var act = () => _sut.ExecuteAsync(categoryId, CancellationToken.None);
+        var act = () => this.sut.ExecuteAsync(categoryId, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(act);
         Assert.Equal(ExceptionMessages.PRODUCT_CATEGORY_NOT_FOUND, exception.Message);
@@ -44,20 +48,20 @@ public class DeleteProductCategoryUseCaseTests
             Id = categoryId,
             Category = "Electronics",
             IsActive = true,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
         };
 
-        _productCategoryRepositoryMock
+        this.productCategoryRepositoryMock
             .Setup(r => r.FindByIdAsync(categoryId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingCategory);
 
-        _productCategoryRepositoryMock
+        this.productCategoryRepositoryMock
             .Setup(r => r.DeleteAsync(existingCategory, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingCategory);
 
-        await _sut.ExecuteAsync(categoryId, CancellationToken.None);
+        await this.sut.ExecuteAsync(categoryId, CancellationToken.None);
 
-        _productCategoryRepositoryMock.Verify(r => r.DeleteAsync(existingCategory, It.IsAny<CancellationToken>()), Times.Once);
-        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
+        this.productCategoryRepositoryMock.Verify(r => r.DeleteAsync(existingCategory, It.IsAny<CancellationToken>()), Times.Once);
+        this.unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
     }
 }

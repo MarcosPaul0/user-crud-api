@@ -1,7 +1,11 @@
+// <copyright file="SetProductImagesController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
+using AutoriaStore.Application.UseCases.SetProductImages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoriaStore.Application.UseCases.SetProductImages;
 
 namespace AutoriaStore.API.Controllers;
 
@@ -10,7 +14,7 @@ namespace AutoriaStore.API.Controllers;
 public class SetProductImagesController(ISetProductImagesUseCase setProductImagesUseCase) : ControllerBase
 {
     private const int ProductImageMaxSize = 12_582_912;
-    
+
     [Authorize]
     [HttpPatch("images/{productId:guid}")]
     [Consumes("multipart/form-data")]
@@ -23,6 +27,6 @@ public class SetProductImagesController(ISetProductImagesUseCase setProductImage
     {
         await setProductImagesUseCase.ExecuteAsync(productId, setProductImagesDto, cancellationToken);
 
-        return NoContent();
+        return this.NoContent();
     }
 }

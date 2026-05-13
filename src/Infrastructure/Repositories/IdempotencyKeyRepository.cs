@@ -1,3 +1,7 @@
+// <copyright file="IdempotencyKeyRepository.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Domain.Entities;
 using AutoriaStore.Domain.Interfaces.Repositories;
 using AutoriaStore.Infrastructure.Context;
@@ -9,9 +13,10 @@ public sealed class IdempotencyKeyRepository : BaseRepository<IdempotencyKey>, I
 {
     private readonly ApplicationDbContext _context;
 
-    public IdempotencyKeyRepository(ApplicationDbContext context) : base(context)
+    public IdempotencyKeyRepository(ApplicationDbContext context)
+        : base(context)
     {
-        _context = context;
+        this._context = context;
     }
 
     public async Task<IdempotencyKey?> FindByUserIdAndEndpointAndKeyAsync(
@@ -20,7 +25,7 @@ public sealed class IdempotencyKeyRepository : BaseRepository<IdempotencyKey>, I
         string idempotencyKey,
         CancellationToken cancellationToken = default)
     {
-        return await _context.IdempotencyKey.FirstOrDefaultAsync(
+        return await this._context.IdempotencyKey.FirstOrDefaultAsync(
             record => record.UserId == userId
                       && record.Endpoint == endpoint
                       && record.Key == idempotencyKey,

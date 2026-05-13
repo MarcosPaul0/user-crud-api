@@ -1,12 +1,16 @@
+// <copyright file="PaginationResponseDto.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 namespace AutoriaStore.API.Dtos;
 
 public record PaginationResponseDto<T>
 {
-    public required IEnumerable<T> Items { get; init; }
-    public required int TotalPages { get; init; }
-    public required int TotalItems { get; init; }
-    public required int ItemsPerPage { get; init; }
-    public required int Page { get; init; }
-    public required bool HasPrevious { get; init; }
-    public required bool HasNext { get; init; }
+    required public IEnumerable<T> Items { get; init; }
+    required public int TotalPages { get; init; }
+    required public int TotalItems { get; init; }
+    required public int ItemsPerPage { get; init; }
+    required public int Page { get; init; }
+    required public bool HasPrevious { get; init; }
+    required public bool HasNext { get; init; }
 }

@@ -1,3 +1,7 @@
+// <copyright file="DeleteUserUseCaseTests.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Application.UseCases.DeleteUser;
 using AutoriaStore.Domain.Enums;
@@ -7,18 +11,18 @@ namespace AutoriaStore.UnitTests.UseCases.User;
 
 public class DeleteUserUseCaseTests
 {
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-    private readonly Mock<IUserRepository> _userRepositoryMock;
-    private readonly DeleteUserUseCase _sut;
+    private readonly Mock<IUnitOfWork> unitOfWorkMock;
+    private readonly Mock<IUserRepository> userRepositoryMock;
+    private readonly DeleteUserUseCase sut;
 
     public DeleteUserUseCaseTests()
     {
-        _unitOfWorkMock = new Mock<IUnitOfWork>();
-        _userRepositoryMock = new Mock<IUserRepository>();
+        this.unitOfWorkMock = new Mock<IUnitOfWork>();
+        this.userRepositoryMock = new Mock<IUserRepository>();
 
-        _unitOfWorkMock.Setup(u => u.User).Returns(_userRepositoryMock.Object);
+        this.unitOfWorkMock.Setup(u => u.User).Returns(this.userRepositoryMock.Object);
 
-        _sut = new DeleteUserUseCase(_unitOfWorkMock.Object);
+        this.sut = new DeleteUserUseCase(this.unitOfWorkMock.Object);
     }
 
     [Fact]
@@ -26,11 +30,11 @@ public class DeleteUserUseCaseTests
     {
         var userId = Guid.NewGuid();
 
-        _userRepositoryMock
+        this.userRepositoryMock
             .Setup(r => r.FindByIdAsync(userId, It.IsAny<CancellationToken>()))
             .ReturnsAsync((AutoriaStore.Domain.Entities.User?)null);
 
-        var act = () => _sut.ExecuteAsync(userId, CancellationToken.None);
+        var act = () => this.sut.ExecuteAsync(userId, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(act);
         Assert.Equal(ExceptionMessages.USER_NOT_FOUND, exception.Message);
@@ -42,20 +46,20 @@ public class DeleteUserUseCaseTests
         var userId = Guid.NewGuid();
         var existingUser = new AutoriaStore.Domain.Entities.User("John Doe Test", "john@example.com", "hash", UserRole.Customer, DateTime.UtcNow)
         {
-            Id = userId
+            Id = userId,
         };
 
-        _userRepositoryMock
+        this.userRepositoryMock
             .Setup(r => r.FindByIdAsync(userId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingUser);
 
-        _userRepositoryMock
+        this.userRepositoryMock
             .Setup(r => r.DeleteAsync(existingUser, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingUser);
 
-        await _sut.ExecuteAsync(userId, CancellationToken.None);
+        await this.sut.ExecuteAsync(userId, CancellationToken.None);
 
-        _userRepositoryMock.Verify(r => r.DeleteAsync(existingUser, It.IsAny<CancellationToken>()), Times.Once);
-        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
+        this.userRepositoryMock.Verify(r => r.DeleteAsync(existingUser, It.IsAny<CancellationToken>()), Times.Once);
+        this.unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
     }
 }

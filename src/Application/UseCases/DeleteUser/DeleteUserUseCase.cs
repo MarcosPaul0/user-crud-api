@@ -1,3 +1,7 @@
+// <copyright file="DeleteUserUseCase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Interfaces.Repositories;
 
@@ -13,9 +17,9 @@ public sealed class DeleteUserUseCase(IUnitOfWork unitOfWork) : IDeleteUserUseCa
         {
             throw new NotFoundException(ExceptionMessages.USER_NOT_FOUND);
         }
-        
+
         await unitOfWork.User.DeleteAsync(user, cancellationToken);
-        
+
         await unitOfWork.SaveChangesAsync();
     }
 }

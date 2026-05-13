@@ -97,10 +97,76 @@ namespace AutoriaStore.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<DateTime?>("CancelledAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("cancelled_at");
+
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("DisputedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("disputed_at");
+
+                    b.Property<DateTime?>("PaidAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("paid_at");
+
+                    b.Property<DateTime?>("PaymentExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("payment_expires_at");
+
+                    b.Property<string>("PaymentExternalId")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("payment_external_id");
+
+                    b.Property<string>("PaymentId")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("payment_id");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("payment_method");
+
+                    b.Property<string>("PaymentProvider")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("payment_provider");
+
+                    b.Property<string>("PaymentStatus")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("payment_status");
+
+                    b.Property<string>("PixCopyPasteCode")
+                        .HasColumnType("text")
+                        .HasColumnName("pix_copy_paste_code");
+
+                    b.Property<string>("PixQrCodeBase64")
+                        .HasColumnType("text")
+                        .HasColumnName("pix_qr_code_base64");
+
+                    b.Property<string>("ReceiptUrl")
+                        .HasColumnType("text")
+                        .HasColumnName("receipt_url");
+
+                    b.Property<DateTime?>("RefundedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("refunded_at");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("status");
 
                     b.Property<int>("TotalPriceInCents")
                         .HasColumnType("integer")
@@ -116,6 +182,9 @@ namespace AutoriaStore.Infrastructure.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PaymentId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -138,6 +207,12 @@ namespace AutoriaStore.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("order_id");
 
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("product_name");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid")
                         .HasColumnName("product_id");
@@ -145,6 +220,10 @@ namespace AutoriaStore.Infrastructure.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer")
                         .HasColumnName("quantity");
+
+                    b.Property<int>("TotalPriceInCents")
+                        .HasColumnType("integer")
+                        .HasColumnName("total_price_in_cents");
 
                     b.Property<int>("UnitPriceInCents")
                         .HasColumnType("integer")

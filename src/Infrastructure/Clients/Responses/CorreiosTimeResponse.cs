@@ -1,3 +1,7 @@
+// <copyright file="CorreiosTimeResponse.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using System.Text.Json.Serialization;
 
 namespace AutoriaStore.Infrastructure.Clients.Responses;

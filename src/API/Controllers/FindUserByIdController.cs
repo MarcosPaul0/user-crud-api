@@ -1,8 +1,12 @@
+// <copyright file="FindUserByIdController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.API.Dtos;
 using AutoriaStore.API.Presenters;
+using AutoriaStore.Application.UseCases.FindUserById;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoriaStore.Application.UseCases.FindUserById;
 
 namespace AutoriaStore.API.Controllers;
 
@@ -17,6 +21,6 @@ public class FindUserByIdController(IFindUserByIdUseCase findUserByIdUseCase) : 
     {
         var user = await findUserByIdUseCase.ExecuteAsync(userId, cancellationToken);
 
-        return Ok(UserPresenter.ToHttp(user));
+        return this.Ok(UserPresenter.ToHttp(user));
     }
 }

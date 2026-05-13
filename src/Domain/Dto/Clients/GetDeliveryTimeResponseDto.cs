@@ -1,6 +1,10 @@
+// <copyright file="GetDeliveryTimeResponseDto.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 namespace AutoriaStore.Domain.Dto.Clients;
 
 public record GetDeliveryTimeResponseDto
 {
-    public required DateTime EstimationDeliveryDate  { get; init; }
+    required public DateTime EstimationDeliveryDate { get; init; }
 }

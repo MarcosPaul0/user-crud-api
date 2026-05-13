@@ -1,10 +1,10 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-#nullable disable
+﻿#nullable disable
 
 namespace AutoriaStore.Infrastructure.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     /// <inheritdoc />
     public partial class AddUserAndPhoneTables : Migration
     {
@@ -20,7 +20,7 @@ namespace AutoriaStore.Infrastructure.Migrations
                     email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     password = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -35,7 +35,7 @@ namespace AutoriaStore.Infrastructure.Migrations
                     phone_number = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                 },
                 constraints: table =>
                 {

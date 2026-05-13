@@ -1,6 +1,10 @@
+// <copyright file="DeleteUserController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+using AutoriaStore.Application.UseCases.DeleteUser;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoriaStore.Application.UseCases.DeleteUser;
 
 namespace AutoriaStore.API.Controllers;
 
@@ -13,7 +17,7 @@ public class DeleteUserController(IDeleteUserUseCase deleteUserUseCase) : Contro
     public async Task<ActionResult> HandleAsync(Guid userId, CancellationToken cancellationToken)
     {
         await deleteUserUseCase.ExecuteAsync(userId, cancellationToken);
-        
-        return NoContent();
+
+        return this.NoContent();
     }
 }

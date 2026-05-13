@@ -1,3 +1,7 @@
+// <copyright file="PhoneConfiguration.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -9,7 +13,7 @@ public class PhoneConfiguration : IEntityTypeConfiguration<Phone>
     public void Configure(EntityTypeBuilder<Phone> builder)
     {
         builder.ToTable("phone");
-        
+
         builder.HasKey(phone => phone.Id);
 
         builder.Property(phone => phone.Id).HasColumnName("id").ValueGeneratedOnAdd();

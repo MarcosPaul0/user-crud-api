@@ -1,8 +1,12 @@
+// <copyright file="ProductCategoryResponseDto.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 namespace AutoriaStore.API.Dtos;
 
 public record ProductCategoryResponseDto
 {
-    public required Guid Id { get; init; }
-    public required string Category { get; init; }
-    public required DateTime CreatedAt { get; init; }
+    required public Guid Id { get; init; }
+    required public string Category { get; init; }
+    required public DateTime CreatedAt { get; init; }
 }

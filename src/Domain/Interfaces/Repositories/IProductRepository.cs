@@ -1,3 +1,7 @@
+// <copyright file="IProductRepository.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Domain.Entities;
 
 namespace AutoriaStore.Domain.Interfaces.Repositories;
@@ -11,6 +15,6 @@ public interface IProductRepository : IBaseRepository<Product>
         int page,
         int itemsPerPage,
         CancellationToken cancellationToken = default);
-    
+
     Task<int> CountAsync(Product filter, CancellationToken cancellationToken = default);
 }

@@ -1,9 +1,13 @@
+// <copyright file="ListProductsForAdminController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.API.Dtos;
 using AutoriaStore.API.Presenters;
 using AutoriaStore.Application.Dtos;
+using AutoriaStore.Application.UseCases.ListProductsForAdmin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoriaStore.Application.UseCases.ListProductsForAdmin;
 
 namespace AutoriaStore.API.Controllers;
 
@@ -20,6 +24,6 @@ public class ListProductsForAdminController(IListProductsForAdminUseCase listPro
     {
         var (products, count) = await listProductsForAdminUseCase.ExecuteAsync(listProductsByAdminDto, cancellationToken);
 
-        return Ok(ProductForAdminPresenter.ToHttp(products, count, listProductsByAdminDto.Page, listProductsByAdminDto.ItemsPerPage));
+        return this.Ok(ProductForAdminPresenter.ToHttp(products, count, listProductsByAdminDto.Page, listProductsByAdminDto.ItemsPerPage));
     }
 }

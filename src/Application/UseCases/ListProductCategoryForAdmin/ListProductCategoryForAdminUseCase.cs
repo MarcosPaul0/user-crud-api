@@ -1,3 +1,7 @@
+// <copyright file="ListProductCategoryForAdminUseCase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Domain.Entities;
 using AutoriaStore.Domain.Interfaces.Repositories;
 
@@ -9,6 +13,6 @@ public class ListProductCategoryForAdminUseCase(IUnitOfWork unitOfWork) : IListP
     {
         var productCategories = await unitOfWork.ProductCategory.FindAllAsync(null, cancellationToken);
 
-        return (productCategories, productCategories.Count());
+        return (productCategories, productCategories.Count);
     }
 }

@@ -1,3 +1,7 @@
+// <copyright file="UnitOfWork.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Domain.Interfaces.Repositories;
 using AutoriaStore.Infrastructure.Context;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,37 +21,42 @@ public sealed class UnitOfWork : IUnitOfWork
 
     public UnitOfWork(ApplicationDbContext context, IServiceProvider serviceProvider)
     {
-        _context = context;
-        
-        _user = new Lazy<IUserRepository>(
+        this._context = context;
+
+        this._user = new Lazy<IUserRepository>(
             serviceProvider.GetRequiredService<IUserRepository>);
-        _product = new Lazy<IProductRepository>(
+        this._product = new Lazy<IProductRepository>(
             serviceProvider.GetRequiredService<IProductRepository>);
-        _productCategory = new Lazy<IProductCategoryRepository>(
+        this._productCategory = new Lazy<IProductCategoryRepository>(
             serviceProvider.GetRequiredService<IProductCategoryRepository>);
-        _productImage = new Lazy<IProductImageRepository>(
+        this._productImage = new Lazy<IProductImageRepository>(
             serviceProvider.GetRequiredService<IProductImageRepository>);
-        _order = new Lazy<IOrderRepository>(
+        this._order = new Lazy<IOrderRepository>(
             serviceProvider.GetRequiredService<IOrderRepository>);
-        _idempotencyKey = new Lazy<IIdempotencyKeyRepository>(
+        this._idempotencyKey = new Lazy<IIdempotencyKeyRepository>(
             serviceProvider.GetRequiredService<IIdempotencyKeyRepository>);
     }
-    
-    public IUserRepository User => _user.Value;
-    public IProductRepository Product => _product.Value;
-    public IProductCategoryRepository ProductCategory => _productCategory.Value;
-    public IProductImageRepository ProductImage => _productImage.Value;
-    public IOrderRepository Order => _order.Value;
-    public IIdempotencyKeyRepository IdempotencyKey => _idempotencyKey.Value;
-    
+
+    public IUserRepository User => this._user.Value;
+
+    public IProductRepository Product => this._product.Value;
+
+    public IProductCategoryRepository ProductCategory => this._productCategory.Value;
+
+    public IProductImageRepository ProductImage => this._productImage.Value;
+
+    public IOrderRepository Order => this._order.Value;
+
+    public IIdempotencyKeyRepository IdempotencyKey => this._idempotencyKey.Value;
+
     public async Task SaveChangesAsync()
     {
-        await _context.SaveChangesAsync();
+        await this._context.SaveChangesAsync();
     }
 
     public void Dispose()
     {
-        _context.Dispose();
+        this._context.Dispose();
         GC.SuppressFinalize(this);
     }
 }

@@ -1,3 +1,7 @@
+// <copyright file="FindProductCategoryByIdForAdminUseCase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Entities;
 using AutoriaStore.Domain.Interfaces.Repositories;
@@ -14,7 +18,7 @@ public class FindProductCategoryByIdForAdminUseCase(IUnitOfWork unitOfWork) : IF
         {
             throw new NotFoundException(ExceptionMessages.PRODUCT_CATEGORY_NOT_FOUND);
         }
-        
+
         return productCategory;
     }
 }

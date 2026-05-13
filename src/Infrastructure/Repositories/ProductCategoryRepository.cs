@@ -1,3 +1,7 @@
+// <copyright file="ProductCategoryRepository.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Domain.Entities;
 using AutoriaStore.Domain.Interfaces.Repositories;
 using AutoriaStore.Infrastructure.Context;
@@ -12,15 +16,16 @@ public class ProductCategoryRepository(ApplicationDbContext context) : BaseRepos
 
     public Task<ProductCategory?> FindByCategoryAsync(string category, CancellationToken cancellationToken = default)
     {
-        return _context.ProductCategory.FirstOrDefaultAsync(productCategory => productCategory.Category == category,
+        return this._context.ProductCategory.FirstOrDefaultAsync(
+            productCategory => productCategory.Category == category,
             cancellationToken);
     }
 
     public async Task<List<ProductCategory>> FindAllAsync(
-        ProductCategory? filter, 
+        ProductCategory? filter,
         CancellationToken cancellationToken = default)
     {
-        var query = _context.ProductCategory.AsNoTracking();
+        var query = this._context.ProductCategory.AsNoTracking();
 
         if (filter is not null)
         {
@@ -29,15 +34,15 @@ public class ProductCategoryRepository(ApplicationDbContext context) : BaseRepos
                 .FilterByIsActive(filter.IsActive)
                 .Build();
         }
-        
+
         return await query.ToListAsync(cancellationToken);
     }
-    
+
     public async Task<List<ProductCategory>> FindAllWithProductCountAsync(
-        ProductCategory? filter, 
+        ProductCategory? filter,
         CancellationToken cancellationToken = default)
     {
-        var query = _context.ProductCategory.AsNoTracking();
+        var query = this._context.ProductCategory.AsNoTracking();
 
         if (filter is not null)
         {
@@ -46,21 +51,21 @@ public class ProductCategoryRepository(ApplicationDbContext context) : BaseRepos
                 .FilterByIsActive(filter.IsActive)
                 .Build();
         }
-        
+
         return await query
             .Select(productCategory => new ProductCategory
             {
                 Id = productCategory.Id,
                 Category = productCategory.Category,
-                ProductCount = _context.Product.Count(p => p.ProductCategoryId == productCategory.Id),
+                ProductCount = this._context.Product.Count(p => p.ProductCategoryId == productCategory.Id),
                 CreatedAt = productCategory.CreatedAt,
-                UpdatedAt = productCategory.UpdatedAt
+                UpdatedAt = productCategory.UpdatedAt,
             })
             .ToListAsync(cancellationToken);
     }
 
     public async Task<int> CountAsync(CancellationToken cancellationToken = default)
     {
-        return await _context.ProductCategory.AsNoTracking().CountAsync(cancellationToken);
+        return await this._context.ProductCategory.AsNoTracking().CountAsync(cancellationToken);
     }
 }

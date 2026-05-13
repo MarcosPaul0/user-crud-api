@@ -1,10 +1,14 @@
+// <copyright file="ProductCategoryForAdminResponseDto.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 namespace AutoriaStore.API.Dtos;
 
 public record ProductCategoryForAdminResponseDto
 {
-    public required Guid Id { get; init; }
-    public required string Category { get; init; }
-    public required bool IsActive { get; init; }
-    public required int ProductCount { get; init; }
-    public required DateTime CreatedAt { get; init; }
+    required public Guid Id { get; init; }
+    required public string Category { get; init; }
+    required public bool IsActive { get; init; }
+    required public int ProductCount { get; init; }
+    required public DateTime CreatedAt { get; init; }
 }

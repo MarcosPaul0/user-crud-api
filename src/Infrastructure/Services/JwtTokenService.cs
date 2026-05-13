@@ -1,9 +1,13 @@
+// <copyright file="JwtTokenService.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using AutoriaStore.Domain.Enums;
-using Microsoft.IdentityModel.Tokens;
 using AutoriaStore.Domain.Interfaces.Services;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AutoriaStore.Infrastructure.Services;
 
@@ -16,13 +20,13 @@ public class JwtTokenService : IJwtTokenService
 
     public JwtTokenService(IEnvironmentVariablesService environmentVariablesService)
     {
-        _issuer = environmentVariablesService.JwtIssuer;
-        _audience = environmentVariablesService.JwtAudience;
-        _expirationMinutes = environmentVariablesService.JwtExpirationTimeInMinutes;
+        this._issuer = environmentVariablesService.JwtIssuer;
+        this._audience = environmentVariablesService.JwtAudience;
+        this._expirationMinutes = environmentVariablesService.JwtExpirationTimeInMinutes;
 
         var rsa = RSA.Create();
         rsa.ImportPkcs8PrivateKey(Convert.FromBase64String(environmentVariablesService.JwtPrivateKey), out _);
-        _signingCredentials = new SigningCredentials(new RsaSecurityKey(rsa), SecurityAlgorithms.RsaSha256);
+        this._signingCredentials = new SigningCredentials(new RsaSecurityKey(rsa), SecurityAlgorithms.RsaSha256);
     }
 
     public string GenerateToken(Guid userId, UserRole role)
@@ -34,14 +38,13 @@ public class JwtTokenService : IJwtTokenService
         };
 
         var token = new JwtSecurityToken(
-            issuer: _issuer,
-            audience: _audience,
+            issuer: this._issuer,
+            audience: this._audience,
             claims: claims,
             notBefore: DateTime.UtcNow,
-            expires: DateTime.UtcNow.AddMinutes(_expirationMinutes),
-            signingCredentials: _signingCredentials
-        );
-        
+            expires: DateTime.UtcNow.AddMinutes(this._expirationMinutes),
+            signingCredentials: this._signingCredentials);
+
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

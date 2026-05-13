@@ -1,3 +1,7 @@
+// <copyright file="UpdateUserUseCase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Interfaces.Repositories;
@@ -16,19 +20,19 @@ public sealed class UpdateUserUseCase(IUnitOfWork unitOfWork) : IUpdateUserUseCa
         }
 
         var hasBeenUpdated = false;
-        
+
         if (updateUserDto.Email != null && user.Email != updateUserDto.Email)
         {
             user.Email = updateUserDto.Email;
             hasBeenUpdated = true;
         }
-        
+
         if (updateUserDto.Name != null && user.Name != updateUserDto.Name)
         {
             user.Name = updateUserDto.Name;
             hasBeenUpdated = true;
         }
-        
+
         if (updateUserDto.Password != null && user.Password != updateUserDto.Password)
         {
             user.Password = updateUserDto.Password;
@@ -38,7 +42,7 @@ public sealed class UpdateUserUseCase(IUnitOfWork unitOfWork) : IUpdateUserUseCa
         if (hasBeenUpdated)
         {
             user.UpdatedAt = DateTime.UtcNow;
-            
+
             await unitOfWork.User.UpdateAsync(user, cancellationToken);
             await unitOfWork.SaveChangesAsync();
         }

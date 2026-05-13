@@ -1,3 +1,7 @@
+// <copyright file="OrderProductConfiguration.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -13,8 +17,10 @@ public class OrderProductConfiguration : IEntityTypeConfiguration<OrderProduct>
         builder.HasKey(orderProduct => orderProduct.Id);
 
         builder.Property(orderProduct => orderProduct.Id).HasColumnName("id").ValueGeneratedOnAdd();
+        builder.Property(orderProduct => orderProduct.ProductName).HasColumnName("product_name").HasMaxLength(255).IsRequired();
         builder.Property(orderProduct => orderProduct.Quantity).HasColumnName("quantity").IsRequired();
         builder.Property(orderProduct => orderProduct.UnitPriceInCents).HasColumnName("unit_price_in_cents").IsRequired();
+        builder.Property(orderProduct => orderProduct.TotalPriceInCents).HasColumnName("total_price_in_cents").IsRequired();
         builder.Property(orderProduct => orderProduct.OrderId).HasColumnName("order_id").IsRequired();
         builder.Property(orderProduct => orderProduct.ProductId).HasColumnName("product_id").IsRequired();
         builder.Property(orderProduct => orderProduct.CreatedAt).HasColumnName("created_at").IsRequired().ValueGeneratedOnAdd();

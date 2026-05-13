@@ -1,31 +1,38 @@
+// <copyright file="MaxFileSizeAttribute.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
 namespace AutoriaStore.Application.Attributes;
 
+[AttributeUsage(AttributeTargets.Property)]
 public class MaxFileSizeAttribute(int maxFileSizeInMb) : ValidationAttribute
 {
-    private readonly ValidationResult _errorMessage = new($"The maximum allowed size per file is{maxFileSizeInMb}MB");
-    
+    private readonly ValidationResult _errorMessage = new ($"The maximum allowed size per file is{maxFileSizeInMb}MB");
+
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
         switch (value)
         {
             case IFormFile file:
-                if (!IsValidFileSize(file))
+                if (!this.IsValidFileSize(file))
                 {
-                    return _errorMessage;
+                    return this._errorMessage;
                 }
+
                 break;
-            
+
             case List<IFormFile> files:
-                if (files.Any(currentFile => !IsValidFileSize(currentFile)))
+                if (files.Any(currentFile => !this.IsValidFileSize(currentFile)))
                 {
-                    return _errorMessage;
+                    return this._errorMessage;
                 }
+
                 break;
         }
-        
+
         return ValidationResult.Success;
     }
 

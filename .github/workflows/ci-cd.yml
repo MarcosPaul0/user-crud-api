@@ -3,12 +3,14 @@
 # =============================================================================
 #
 # Estágios:
+#   lint   → Valida StyleCop e Sonar (warnings viram erros); bloqueia se houver violações
+#   test   → Executa os testes unitários e bloqueia o pipeline se algum falhar
 #   build  → Builda a imagem Docker da API e pusha para ghcr.io
 #   deploy → Via SSH, faz pull da nova imagem na VPS e recria o container
 #
 # Triggers:
 #   - Push na branch main
-#   - Pull Request direcionado à main (somente o estágio build é executado)
+#   - Pull Request direcionado à main (estágios lint e test são executados)
 #
 # Secrets necessários (Settings → Secrets and variables → Actions):
 #   VPS_HOST        → IP ou domínio da VPS
@@ -44,7 +46,55 @@ env:
 
 jobs:
   # ---------------------------------------------------------------------------
-  # JOB 1: build
+  # JOB 1: lint
+  # Compila a solução com -warnaserror, forçando StyleCop e SonarAnalyzer a
+  # tratar warnings como erros. Bloqueia test/build/deploy se houver violações.
+  # ---------------------------------------------------------------------------
+  lint:
+    name: Lint (Analyzers)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Restaurar dependências
+        run: dotnet restore
+
+      - name: Validar lint (warnings como erros)
+        run: dotnet build --no-restore -warnaserror
+
+  # ---------------------------------------------------------------------------
+  # JOB 2: test
+  # Roda os testes unitários. Bloqueia build e deploy se algum teste falhar.
+  # ---------------------------------------------------------------------------
+  test:
+    needs: lint
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Restaurar dependências
+        run: dotnet restore tests/UnitTests/AutoriaStore.UnitTests.csproj
+
+      - name: Executar testes unitários
+        run: dotnet test tests/UnitTests/AutoriaStore.UnitTests.csproj --no-restore --verbosity normal
+
+  # ---------------------------------------------------------------------------
+  # JOB 3: build
   # Builda a imagem Docker e pusha para o GitHub Container Registry (ghcr.io).
   # Executa tanto em push quanto em PR — útil para validar o Dockerfile no PR
   # sem realizar o deploy.
@@ -52,6 +102,8 @@ jobs:
   build:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
+    needs: test
+    if: false
 
     outputs:
       # image_tag  → SHA curto do commit (ex: sha-a1b2c3d)
@@ -107,7 +159,7 @@ jobs:
           cache-to:   type=registry,ref=${{ env.IMAGE_NAME }}:buildcache,mode=max
 
   # ---------------------------------------------------------------------------
-  # JOB 2: deploy
+  # JOB 4: deploy
   # Conecta na VPS via SSH, faz pull da nova imagem e recria o container da API.
   # Só executa em push na main (não em PRs) e somente após o build ter sucesso.
   # ---------------------------------------------------------------------------

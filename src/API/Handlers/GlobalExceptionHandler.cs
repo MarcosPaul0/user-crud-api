@@ -1,3 +1,7 @@
+// <copyright file="GlobalExceptionHandler.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 
@@ -20,11 +24,12 @@ public class GlobalExceptionHandler : IExceptionHandler
 
         httpContext.Response.StatusCode = statusCode;
 
-        await httpContext.Response.WriteAsJsonAsync(new
-        {
-            statusCode,
-            message
-        }, cancellationToken);
+        await httpContext.Response.WriteAsJsonAsync(
+            new
+            {
+                statusCode,
+                message,
+            }, cancellationToken);
 
         return true;
     }

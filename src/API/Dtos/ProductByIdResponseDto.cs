@@ -1,14 +1,18 @@
+// <copyright file="ProductByIdResponseDto.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 namespace AutoriaStore.API.Dtos;
 
 public record ProductByIdResponseDto
 {
-    public required Guid Id { get; init; }
-    public required string Name { get; init; }
-    public required string PrintDescription { get; init; }
-    public required string Description { get; init; }
-    public required int PriceInCents { get; init; }
-    public required byte DiscountPercentage { get; init; }
-    public required Guid ProductCategoryId { get; init; }
-    public required string Category { get; init; }
-    public required List<ProductImageResponseDto> ProductImages { get; init; }
+    required public Guid Id { get; init; }
+    required public string Name { get; init; }
+    required public string PrintDescription { get; init; }
+    required public string Description { get; init; }
+    required public int PriceInCents { get; init; }
+    required public byte DiscountPercentage { get; init; }
+    required public Guid ProductCategoryId { get; init; }
+    required public string Category { get; init; }
+    required public List<ProductImageResponseDto> ProductImages { get; init; }
 }

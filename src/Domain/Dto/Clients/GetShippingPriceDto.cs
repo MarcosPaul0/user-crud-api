@@ -1,10 +1,14 @@
+// <copyright file="GetShippingPriceDto.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 namespace AutoriaStore.Domain.Dto.Clients;
 
 public record GetShippingPriceDto
 {
-    public required string DestinationPostalCode { get; init; }
-    public required int DepthInCentimeters { get; init; }
-    public required int WidthInCentimeters { get; init; }
-    public required int HeightInCentimeters { get; init; }
-    public required int WeightInGrams { get; init; }
+    required public string DestinationPostalCode { get; init; }
+    required public int DepthInCentimeters { get; init; }
+    required public int WidthInCentimeters { get; init; }
+    required public int HeightInCentimeters { get; init; }
+    required public int WeightInGrams { get; init; }
 }

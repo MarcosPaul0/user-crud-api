@@ -1,10 +1,14 @@
-using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+// <copyright file="20260420143000_AddOrderAndIdempotencyTables.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 #nullable disable
 
 namespace AutoriaStore.Infrastructure.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     /// <inheritdoc />
     public partial class AddOrderAndIdempotencyTables : Migration
     {
@@ -24,7 +28,7 @@ namespace AutoriaStore.Infrastructure.Migrations
                     response_body = table.Column<string>(type: "jsonb", nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    expires_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    expires_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -40,7 +44,7 @@ namespace AutoriaStore.Infrastructure.Migrations
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     total_price_in_cents = table.Column<int>(type: "integer", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -63,7 +67,7 @@ namespace AutoriaStore.Infrastructure.Migrations
                     order_id = table.Column<Guid>(type: "uuid", nullable: false),
                     product_id = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                 },
                 constraints: table =>
                 {

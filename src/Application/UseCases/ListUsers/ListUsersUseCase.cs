@@ -1,3 +1,7 @@
+// <copyright file="ListUsersUseCase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Domain.Entities;
 using AutoriaStore.Domain.Interfaces.Repositories;
@@ -7,19 +11,19 @@ namespace AutoriaStore.Application.UseCases.ListUsers;
 public sealed class ListUserUseCase(IUnitOfWork unitOfWork) : IListUserUseCase
 {
     public async Task<(IEnumerable<User>, int)> ExecuteAsync(
-        ListUsersDto listUsersDto, 
+        ListUsersDto listUsersDto,
         CancellationToken cancellationToken)
     {
         var usersFilter = new User(
             listUsersDto.Name,
             listUsersDto.Role);
-        
+
         var users = await unitOfWork.User.FindAllAsync(
             usersFilter,
             listUsersDto.Page,
             listUsersDto.ItemsPerPage,
             cancellationToken);
-        
+
         var usersCount = await unitOfWork.User.CountAsync(usersFilter, cancellationToken);
 
         return (users, usersCount);

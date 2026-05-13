@@ -1,3 +1,7 @@
+// <copyright file="CalculateShippingController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.UseCases.CalculateShipping;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +19,6 @@ public sealed class CalculateShippingController(ICalculateShippingUseCase calcul
     {
         var result = await calculateShippingUseCase.ExecuteAsync(calculateShippingDto, cancellationToken);
 
-        return Ok(result);
+        return this.Ok(result);
     }
 }

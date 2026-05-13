@@ -1,3 +1,7 @@
+// <copyright file="Program.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using System.Security.Cryptography;
 using System.Text.Json.Serialization;
 using AutoriaStore.API.Handlers;
@@ -30,7 +34,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("Default", policy =>
     {
         policy
-            .WithOrigins(originUrl)
+            .WithOrigins(originUrl!)
             .AllowCredentials()
             .AllowAnyHeader()
             .AllowAnyMethod();
@@ -42,7 +46,7 @@ var audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
 var publicKey = Environment.GetEnvironmentVariable("JWT_PUBLIC_KEY");
 var authTokenCookie = Environment.GetEnvironmentVariable("AUTH_TOKEN_COOKIE");
 
-var keyBytes = Convert.FromBase64String(publicKey);
+var keyBytes = Convert.FromBase64String(publicKey!);
 
 var rsa = RSA.Create();
 rsa.ImportSubjectPublicKeyInfo(keyBytes, out _);
@@ -59,25 +63,26 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = audience,
             ValidateLifetime = true,
             IssuerSigningKey = rsaKey,
-            ClockSkew = TimeSpan.Zero
+            ClockSkew = TimeSpan.Zero,
         };
-        
+
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
             {
-                var token = context.Request.Cookies[authTokenCookie];
-                
+                var token = context.Request.Cookies[authTokenCookie!];
+
                 if (!string.IsNullOrEmpty(token))
                 {
                     context.Token = token;
                 }
-                
+
                 return Task.CompletedTask;
-            }
+            },
         };
     })
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+    .AddCookie(
+        CookieAuthenticationDefaults.AuthenticationScheme,
         options => builder.Configuration.Bind("CookieSettings", options));
 builder.Services.AddHttpClient<IPostageHttpClient, CorreiosHttpClient>();
 builder.Services.AddMemoryCache();
@@ -100,6 +105,7 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
+
 app.UseCors("Default");
 app.UseAuthentication();
 app.UseAuthorization();

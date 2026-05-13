@@ -1,14 +1,18 @@
+// <copyright file="DependencyInjection.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using Amazon.Runtime;
 using Amazon.S3;
+using AutoriaStore.Domain.Interfaces.Clients;
+using AutoriaStore.Domain.Interfaces.Repositories;
+using AutoriaStore.Domain.Interfaces.Services;
+using AutoriaStore.Infrastructure.Clients;
 using AutoriaStore.Infrastructure.Context;
 using AutoriaStore.Infrastructure.Repositories;
 using AutoriaStore.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using AutoriaStore.Domain.Interfaces.Clients;
-using AutoriaStore.Domain.Interfaces.Repositories;
-using AutoriaStore.Domain.Interfaces.Services;
-using AutoriaStore.Infrastructure.Clients;
 
 namespace AutoriaStore.Infrastructure;
 
@@ -19,14 +23,14 @@ public static class DependencyInjection
         services.AddSingleton<IEnvironmentVariablesService, EnvironmentVariablesService>();
 
         var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-        
+
         Console.WriteLine(connectionString);
-        
+
         if (string.IsNullOrWhiteSpace(connectionString))
         {
             throw new InvalidOperationException("The database connection string is not set.");
         }
-        
+
         services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
         services.AddHttpContextAccessor();
 
@@ -39,8 +43,17 @@ public static class DependencyInjection
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IOrderProductRepository, OrderProductRepository>();
         services.AddScoped<IIdempotencyKeyRepository, IdempotencyKeyRepository>();
-        
+
         services.AddScoped<IPasswordHasherService, PasswordHasherService>();
+        services.AddHttpClient<IEmailService, ResendEmailService>(httpClient =>
+        {
+            httpClient.BaseAddress = new Uri("https://api.resend.com/");
+        });
+        services.AddHttpClient<IPixPaymentService, AbacatePayPixPaymentService>(httpClient =>
+        {
+            httpClient.BaseAddress = new Uri("https://api.abacatepay.com/");
+        });
+        services.AddScoped<IAbacatePayWebhookSignatureService, AbacatePayWebhookSignatureService>();
         services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IIdempotencyService, IdempotencyService>();
@@ -48,15 +61,15 @@ public static class DependencyInjection
         services.AddSingleton<IAmazonS3>(serviceProvider =>
         {
             var environmentVariablesService = serviceProvider.GetRequiredService<IEnvironmentVariablesService>();
-            
+
             var credentials = new BasicAWSCredentials(
-                environmentVariablesService.ObjectStorageAccessKey, 
+                environmentVariablesService.ObjectStorageAccessKey,
                 environmentVariablesService.ObjectStorageSecretKey);
-            
+
             var config = new AmazonS3Config
             {
                 ServiceURL = environmentVariablesService.ObjectStorageEndpoint,
-                ForcePathStyle = true
+                ForcePathStyle = true,
             };
 
             return new AmazonS3Client(credentials, config);

@@ -1,23 +1,27 @@
+// <copyright file="ProductForAdminResponseDto.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 namespace AutoriaStore.API.Dtos;
 
 public record ProductForAdminResponseDto
 {
-    public required Guid Id { get; init; }
-    public required string Name { get; init; }
-    public required string PrintDescription { get; init; }
-    public required string Description { get; init; }
-    public required int PriceInCents { get; init; }
-    public required int ProductionTimeInMinutes { get; init; }
-    public required byte DiscountPercentage { get; init; }
-    public required bool? IsActive { get; init; }
-    public required int StockQuantity { get; init; }
-    public required int DepthInCentimeters { get; init; }
-    public required int WidthInCentimeters { get; init; }
-    public required int HeightInCentimeters { get; init; }
-    public required int WeightInGrams { get; init; }
-    public required Guid ProductCategoryId { get; init; }
-    public required string Category { get; init; }
-    public required List<ProductImageResponseDto> ProductImages { get; init; }
-    public required DateTime CreatedAt { get; init; }
-    public required DateTime? UpdatedAt { get; init; }
+    required public Guid Id { get; init; }
+    required public string Name { get; init; }
+    required public string PrintDescription { get; init; }
+    required public string Description { get; init; }
+    required public int PriceInCents { get; init; }
+    required public int ProductionTimeInMinutes { get; init; }
+    required public byte DiscountPercentage { get; init; }
+    required public bool? IsActive { get; init; }
+    required public int StockQuantity { get; init; }
+    required public int DepthInCentimeters { get; init; }
+    required public int WidthInCentimeters { get; init; }
+    required public int HeightInCentimeters { get; init; }
+    required public int WeightInGrams { get; init; }
+    required public Guid ProductCategoryId { get; init; }
+    required public string Category { get; init; }
+    required public List<ProductImageResponseDto> ProductImages { get; init; }
+    required public DateTime CreatedAt { get; init; }
+    required public DateTime? UpdatedAt { get; init; }
 }

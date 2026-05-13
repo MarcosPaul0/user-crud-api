@@ -1,3 +1,7 @@
+// <copyright file="ListProductCategoryController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.API.Dtos;
 using AutoriaStore.API.Presenters;
 using AutoriaStore.Application.UseCases.ListProductCategory;
@@ -15,6 +19,6 @@ public class ListProductCategoryController(IListProductCategoryUseCase listProdu
     {
         var (productCategories, count) = await listProductCategoryUseCase.ExecuteAsync(cancellationToken);
 
-        return Ok(ProductCategoryPresenter.ToHttp(productCategories, count));
+        return this.Ok(ProductCategoryPresenter.ToHttp(productCategories, count));
     }
 }

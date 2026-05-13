@@ -6,8 +6,8 @@ public record CalculateShippingDto
 {
     [Required]
     public Guid ProductId { get; set; }
-    
+
     [Required]
     [MinLength(8)]
-    public string DestinationPostalCode { get; set; }
+    public string DestinationPostalCode { get; set; } = null!;
 }

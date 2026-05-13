@@ -1,3 +1,7 @@
+// <copyright file="CreateProductCategoryUseCase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.Exceptions;
 using AutoriaStore.Domain.Entities;

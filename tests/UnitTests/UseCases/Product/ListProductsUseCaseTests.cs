@@ -1,3 +1,7 @@
+// <copyright file="ListProductsUseCaseTests.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Application.Dtos;
 using AutoriaStore.Application.UseCases.ListProducts;
 using AutoriaStore.Domain.Interfaces.Repositories;
@@ -6,18 +10,18 @@ namespace AutoriaStore.UnitTests.UseCases.Product;
 
 public class ListProductsUseCaseTests
 {
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-    private readonly Mock<IProductRepository> _productRepositoryMock;
-    private readonly ListProductsUseCase _sut;
+    private readonly Mock<IUnitOfWork> unitOfWorkMock;
+    private readonly Mock<IProductRepository> productRepositoryMock;
+    private readonly ListProductsUseCase sut;
 
     public ListProductsUseCaseTests()
     {
-        _unitOfWorkMock = new Mock<IUnitOfWork>();
-        _productRepositoryMock = new Mock<IProductRepository>();
+        this.unitOfWorkMock = new Mock<IUnitOfWork>();
+        this.productRepositoryMock = new Mock<IProductRepository>();
 
-        _unitOfWorkMock.Setup(u => u.Product).Returns(_productRepositoryMock.Object);
+        this.unitOfWorkMock.Setup(u => u.Product).Returns(this.productRepositoryMock.Object);
 
-        _sut = new ListProductsUseCase(_unitOfWorkMock.Object);
+        this.sut = new ListProductsUseCase(this.unitOfWorkMock.Object);
     }
 
     [Fact]
@@ -25,31 +29,32 @@ public class ListProductsUseCaseTests
     {
         var dto = new ListProductsDto { Page = 1, ItemsPerPage = 10 };
 
-        _productRepositoryMock
+        this.productRepositoryMock
             .Setup(r => r.FindAllAsync(
                 It.Is<AutoriaStore.Domain.Entities.Product>(f =>
                     f.IsActive == true &&
                     f.ProductCategory != null &&
-                    f.ProductCategory.IsActive == true),
+                    f.ProductCategory.IsActive),
                 dto.Page,
                 dto.ItemsPerPage,
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<AutoriaStore.Domain.Entities.Product>());
 
-        _productRepositoryMock
+        this.productRepositoryMock
             .Setup(r => r.CountAsync(
                 It.Is<AutoriaStore.Domain.Entities.Product>(f =>
                     f.IsActive == true),
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(0);
 
-        await _sut.ExecuteAsync(dto, CancellationToken.None);
+        await this.sut.ExecuteAsync(dto, CancellationToken.None);
 
-        _productRepositoryMock.Verify(r => r.FindAllAsync(
+        this.productRepositoryMock.Verify(
+            r => r.FindAllAsync(
             It.Is<AutoriaStore.Domain.Entities.Product>(f =>
                 f.IsActive == true &&
                 f.ProductCategory != null &&
-                f.ProductCategory.IsActive == true),
+                f.ProductCategory.IsActive),
             dto.Page,
             dto.ItemsPerPage,
             It.IsAny<CancellationToken>()), Times.Once);
@@ -60,7 +65,7 @@ public class ListProductsUseCaseTests
     {
         var dto = new ListProductsDto { Page = 1, ItemsPerPage = 10, Name = "Laptop" };
 
-        _productRepositoryMock
+        this.productRepositoryMock
             .Setup(r => r.FindAllAsync(
                 It.Is<AutoriaStore.Domain.Entities.Product>(f => f.Name == "Laptop"),
                 dto.Page,
@@ -68,13 +73,14 @@ public class ListProductsUseCaseTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<AutoriaStore.Domain.Entities.Product>());
 
-        _productRepositoryMock
+        this.productRepositoryMock
             .Setup(r => r.CountAsync(It.IsAny<AutoriaStore.Domain.Entities.Product>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(0);
 
-        await _sut.ExecuteAsync(dto, CancellationToken.None);
+        await this.sut.ExecuteAsync(dto, CancellationToken.None);
 
-        _productRepositoryMock.Verify(r => r.FindAllAsync(
+        this.productRepositoryMock.Verify(
+            r => r.FindAllAsync(
             It.Is<AutoriaStore.Domain.Entities.Product>(f => f.Name == "Laptop"),
             dto.Page,
             dto.ItemsPerPage,
@@ -88,21 +94,49 @@ public class ListProductsUseCaseTests
 
         var products = new List<AutoriaStore.Domain.Entities.Product>
         {
-            new() { Id = Guid.NewGuid(), Name = "Product A", CreatedAt = DateTime.UtcNow },
-            new() { Id = Guid.NewGuid(), Name = "Product B", CreatedAt = DateTime.UtcNow }
+            new () { Id = Guid.NewGuid(), Name = "Product A", CreatedAt = DateTime.UtcNow },
+            new () { Id = Guid.NewGuid(), Name = "Product B", CreatedAt = DateTime.UtcNow },
         };
 
-        _productRepositoryMock
+        this.productRepositoryMock
             .Setup(r => r.FindAllAsync(It.IsAny<AutoriaStore.Domain.Entities.Product>(), dto.Page, dto.ItemsPerPage, It.IsAny<CancellationToken>()))
             .ReturnsAsync(products);
 
-        _productRepositoryMock
+        this.productRepositoryMock
             .Setup(r => r.CountAsync(It.IsAny<AutoriaStore.Domain.Entities.Product>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(2);
 
-        var (resultProducts, resultCount) = await _sut.ExecuteAsync(dto, CancellationToken.None);
+        var (resultProducts, resultCount) = await this.sut.ExecuteAsync(dto, CancellationToken.None);
 
         Assert.Equal(products, resultProducts);
         Assert.Equal(2, resultCount);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_WhenProductCategoryIdFilterProvided_AppliesProductCategoryIdFilter()
+    {
+        var categoryId = Guid.NewGuid();
+        var dto = new ListProductsDto { Page = 1, ItemsPerPage = 10, ProductCategoryId = categoryId };
+
+        this.productRepositoryMock
+            .Setup(r => r.FindAllAsync(
+                It.Is<AutoriaStore.Domain.Entities.Product>(f => f.ProductCategoryId == categoryId),
+                dto.Page,
+                dto.ItemsPerPage,
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<AutoriaStore.Domain.Entities.Product>());
+
+        this.productRepositoryMock
+            .Setup(r => r.CountAsync(It.IsAny<AutoriaStore.Domain.Entities.Product>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(0);
+
+        await this.sut.ExecuteAsync(dto, CancellationToken.None);
+
+        this.productRepositoryMock.Verify(
+            r => r.FindAllAsync(
+            It.Is<AutoriaStore.Domain.Entities.Product>(f => f.ProductCategoryId == categoryId),
+            dto.Page,
+            dto.ItemsPerPage,
+            It.IsAny<CancellationToken>()), Times.Once);
     }
 }

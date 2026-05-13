@@ -1,3 +1,7 @@
+// <copyright file="ProductImageRepository.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Domain.Entities;
 using AutoriaStore.Domain.Interfaces.Repositories;
 using AutoriaStore.Infrastructure.Context;
@@ -8,10 +12,10 @@ namespace AutoriaStore.Infrastructure.Repositories;
 public class ProductImageRepository(ApplicationDbContext context) : BaseRepository<ProductImage>(context), IProductImageRepository
 {
     private readonly ApplicationDbContext _context = context;
-    
+
     public async Task<List<ProductImage>> FindAllByProductIdAsync(Guid productId, CancellationToken cancellationToken = default)
     {
-        return await _context.ProductImage.AsNoTracking().Where(productImage => productImage.ProductId == productId)
+        return await this._context.ProductImage.AsNoTracking().Where(productImage => productImage.ProductId == productId)
             .ToListAsync(cancellationToken);
     }
 }

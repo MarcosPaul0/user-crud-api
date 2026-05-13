@@ -1,3 +1,7 @@
+// <copyright file="ProductConfiguration.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
 using AutoriaStore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -9,11 +13,11 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     public void Configure(EntityTypeBuilder<Product> builder)
     {
         builder.ToTable("product");
-        
+
         builder.HasKey(product => product.Id);
 
         builder.Property(product => product.Id).HasColumnName("id").ValueGeneratedOnAdd();
-        
+
         builder.Property(product => product.Name).HasColumnName("name").HasMaxLength(100).IsRequired();
         builder.Property(product => product.PrintDescription).HasColumnName("print_description").HasMaxLength(600).IsRequired();
         builder.Property(product => product.Description).HasColumnName("description").HasMaxLength(1200).IsRequired();
@@ -24,12 +28,12 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(product => product.StockQuantity).HasColumnName("stock_quantity").IsRequired();
         builder.Property(product => product.CreatedAt).HasColumnName("created_at").IsRequired().ValueGeneratedOnAdd();
         builder.Property(product => product.UpdatedAt).HasColumnName("updated_at").IsRequired(false).ValueGeneratedOnUpdate();
-        // TODO definir valores padrões
+
         builder.Property(product => product.WeightInGrams).HasColumnName("weight_in_grams").HasDefaultValue(415).IsRequired();
         builder.Property(product => product.HeightInCentimeters).HasColumnName("height_in_centimeters").HasDefaultValue(15).IsRequired();
         builder.Property(product => product.WidthInCentimeters).HasColumnName("width_in_centimeters").HasDefaultValue(15).IsRequired();
         builder.Property(product => product.DepthInCentimeters).HasColumnName("depth_in_centimeters").HasDefaultValue(15).IsRequired();
-        
+
         builder.Property(product => product.ProductCategoryId).HasColumnName("product_category_id").IsRequired();
         builder.HasOne(product => product.ProductCategory)
             .WithMany()
