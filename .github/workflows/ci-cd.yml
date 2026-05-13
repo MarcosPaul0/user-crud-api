@@ -103,6 +103,7 @@ jobs:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
     needs: test
+    if: false
 
     outputs:
       # image_tag  → SHA curto do commit (ex: sha-a1b2c3d)
@@ -166,6 +167,7 @@ jobs:
     name: Deploy na VPS
     runs-on: ubuntu-latest
     needs: build
+    if: false
     # Garante que deploy só rode em push na main (nunca em PRs)
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
