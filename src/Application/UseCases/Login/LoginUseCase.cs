@@ -20,14 +20,14 @@ public sealed class LoginUseCase(
 
         if (user is null)
         {
-            throw new UnauthorizeException(ExceptionMessages.LOGINFAILED);
+            throw new UnauthorizeException(ExceptionMessages.LOGIN_FAILED);
         }
 
         var passwordIsValid = passwordHasherService.Verify(loginDto.Password, user.Password);
 
         if (!passwordIsValid)
         {
-            throw new UnauthorizeException(ExceptionMessages.LOGINFAILED);
+            throw new UnauthorizeException(ExceptionMessages.LOGIN_FAILED);
         }
 
         var token = jwtTokenService.GenerateToken(user.Id, user.Role);

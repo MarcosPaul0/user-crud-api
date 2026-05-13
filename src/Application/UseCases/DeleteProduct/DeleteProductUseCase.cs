@@ -18,7 +18,7 @@ public sealed class DeleteProductUseCase(
 
         if (product == null)
         {
-            throw new NotFoundException(ExceptionMessages.PRODUCTNOTFOUND);
+            throw new NotFoundException(ExceptionMessages.PRODUCT_NOT_FOUND);
         }
 
         var productImages = await unitOfWork.ProductImage.FindAllByProductIdAsync(productId, cancellationToken);

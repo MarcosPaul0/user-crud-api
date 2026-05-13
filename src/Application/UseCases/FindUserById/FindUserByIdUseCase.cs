@@ -16,7 +16,7 @@ public sealed class FindUserByIdUseCase(IUnitOfWork unitOfWork) : IFindUserByIdU
 
         if (user is null)
         {
-            throw new NotFoundException(ExceptionMessages.USERNOTFOUND);
+            throw new NotFoundException(ExceptionMessages.USER_NOT_FOUND);
         }
 
         return user;

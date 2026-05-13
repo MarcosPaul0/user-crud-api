@@ -44,3 +44,6 @@ dotnet_diagnostic.CS9107.severity = none
 
 # Startup env-var reads — nullable by env contract, app fails fast if missing
 dotnet_diagnostic.CS8604.severity = none
+
+# SCREAMING_SNAKE_CASE intentional for ExceptionMessages constants
+dotnet_diagnostic.SA1310.severity = none

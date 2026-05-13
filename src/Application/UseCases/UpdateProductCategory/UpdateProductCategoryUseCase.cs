@@ -20,7 +20,7 @@ public sealed class UpdateProductCategoryUseCase(IUnitOfWork unitOfWork) : IUpda
 
         if (productCategory == null)
         {
-            throw new NotFoundException(ExceptionMessages.PRODUCTCATEGORYNOTFOUND);
+            throw new NotFoundException(ExceptionMessages.PRODUCT_CATEGORY_NOT_FOUND);
         }
 
         var isUpdated = false;
@@ -32,7 +32,7 @@ public sealed class UpdateProductCategoryUseCase(IUnitOfWork unitOfWork) : IUpda
 
             if (productCategoryAlreadyExists != null && productCategoryAlreadyExists.Id != productCategory.Id)
             {
-                throw new ConflictException(ExceptionMessages.PRODUCTCATEGORYALREADYEXISTS);
+                throw new ConflictException(ExceptionMessages.PRODUCT_CATEGORY_ALREADY_EXISTS);
             }
 
             productCategory.Category = updateProductCategoryDto.Category;

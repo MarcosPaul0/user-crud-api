@@ -13,6 +13,7 @@ public class ProductImageDto
     public Guid? Id { get; init; }
 
     [AllowedImageExtensions(".jpg", ".jpeg", ".png", ".webp")]
+    [MaxFileSizeAttribute(3)]
     public IFormFile? File { get; init; }
 
     [Required]

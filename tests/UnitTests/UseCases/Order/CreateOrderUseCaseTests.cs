@@ -67,7 +67,7 @@ public class CreateOrderUseCaseTests
 
         var exception = await Assert.ThrowsAsync<UnauthorizeException>(act);
 
-        Assert.Equal(ExceptionMessages.USERNOTAUTHENTICATED, exception.Message);
+        Assert.Equal(ExceptionMessages.USER_NOT_AUTHENTICATED, exception.Message);
     }
 
     [Fact]
@@ -84,7 +84,7 @@ public class CreateOrderUseCaseTests
 
         var exception = await Assert.ThrowsAsync<BadRequestException>(act);
 
-        Assert.Equal(ExceptionMessages.IDEMPOTENCYKEYREQUIRED, exception.Message);
+        Assert.Equal(ExceptionMessages.IDEMPOTENCY_KEY_REQUIRED, exception.Message);
     }
 
     [Fact]
@@ -101,7 +101,7 @@ public class CreateOrderUseCaseTests
 
         var exception = await Assert.ThrowsAsync<ConflictException>(act);
 
-        Assert.Equal(ExceptionMessages.ORDERITEMSREQUIRED, exception.Message);
+        Assert.Equal(ExceptionMessages.ORDER_ITEMS_REQUIRED, exception.Message);
     }
 
     [Fact]
@@ -188,7 +188,7 @@ public class CreateOrderUseCaseTests
         var act = () => this.sut.ExecuteAsync(dto, "request-key", Endpoint, CancellationToken.None);
         var exception = await Assert.ThrowsAsync<NotFoundException>(act);
 
-        Assert.Equal(ExceptionMessages.PRODUCTNOTFOUND, exception.Message);
+        Assert.Equal(ExceptionMessages.PRODUCT_NOT_FOUND, exception.Message);
     }
 
     [Fact]

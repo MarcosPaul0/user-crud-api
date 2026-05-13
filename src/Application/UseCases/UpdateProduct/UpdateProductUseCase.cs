@@ -16,7 +16,7 @@ public sealed class UpdateProductUseCase(IUnitOfWork unitOfWork) : IUpdateProduc
 
         if (product == null)
         {
-            throw new NotFoundException(ExceptionMessages.PRODUCTNOTFOUND);
+            throw new NotFoundException(ExceptionMessages.PRODUCT_NOT_FOUND);
         }
 
         var isUpdated = false;
@@ -27,7 +27,7 @@ public sealed class UpdateProductUseCase(IUnitOfWork unitOfWork) : IUpdateProduc
 
             if (productAlreadyExists != null)
             {
-                throw new ConflictException(ExceptionMessages.PRODUCTALREADYEXISTS);
+                throw new ConflictException(ExceptionMessages.PRODUCT_ALREADY_EXISTS);
             }
 
             product.Name = updateProductDto.Name;
@@ -41,7 +41,7 @@ public sealed class UpdateProductUseCase(IUnitOfWork unitOfWork) : IUpdateProduc
 
             if (productCategory == null)
             {
-                throw new NotFoundException(ExceptionMessages.PRODUCTCATEGORYNOTFOUND);
+                throw new NotFoundException(ExceptionMessages.PRODUCT_CATEGORY_NOT_FOUND);
             }
 
             product.ProductCategoryId = updateProductDto.ProductCategoryId.Value;

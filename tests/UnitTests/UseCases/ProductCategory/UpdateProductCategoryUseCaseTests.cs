@@ -38,7 +38,7 @@ public class UpdateProductCategoryUseCaseTests
         var act = () => this.sut.ExecuteAsync(categoryId, dto, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(act);
-        Assert.Equal(ExceptionMessages.PRODUCTCATEGORYNOTFOUND, exception.Message);
+        Assert.Equal(ExceptionMessages.PRODUCT_CATEGORY_NOT_FOUND, exception.Message);
     }
 
     [Fact]
@@ -74,7 +74,7 @@ public class UpdateProductCategoryUseCaseTests
         var act = () => this.sut.ExecuteAsync(categoryId, dto, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<ConflictException>(act);
-        Assert.Equal(ExceptionMessages.PRODUCTCATEGORYALREADYEXISTS, exception.Message);
+        Assert.Equal(ExceptionMessages.PRODUCT_CATEGORY_ALREADY_EXISTS, exception.Message);
     }
 
     [Fact]

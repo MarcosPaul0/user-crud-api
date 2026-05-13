@@ -29,17 +29,17 @@ public sealed class CreateOrderUseCase(
 
         if (authenticatedUserId == null || authenticatedUserId == Guid.Empty)
         {
-            throw new UnauthorizeException(ExceptionMessages.USERNOTAUTHENTICATED);
+            throw new UnauthorizeException(ExceptionMessages.USER_NOT_AUTHENTICATED);
         }
 
         if (string.IsNullOrWhiteSpace(idempotencyKey))
         {
-            throw new BadRequestException(ExceptionMessages.IDEMPOTENCYKEYREQUIRED);
+            throw new BadRequestException(ExceptionMessages.IDEMPOTENCY_KEY_REQUIRED);
         }
 
         if (createOrderDto.Items.Count == 0)
         {
-            throw new ConflictException(ExceptionMessages.ORDERITEMSREQUIRED);
+            throw new ConflictException(ExceptionMessages.ORDER_ITEMS_REQUIRED);
         }
 
         var existingIdempotencyKey = await idempotencyService.GetIdempotencyKeyAsync(
@@ -108,21 +108,21 @@ public sealed class CreateOrderUseCase(
 
         if (customer is null)
         {
-            throw new NotFoundException(ExceptionMessages.USERNOTFOUND);
+            throw new NotFoundException(ExceptionMessages.USER_NOT_FOUND);
         }
 
         foreach (var item in createOrderDto.Items)
         {
             if (item.Quantity <= 0)
             {
-                throw new ConflictException(ExceptionMessages.ORDERITEMQUANTITYINVALID);
+                throw new ConflictException(ExceptionMessages.ORDER_ITEM_QUANTITY_INVALID);
             }
 
             var product = await unitOfWork.Product.FindByIdAsync(item.ProductId, cancellationToken);
 
             if (product is not { IsActive: true })
             {
-                throw new NotFoundException(ExceptionMessages.PRODUCTNOTFOUND);
+                throw new NotFoundException(ExceptionMessages.PRODUCT_NOT_FOUND);
             }
 
             totalPriceInCents += product.PriceInCents * item.Quantity;

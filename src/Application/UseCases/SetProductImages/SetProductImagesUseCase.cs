@@ -24,7 +24,7 @@ public sealed class SetProductImagesUseCase(
 
         if (product == null)
         {
-            throw new NotFoundException(ExceptionMessages.PRODUCTNOTFOUND);
+            throw new NotFoundException(ExceptionMessages.PRODUCT_NOT_FOUND);
         }
 
         var productImagesToCreate = new List<(IFormFile, ProductImage)>();
@@ -48,7 +48,7 @@ public sealed class SetProductImagesUseCase(
 
         if (productImages.Count + productImagesToCreate.Count > 5)
         {
-            throw new ConflictException(ExceptionMessages.PRODUCTMAXIMAGESREACHED);
+            throw new ConflictException(ExceptionMessages.PRODUCT_MAX_IMAGES_REACHED);
         }
 
         foreach (var productImageDto in setProductImagesDto.Images)
@@ -62,7 +62,7 @@ public sealed class SetProductImagesUseCase(
 
             if (productImage == null)
             {
-                throw new NotFoundException(ExceptionMessages.PRODUCTIMAGENOTFOUND);
+                throw new NotFoundException(ExceptionMessages.PRODUCT_IMAGE_NOT_FOUND);
             }
 
             productImage.DisplayOrder = productImageDto.DisplayOrder;
@@ -92,7 +92,7 @@ public sealed class SetProductImagesUseCase(
     {
         if (file == null)
         {
-            throw new ConflictException(ExceptionMessages.PRODUCTIMAGEFILEISREQUIRED);
+            throw new ConflictException(ExceptionMessages.PRODUCT_IMAGE_FILE_IS_REQUIRED);
         }
 
         var imageId = Guid.NewGuid();

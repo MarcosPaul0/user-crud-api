@@ -16,7 +16,7 @@ public sealed class FindProductByIdUseCase(IUnitOfWork unitOfWork) : IFindProduc
 
         if (product == null)
         {
-            throw new NotFoundException(ExceptionMessages.PRODUCTNOTFOUND);
+            throw new NotFoundException(ExceptionMessages.PRODUCT_NOT_FOUND);
         }
 
         return product;

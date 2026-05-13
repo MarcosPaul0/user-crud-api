@@ -45,7 +45,7 @@ public class CreateProductCategoryUseCaseTests
         var act = () => this.sut.ExecuteAsync(dto, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<ConflictException>(act);
-        Assert.Equal(ExceptionMessages.PRODUCTCATEGORYALREADYEXISTS, exception.Message);
+        Assert.Equal(ExceptionMessages.PRODUCT_CATEGORY_ALREADY_EXISTS, exception.Message);
     }
 
     [Fact]

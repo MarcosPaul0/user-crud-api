@@ -43,7 +43,7 @@ public class LoginUseCaseTests
         var act = () => this.sut.ExecuteAsync(dto, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<UnauthorizeException>(act);
-        Assert.Equal(ExceptionMessages.LOGINFAILED, exception.Message);
+        Assert.Equal(ExceptionMessages.LOGIN_FAILED, exception.Message);
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public class LoginUseCaseTests
         var act = () => this.sut.ExecuteAsync(dto, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<UnauthorizeException>(act);
-        Assert.Equal(ExceptionMessages.LOGINFAILED, exception.Message);
+        Assert.Equal(ExceptionMessages.LOGIN_FAILED, exception.Message);
     }
 
     [Fact]

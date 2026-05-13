@@ -22,7 +22,7 @@ public sealed class FindOrderByIdUseCase(
 
         if (authenticatedUserId == null || authenticatedUserId == Guid.Empty)
         {
-            throw new UnauthorizeException(ExceptionMessages.USERNOTAUTHENTICATED);
+            throw new UnauthorizeException(ExceptionMessages.USER_NOT_AUTHENTICATED);
         }
 
         var order = await unitOfWork.Order.FindByUserIdAndOrderIdAsync(
@@ -32,7 +32,7 @@ public sealed class FindOrderByIdUseCase(
 
         if (order is null)
         {
-            throw new NotFoundException(ExceptionMessages.ORDERNOTFOUND);
+            throw new NotFoundException(ExceptionMessages.ORDER_NOT_FOUND);
         }
 
         await this.SynchronizePendingPaymentAsync(order, cancellationToken);

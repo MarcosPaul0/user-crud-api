@@ -39,7 +39,7 @@ public class UpdateUserUseCaseTests
         var act = () => this.sut.ExecuteAsync(userId, dto, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(act);
-        Assert.Equal(ExceptionMessages.USERNOTFOUND, exception.Message);
+        Assert.Equal(ExceptionMessages.USER_NOT_FOUND, exception.Message);
     }
 
     [Fact]

@@ -10,7 +10,7 @@ namespace AutoriaStore.Application.Attributes;
 [AttributeUsage(AttributeTargets.Property)]
 public class MaxFileSizeAttribute(int maxFileSizeInMb) : ValidationAttribute
 {
-    private readonly ValidationResult errorMessage = new ($"The maximum allowed size per file is{maxFileSizeInMb}MB");
+    private readonly ValidationResult _errorMessage = new ($"The maximum allowed size per file is{maxFileSizeInMb}MB");
 
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
@@ -19,7 +19,7 @@ public class MaxFileSizeAttribute(int maxFileSizeInMb) : ValidationAttribute
             case IFormFile file:
                 if (!this.IsValidFileSize(file))
                 {
-                    return this.errorMessage;
+                    return this._errorMessage;
                 }
 
                 break;
@@ -27,7 +27,7 @@ public class MaxFileSizeAttribute(int maxFileSizeInMb) : ValidationAttribute
             case List<IFormFile> files:
                 if (files.Any(currentFile => !this.IsValidFileSize(currentFile)))
                 {
-                    return this.errorMessage;
+                    return this._errorMessage;
                 }
 
                 break;

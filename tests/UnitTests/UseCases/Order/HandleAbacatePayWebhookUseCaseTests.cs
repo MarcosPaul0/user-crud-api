@@ -45,7 +45,7 @@ public class HandleAbacatePayWebhookUseCaseTests
             }, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<UnauthorizeException>(act);
-        Assert.Equal(ExceptionMessages.ABACATEPAYWEBHOOKUNAUTHORIZED, exception.Message);
+        Assert.Equal(ExceptionMessages.ABACATE_PAY_WEBHOOK_UNAUTHORIZED, exception.Message);
     }
 
     [Fact]

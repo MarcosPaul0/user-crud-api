@@ -34,7 +34,7 @@ public sealed class CalculateShippingUseCase(
 
         if (product is null)
         {
-            throw new NotFoundException(ExceptionMessages.PRODUCTNOTFOUND);
+            throw new NotFoundException(ExceptionMessages.PRODUCT_NOT_FOUND);
         }
 
         var hasShippingResult = memoryCache.TryGetValue<CalculateShippingResultDto>(

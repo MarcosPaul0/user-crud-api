@@ -18,7 +18,7 @@ public sealed class CreateProductCategoryUseCase(IUnitOfWork unitOfWork) : ICrea
 
         if (productCategoryAlreadyExists != null)
         {
-            throw new ConflictException(ExceptionMessages.PRODUCTCATEGORYALREADYEXISTS);
+            throw new ConflictException(ExceptionMessages.PRODUCT_CATEGORY_ALREADY_EXISTS);
         }
 
         var newProductCategory = new ProductCategory()

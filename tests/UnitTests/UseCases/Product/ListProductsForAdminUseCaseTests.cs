@@ -102,4 +102,59 @@ public class ListProductsForAdminUseCaseTests
         Assert.Equal(products, resultProducts);
         Assert.Equal(2, resultCount);
     }
+
+    [Fact]
+    public async Task ExecuteAsync_WhenNameFilterProvided_AppliesNameToFilter()
+    {
+        var dto = new ListProductsByAdminDto { Page = 1, ItemsPerPage = 10, Name = "Camera" };
+
+        this.productRepositoryMock
+            .Setup(r => r.FindAllAsync(
+                It.Is<AutoriaStore.Domain.Entities.Product>(f => f.Name == "Camera"),
+                dto.Page,
+                dto.ItemsPerPage,
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<AutoriaStore.Domain.Entities.Product>());
+
+        this.productRepositoryMock
+            .Setup(r => r.CountAsync(It.IsAny<AutoriaStore.Domain.Entities.Product>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(0);
+
+        await this.sut.ExecuteAsync(dto, CancellationToken.None);
+
+        this.productRepositoryMock.Verify(
+            r => r.FindAllAsync(
+            It.Is<AutoriaStore.Domain.Entities.Product>(f => f.Name == "Camera"),
+            dto.Page,
+            dto.ItemsPerPage,
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_WhenProductCategoryIdFilterProvided_AppliesProductCategoryIdFilter()
+    {
+        var categoryId = Guid.NewGuid();
+        var dto = new ListProductsByAdminDto { Page = 1, ItemsPerPage = 10, ProductCategoryId = categoryId };
+
+        this.productRepositoryMock
+            .Setup(r => r.FindAllAsync(
+                It.Is<AutoriaStore.Domain.Entities.Product>(f => f.ProductCategoryId == categoryId),
+                dto.Page,
+                dto.ItemsPerPage,
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<AutoriaStore.Domain.Entities.Product>());
+
+        this.productRepositoryMock
+            .Setup(r => r.CountAsync(It.IsAny<AutoriaStore.Domain.Entities.Product>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(0);
+
+        await this.sut.ExecuteAsync(dto, CancellationToken.None);
+
+        this.productRepositoryMock.Verify(
+            r => r.FindAllAsync(
+            It.Is<AutoriaStore.Domain.Entities.Product>(f => f.ProductCategoryId == categoryId),
+            dto.Page,
+            dto.ItemsPerPage,
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
 }

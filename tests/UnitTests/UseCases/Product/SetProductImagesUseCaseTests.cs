@@ -46,7 +46,7 @@ public class SetProductImagesUseCaseTests
         var act = () => this.sut.ExecuteAsync(productId, dto, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(act);
-        Assert.Equal(ExceptionMessages.PRODUCTNOTFOUND, exception.Message);
+        Assert.Equal(ExceptionMessages.PRODUCT_NOT_FOUND, exception.Message);
     }
 
     [Fact]
@@ -92,7 +92,7 @@ public class SetProductImagesUseCaseTests
         var act = () => this.sut.ExecuteAsync(productId, dto, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<ConflictException>(act);
-        Assert.Equal(ExceptionMessages.PRODUCTMAXIMAGESREACHED, exception.Message);
+        Assert.Equal(ExceptionMessages.PRODUCT_MAX_IMAGES_REACHED, exception.Message);
     }
 
     [Fact]
@@ -234,5 +234,78 @@ public class SetProductImagesUseCaseTests
         Assert.Equal(3, existingImage.DisplayOrder);
         this.productImageRepositoryMock.Verify(r => r.UpdateAsync(existingImage, It.IsAny<CancellationToken>()), Times.Once);
         this.unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_WhenUpdatingImageNotFoundInRepository_ThrowsNotFoundException()
+    {
+        var productId = Guid.NewGuid();
+        var nonExistentImageId = Guid.NewGuid();
+
+        var existingProduct = new AutoriaStore.Domain.Entities.Product
+        {
+            Id = productId,
+            Name = "Test Product",
+            CreatedAt = DateTime.UtcNow,
+        };
+
+        var dto = new SetProductImagesDto
+        {
+            Images = new List<ProductImageDto>
+            {
+                new () { Id = nonExistentImageId, File = null, DisplayOrder = 1 },
+            },
+        };
+
+        this.productRepositoryMock
+            .Setup(r => r.FindByIdAsync(productId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(existingProduct);
+
+        this.productImageRepositoryMock
+            .Setup(r => r.FindAllByProductIdAsync(productId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<ProductImage>());
+
+        this.productImageRepositoryMock
+            .Setup(r => r.FindByIdAsync(nonExistentImageId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync((ProductImage?)null);
+
+        var act = () => this.sut.ExecuteAsync(productId, dto, CancellationToken.None);
+
+        var exception = await Assert.ThrowsAsync<NotFoundException>(act);
+        Assert.Equal(ExceptionMessages.PRODUCT_IMAGE_NOT_FOUND, exception.Message);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_WhenCreatingNewImageWithNullFile_ThrowsConflictException()
+    {
+        var productId = Guid.NewGuid();
+
+        var existingProduct = new AutoriaStore.Domain.Entities.Product
+        {
+            Id = productId,
+            Name = "Test Product",
+            CreatedAt = DateTime.UtcNow,
+        };
+
+        var dto = new SetProductImagesDto
+        {
+            Images = new List<ProductImageDto>
+            {
+                new () { File = null, DisplayOrder = 1 },
+            },
+        };
+
+        this.productRepositoryMock
+            .Setup(r => r.FindByIdAsync(productId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(existingProduct);
+
+        this.productImageRepositoryMock
+            .Setup(r => r.FindAllByProductIdAsync(productId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<ProductImage>());
+
+        var act = () => this.sut.ExecuteAsync(productId, dto, CancellationToken.None);
+
+        var exception = await Assert.ThrowsAsync<ConflictException>(act);
+        Assert.Equal(ExceptionMessages.PRODUCT_IMAGE_FILE_IS_REQUIRED, exception.Message);
     }
 }

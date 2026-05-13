@@ -18,14 +18,14 @@ public sealed class CreateProductUseCase(IUnitOfWork unitOfWork) : ICreateProduc
 
         if (productCategory == null)
         {
-            throw new NotFoundException(ExceptionMessages.PRODUCTCATEGORYNOTFOUND);
+            throw new NotFoundException(ExceptionMessages.PRODUCT_CATEGORY_NOT_FOUND);
         }
 
         var productAlreadyExists = await unitOfWork.Product.FindByNameAsync(createProductDto.Name, cancellationToken);
 
         if (productAlreadyExists != null)
         {
-            throw new ConflictException(ExceptionMessages.PRODUCTALREADYEXISTS);
+            throw new ConflictException(ExceptionMessages.PRODUCT_ALREADY_EXISTS);
         }
 
         var newProduct = new Product()

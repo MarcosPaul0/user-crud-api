@@ -16,7 +16,7 @@ public sealed class UpdateUserUseCase(IUnitOfWork unitOfWork) : IUpdateUserUseCa
 
         if (user == null)
         {
-            throw new NotFoundException(ExceptionMessages.USERNOTFOUND);
+            throw new NotFoundException(ExceptionMessages.USER_NOT_FOUND);
         }
 
         var hasBeenUpdated = false;

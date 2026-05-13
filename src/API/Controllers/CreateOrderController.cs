@@ -26,7 +26,7 @@ public sealed class CreateOrderController(
     {
         if (string.IsNullOrWhiteSpace(idempotencyKey))
         {
-            throw new BadRequestException(ExceptionMessages.IDEMPOTENCYKEYREQUIRED);
+            throw new BadRequestException(ExceptionMessages.IDEMPOTENCY_KEY_REQUIRED);
         }
 
         var endpoint = $"{this.HttpContext.Request.Method}:{this.HttpContext.Request.Path}";

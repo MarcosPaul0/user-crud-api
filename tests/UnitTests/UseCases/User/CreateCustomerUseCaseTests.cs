@@ -50,7 +50,7 @@ public class CreateCustomerUseCaseTests
         var act = () => this.sut.ExecuteAsync(dto, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<ConflictException>(act);
-        Assert.Equal(ExceptionMessages.USERALREADYEXISTS, exception.Message);
+        Assert.Equal(ExceptionMessages.USER_ALREADY_EXISTS, exception.Message);
     }
 
     [Fact]

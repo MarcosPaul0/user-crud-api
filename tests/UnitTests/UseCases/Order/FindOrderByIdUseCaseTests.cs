@@ -37,7 +37,7 @@ public class FindOrderByIdUseCaseTests
         var act = () => this.sut.ExecuteAsync(Guid.NewGuid(), CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<UnauthorizeException>(act);
-        Assert.Equal(ExceptionMessages.USERNOTAUTHENTICATED, exception.Message);
+        Assert.Equal(ExceptionMessages.USER_NOT_AUTHENTICATED, exception.Message);
     }
 
     [Fact]

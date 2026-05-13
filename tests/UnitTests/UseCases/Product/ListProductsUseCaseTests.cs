@@ -111,4 +111,32 @@ public class ListProductsUseCaseTests
         Assert.Equal(products, resultProducts);
         Assert.Equal(2, resultCount);
     }
+
+    [Fact]
+    public async Task ExecuteAsync_WhenProductCategoryIdFilterProvided_AppliesProductCategoryIdFilter()
+    {
+        var categoryId = Guid.NewGuid();
+        var dto = new ListProductsDto { Page = 1, ItemsPerPage = 10, ProductCategoryId = categoryId };
+
+        this.productRepositoryMock
+            .Setup(r => r.FindAllAsync(
+                It.Is<AutoriaStore.Domain.Entities.Product>(f => f.ProductCategoryId == categoryId),
+                dto.Page,
+                dto.ItemsPerPage,
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<AutoriaStore.Domain.Entities.Product>());
+
+        this.productRepositoryMock
+            .Setup(r => r.CountAsync(It.IsAny<AutoriaStore.Domain.Entities.Product>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(0);
+
+        await this.sut.ExecuteAsync(dto, CancellationToken.None);
+
+        this.productRepositoryMock.Verify(
+            r => r.FindAllAsync(
+            It.Is<AutoriaStore.Domain.Entities.Product>(f => f.ProductCategoryId == categoryId),
+            dto.Page,
+            dto.ItemsPerPage,
+            It.IsAny<CancellationToken>()), Times.Once);
+    }
 }

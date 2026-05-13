@@ -36,7 +36,7 @@ public class FindProductByIdUseCaseTests
         var act = () => this.sut.ExecuteAsync(productId, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(act);
-        Assert.Equal(ExceptionMessages.PRODUCTNOTFOUND, exception.Message);
+        Assert.Equal(ExceptionMessages.PRODUCT_NOT_FOUND, exception.Message);
     }
 
     [Fact]

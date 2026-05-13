@@ -88,7 +88,7 @@ public class CalculateShippingUseCaseTests
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(act);
 
-        Assert.Equal(ExceptionMessages.PRODUCTNOTFOUND, exception.Message);
+        Assert.Equal(ExceptionMessages.PRODUCT_NOT_FOUND, exception.Message);
         this.postageHttpClientMock.Verify(
             client => client.GetDeliveryTimeAsync(It.IsAny<GetDeliveryTimeDto>(), It.IsAny<CancellationToken>()),
             Times.Never);

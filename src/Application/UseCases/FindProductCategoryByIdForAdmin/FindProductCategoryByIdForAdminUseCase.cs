@@ -16,7 +16,7 @@ public class FindProductCategoryByIdForAdminUseCase(IUnitOfWork unitOfWork) : IF
 
         if (productCategory == null)
         {
-            throw new NotFoundException(ExceptionMessages.PRODUCTCATEGORYNOTFOUND);
+            throw new NotFoundException(ExceptionMessages.PRODUCT_CATEGORY_NOT_FOUND);
         }
 
         return productCategory;

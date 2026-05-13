@@ -36,7 +36,7 @@ public class DeleteProductCategoryUseCaseTests
         var act = () => this.sut.ExecuteAsync(categoryId, CancellationToken.None);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(act);
-        Assert.Equal(ExceptionMessages.PRODUCTCATEGORYNOTFOUND, exception.Message);
+        Assert.Equal(ExceptionMessages.PRODUCT_CATEGORY_NOT_FOUND, exception.Message);
     }
 
     [Fact]

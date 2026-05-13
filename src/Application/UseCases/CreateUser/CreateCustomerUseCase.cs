@@ -23,7 +23,7 @@ public sealed class CreateCustomerUseCase(
 
         if (userAlreadyExists != null)
         {
-            throw new ConflictException(ExceptionMessages.USERALREADYEXISTS);
+            throw new ConflictException(ExceptionMessages.USER_ALREADY_EXISTS);
         }
 
         var passwordHash = passwordHasherService.Hash(createUserDto.Password);

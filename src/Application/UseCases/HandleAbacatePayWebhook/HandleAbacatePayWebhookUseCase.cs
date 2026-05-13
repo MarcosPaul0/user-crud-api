@@ -81,14 +81,14 @@ public sealed class HandleAbacatePayWebhookUseCase(
                 environmentVariablesService.AbacatePayWebhookSecret,
                 StringComparison.Ordinal))
         {
-            throw new UnauthorizeException(ExceptionMessages.ABACATEPAYWEBHOOKUNAUTHORIZED);
+            throw new UnauthorizeException(ExceptionMessages.ABACATE_PAY_WEBHOOK_UNAUTHORIZED);
         }
 
         if (!abacatePayWebhookSignatureService.IsValid(
                 handleAbacatePayWebhookDto.RawBody,
                 handleAbacatePayWebhookDto.Signature))
         {
-            throw new UnauthorizeException(ExceptionMessages.ABACATEPAYWEBHOOKUNAUTHORIZED);
+            throw new UnauthorizeException(ExceptionMessages.ABACATE_PAY_WEBHOOK_UNAUTHORIZED);
         }
     }
 }
