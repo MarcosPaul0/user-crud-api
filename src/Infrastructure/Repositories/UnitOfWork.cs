@@ -10,53 +10,53 @@ namespace AutoriaStore.Infrastructure.Repositories;
 
 public sealed class UnitOfWork : IUnitOfWork
 {
-    private readonly ApplicationDbContext context;
+    private readonly ApplicationDbContext _context;
 
-    private readonly Lazy<IUserRepository> user;
-    private readonly Lazy<IProductRepository> product;
-    private readonly Lazy<IProductCategoryRepository> productCategory;
-    private readonly Lazy<IProductImageRepository> productImage;
-    private readonly Lazy<IOrderRepository> order;
-    private readonly Lazy<IIdempotencyKeyRepository> idempotencyKey;
+    private readonly Lazy<IUserRepository> _user;
+    private readonly Lazy<IProductRepository> _product;
+    private readonly Lazy<IProductCategoryRepository> _productCategory;
+    private readonly Lazy<IProductImageRepository> _productImage;
+    private readonly Lazy<IOrderRepository> _order;
+    private readonly Lazy<IIdempotencyKeyRepository> _idempotencyKey;
 
     public UnitOfWork(ApplicationDbContext context, IServiceProvider serviceProvider)
     {
-        this.context = context;
+        this._context = context;
 
-        this.user = new Lazy<IUserRepository>(
+        this._user = new Lazy<IUserRepository>(
             serviceProvider.GetRequiredService<IUserRepository>);
-        this.product = new Lazy<IProductRepository>(
+        this._product = new Lazy<IProductRepository>(
             serviceProvider.GetRequiredService<IProductRepository>);
-        this.productCategory = new Lazy<IProductCategoryRepository>(
+        this._productCategory = new Lazy<IProductCategoryRepository>(
             serviceProvider.GetRequiredService<IProductCategoryRepository>);
-        this.productImage = new Lazy<IProductImageRepository>(
+        this._productImage = new Lazy<IProductImageRepository>(
             serviceProvider.GetRequiredService<IProductImageRepository>);
-        this.order = new Lazy<IOrderRepository>(
+        this._order = new Lazy<IOrderRepository>(
             serviceProvider.GetRequiredService<IOrderRepository>);
-        this.idempotencyKey = new Lazy<IIdempotencyKeyRepository>(
+        this._idempotencyKey = new Lazy<IIdempotencyKeyRepository>(
             serviceProvider.GetRequiredService<IIdempotencyKeyRepository>);
     }
 
-    public IUserRepository User => this.user.Value;
+    public IUserRepository User => this._user.Value;
 
-    public IProductRepository Product => this.product.Value;
+    public IProductRepository Product => this._product.Value;
 
-    public IProductCategoryRepository ProductCategory => this.productCategory.Value;
+    public IProductCategoryRepository ProductCategory => this._productCategory.Value;
 
-    public IProductImageRepository ProductImage => this.productImage.Value;
+    public IProductImageRepository ProductImage => this._productImage.Value;
 
-    public IOrderRepository Order => this.order.Value;
+    public IOrderRepository Order => this._order.Value;
 
-    public IIdempotencyKeyRepository IdempotencyKey => this.idempotencyKey.Value;
+    public IIdempotencyKeyRepository IdempotencyKey => this._idempotencyKey.Value;
 
     public async Task SaveChangesAsync()
     {
-        await this.context.SaveChangesAsync();
+        await this._context.SaveChangesAsync();
     }
 
     public void Dispose()
     {
-        this.context.Dispose();
+        this._context.Dispose();
         GC.SuppressFinalize(this);
     }
 }

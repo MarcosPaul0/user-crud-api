@@ -12,11 +12,11 @@ namespace AutoriaStore.Infrastructure.Repositories;
 
 public class ProductRepository(ApplicationDbContext context) : BaseRepository<Product>(context), IProductRepository
 {
-    private readonly ApplicationDbContext context = context;
+    private readonly ApplicationDbContext _context = context;
 
     public override async Task<Product?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await this.context.Product
+        return await this._context.Product
             .Include(product => product.ProductCategory)
             .Include(product => product.ProductImages.OrderBy(productImage => productImage.DisplayOrder))
             .FirstOrDefaultAsync(product => product.Id == id, cancellationToken);
@@ -24,7 +24,7 @@ public class ProductRepository(ApplicationDbContext context) : BaseRepository<Pr
 
     public async Task<Product?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        return await this.context.Product.FirstOrDefaultAsync(product => product.Name == name, cancellationToken);
+        return await this._context.Product.FirstOrDefaultAsync(product => product.Name == name, cancellationToken);
     }
 
     public async Task<List<Product>> FindAllAsync(
@@ -33,7 +33,7 @@ public class ProductRepository(ApplicationDbContext context) : BaseRepository<Pr
         int itemsPerPage,
         CancellationToken cancellationToken = default)
     {
-        var query = this.context.Product.AsNoTracking();
+        var query = this._context.Product.AsNoTracking();
 
         query = new ProductFilterBuilder(query)
             .FilterByIsActive(filter.IsActive)
@@ -51,7 +51,7 @@ public class ProductRepository(ApplicationDbContext context) : BaseRepository<Pr
 
     public async Task<int> CountAsync(Product filter, CancellationToken cancellationToken = default)
     {
-        var query = this.context.Product.AsNoTracking();
+        var query = this._context.Product.AsNoTracking();
 
         query = new ProductFilterBuilder(query)
             .FilterByIsActive(filter.IsActive)

@@ -47,3 +47,17 @@ dotnet_diagnostic.CS8604.severity = none
 
 # SCREAMING_SNAKE_CASE intentional for ExceptionMessages constants
 dotnet_diagnostic.SA1310.severity = none
+
+# Private fields use _camelCase — SA1309 conflicts with this convention
+dotnet_diagnostic.SA1309.severity = none
+
+# Enforce _camelCase for private fields
+dotnet_naming_rule.private_fields_underscore.severity = warning
+dotnet_naming_rule.private_fields_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore.style = underscore_camel_case
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+dotnet_naming_style.underscore_camel_case.capitalization = camel_case
+dotnet_naming_style.underscore_camel_case.required_prefix = _

@@ -10,7 +10,7 @@ namespace AutoriaStore.Application.Attributes;
 [AttributeUsage(AttributeTargets.Property)]
 public class AllowedImageExtensionsAttribute(params string[] extensions) : ValidationAttribute
 {
-    private readonly ValidationResult errorMessage = new ($"Only files with the {string.Join(", ", extensions)} extension are allowed.");
+    private readonly ValidationResult _errorMessage = new ($"Only files with the {string.Join(", ", extensions)} extension are allowed.");
 
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
@@ -19,7 +19,7 @@ public class AllowedImageExtensionsAttribute(params string[] extensions) : Valid
             case IFormFile file:
                 if (!this.IsValidExtension(file))
                 {
-                    return this.errorMessage;
+                    return this._errorMessage;
                 }
 
                 break;
@@ -27,7 +27,7 @@ public class AllowedImageExtensionsAttribute(params string[] extensions) : Valid
             case List<IFormFile> files:
                 if (files.Any(currentFile => !this.IsValidExtension(currentFile)))
                 {
-                    return this.errorMessage;
+                    return this._errorMessage;
                 }
 
                 break;

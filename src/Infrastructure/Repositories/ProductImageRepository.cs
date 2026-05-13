@@ -11,11 +11,11 @@ namespace AutoriaStore.Infrastructure.Repositories;
 
 public class ProductImageRepository(ApplicationDbContext context) : BaseRepository<ProductImage>(context), IProductImageRepository
 {
-    private readonly ApplicationDbContext context = context;
+    private readonly ApplicationDbContext _context = context;
 
     public async Task<List<ProductImage>> FindAllByProductIdAsync(Guid productId, CancellationToken cancellationToken = default)
     {
-        return await this.context.ProductImage.AsNoTracking().Where(productImage => productImage.ProductId == productId)
+        return await this._context.ProductImage.AsNoTracking().Where(productImage => productImage.ProductId == productId)
             .ToListAsync(cancellationToken);
     }
 }

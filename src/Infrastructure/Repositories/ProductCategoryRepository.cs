@@ -12,11 +12,11 @@ namespace AutoriaStore.Infrastructure.Repositories;
 
 public class ProductCategoryRepository(ApplicationDbContext context) : BaseRepository<ProductCategory>(context), IProductCategoryRepository
 {
-    private readonly ApplicationDbContext context = context;
+    private readonly ApplicationDbContext _context = context;
 
     public Task<ProductCategory?> FindByCategoryAsync(string category, CancellationToken cancellationToken = default)
     {
-        return this.context.ProductCategory.FirstOrDefaultAsync(
+        return this._context.ProductCategory.FirstOrDefaultAsync(
             productCategory => productCategory.Category == category,
             cancellationToken);
     }
@@ -25,7 +25,7 @@ public class ProductCategoryRepository(ApplicationDbContext context) : BaseRepos
         ProductCategory? filter,
         CancellationToken cancellationToken = default)
     {
-        var query = this.context.ProductCategory.AsNoTracking();
+        var query = this._context.ProductCategory.AsNoTracking();
 
         if (filter is not null)
         {
@@ -42,7 +42,7 @@ public class ProductCategoryRepository(ApplicationDbContext context) : BaseRepos
         ProductCategory? filter,
         CancellationToken cancellationToken = default)
     {
-        var query = this.context.ProductCategory.AsNoTracking();
+        var query = this._context.ProductCategory.AsNoTracking();
 
         if (filter is not null)
         {
@@ -57,7 +57,7 @@ public class ProductCategoryRepository(ApplicationDbContext context) : BaseRepos
             {
                 Id = productCategory.Id,
                 Category = productCategory.Category,
-                ProductCount = this.context.Product.Count(p => p.ProductCategoryId == productCategory.Id),
+                ProductCount = this._context.Product.Count(p => p.ProductCategoryId == productCategory.Id),
                 CreatedAt = productCategory.CreatedAt,
                 UpdatedAt = productCategory.UpdatedAt,
             })
@@ -66,6 +66,6 @@ public class ProductCategoryRepository(ApplicationDbContext context) : BaseRepos
 
     public async Task<int> CountAsync(CancellationToken cancellationToken = default)
     {
-        return await this.context.ProductCategory.AsNoTracking().CountAsync(cancellationToken);
+        return await this._context.ProductCategory.AsNoTracking().CountAsync(cancellationToken);
     }
 }

@@ -12,7 +12,7 @@ namespace AutoriaStore.Infrastructure.Repositories;
 
 public class UserRepository(ApplicationDbContext context) : BaseRepository<User>(context), IUserRepository
 {
-    private readonly ApplicationDbContext context = context;
+    private readonly ApplicationDbContext _context = context;
 
     public async Task<IEnumerable<User>> FindAllAsync(
         User filter,
@@ -20,7 +20,7 @@ public class UserRepository(ApplicationDbContext context) : BaseRepository<User>
         int itemsPerPage,
         CancellationToken cancellationToken = default)
     {
-        var query = this.context.User.AsNoTracking();
+        var query = this._context.User.AsNoTracking();
 
         query = new UserFilterBuilder(query)
             .FilterByName(filter.Name)
@@ -33,7 +33,7 @@ public class UserRepository(ApplicationDbContext context) : BaseRepository<User>
 
     public async Task<int> CountAsync(User filter, CancellationToken cancellationToken = default)
     {
-        var query = this.context.User.AsNoTracking();
+        var query = this._context.User.AsNoTracking();
 
         query = new UserFilterBuilder(query)
             .FilterByName(filter.Name)
@@ -45,11 +45,11 @@ public class UserRepository(ApplicationDbContext context) : BaseRepository<User>
 
     public async Task<User?> FindByEmailAsync(string email, CancellationToken cancellationToken = default)
     {
-        return await this.context.User.FirstOrDefaultAsync(user => user.Email == email, cancellationToken);
+        return await this._context.User.FirstOrDefaultAsync(user => user.Email == email, cancellationToken);
     }
 
     public async Task<User?> FindWithPonesByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await this.context.User.FirstOrDefaultAsync(user => user.Id == id, cancellationToken);
+        return await this._context.User.FirstOrDefaultAsync(user => user.Id == id, cancellationToken);
     }
 }

@@ -11,12 +11,12 @@ namespace AutoriaStore.Infrastructure.Repositories;
 
 public sealed class IdempotencyKeyRepository : BaseRepository<IdempotencyKey>, IIdempotencyKeyRepository
 {
-    private readonly ApplicationDbContext context;
+    private readonly ApplicationDbContext _context;
 
     public IdempotencyKeyRepository(ApplicationDbContext context)
         : base(context)
     {
-        this.context = context;
+        this._context = context;
     }
 
     public async Task<IdempotencyKey?> FindByUserIdAndEndpointAndKeyAsync(
@@ -25,7 +25,7 @@ public sealed class IdempotencyKeyRepository : BaseRepository<IdempotencyKey>, I
         string idempotencyKey,
         CancellationToken cancellationToken = default)
     {
-        return await this.context.IdempotencyKey.FirstOrDefaultAsync(
+        return await this._context.IdempotencyKey.FirstOrDefaultAsync(
             record => record.UserId == userId
                       && record.Endpoint == endpoint
                       && record.Key == idempotencyKey,

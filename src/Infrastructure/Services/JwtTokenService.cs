@@ -13,20 +13,20 @@ namespace AutoriaStore.Infrastructure.Services;
 
 public class JwtTokenService : IJwtTokenService
 {
-    private readonly string issuer;
-    private readonly string audience;
-    private readonly int expirationMinutes;
-    private readonly SigningCredentials signingCredentials;
+    private readonly string _issuer;
+    private readonly string _audience;
+    private readonly int _expirationMinutes;
+    private readonly SigningCredentials _signingCredentials;
 
     public JwtTokenService(IEnvironmentVariablesService environmentVariablesService)
     {
-        this.issuer = environmentVariablesService.JwtIssuer;
-        this.audience = environmentVariablesService.JwtAudience;
-        this.expirationMinutes = environmentVariablesService.JwtExpirationTimeInMinutes;
+        this._issuer = environmentVariablesService.JwtIssuer;
+        this._audience = environmentVariablesService.JwtAudience;
+        this._expirationMinutes = environmentVariablesService.JwtExpirationTimeInMinutes;
 
         var rsa = RSA.Create();
         rsa.ImportPkcs8PrivateKey(Convert.FromBase64String(environmentVariablesService.JwtPrivateKey), out _);
-        this.signingCredentials = new SigningCredentials(new RsaSecurityKey(rsa), SecurityAlgorithms.RsaSha256);
+        this._signingCredentials = new SigningCredentials(new RsaSecurityKey(rsa), SecurityAlgorithms.RsaSha256);
     }
 
     public string GenerateToken(Guid userId, UserRole role)
@@ -38,12 +38,12 @@ public class JwtTokenService : IJwtTokenService
         };
 
         var token = new JwtSecurityToken(
-            issuer: this.issuer,
-            audience: this.audience,
+            issuer: this._issuer,
+            audience: this._audience,
             claims: claims,
             notBefore: DateTime.UtcNow,
-            expires: DateTime.UtcNow.AddMinutes(this.expirationMinutes),
-            signingCredentials: this.signingCredentials);
+            expires: DateTime.UtcNow.AddMinutes(this._expirationMinutes),
+            signingCredentials: this._signingCredentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
